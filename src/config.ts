@@ -1,5 +1,5 @@
 import { IConfig } from "./types";
-import extend from 'lodash/extend';
+import extendWith from 'lodash/extendWith';
 
 
 export class Config {
@@ -16,7 +16,9 @@ export class Config {
   };
 
   static resolve( config: IConfig ) {
-    return extend( config, Config.default );
+    return extendWith( Config.default, config, ( oldVal, newVal ) => {
+      return newVal === null || newVal === undefined ? oldVal : newVal
+    } );
   }
 
 }

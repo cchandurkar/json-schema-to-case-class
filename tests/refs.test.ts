@@ -1,13 +1,14 @@
-import { convert } from '../src'
+import { convert, stripSchema, resolveRefs } from '../src'
 import { expect } from 'chai';
+import { Config } from '../src/config';
 
 const sampleLocalRefSchema = require('./test-data/sample-local-ref-schema');
 
-describe( 'Converter', () => {
+describe( 'Strip Schema', () => {
 
-    it('should resolve JSON Schema', async () => {
+    it('should strip JSON Schema', async () => {
 
-        let result = await convert( sampleLocalRefSchema, {
+        let config = {
             maxDepth: 0,
             optionSetting: "useOptions",
             classNameTextCase: 'pascalCase',
@@ -16,10 +17,14 @@ describe( 'Converter', () => {
             defaultGenericType: "Any",
             parseRefs: true,
             generateComments: false
-        });
+        };
 
-        // console.log(JSON.stringify(result, null, 2));
+        let result = await resolveRefs(sampleLocalRefSchema)
+            .then( res => stripSchema( res.schema, config) );
+
         expect(result).to.be.an('object');
+        expect(result.caseClassName).to.eql( Config.default.topLevelCaseClassName );
+        expect(result.parameters[0].nestedObject.parameters[0].paramType).to.eql('String');
 
     });
 

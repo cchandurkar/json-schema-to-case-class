@@ -1,4 +1,4 @@
-import { IConfig } from './types';
+import { IConfig, ICaseClassDef } from './types';
 import { Config } from './config';
 
 import get from 'lodash/get';
@@ -8,56 +8,51 @@ import * as changeCase from 'change-case';
 import $RefParser from '@apidevtools/json-schema-ref-parser';
 
 
-export const typeMap = new Map(Object.entries({
+export const typeMap = {
   'integer':  'Integer',
   'string':   'String',
   'number':   'Double',
   'boolean':  'Boolean',
   'array':    'List',
   'object':   'Any'
-}));
+};
+
+async function validate( schema ) {
+  console.assert( schema.properties, 'Required field not found or null: "properties"' );
+  return true;
+}
 
 /**
- * This function basically converts the JSON SChema into simplified data format
+ * This function basically converts the JSON Schema into simplified data format
  * which can be used by other formatters.
  *
  * @param schema
  * @param config
  */
-export async function convert( schema: any, config: IConfig ) {
+export async function convert( schema: any, config: IConfig ): Promise<string> {
+  return validate( schema )
+      .then( () => resolveRefs( schema ) )
+      .then( res => stripSchema( res.schema, config) )
+      .then( res => format( res, config ) )
+}
 
-  // Sanitize, use default if not provided
+/**
+ * This function basically strips the JSON Schema into simplified format
+ * which can be used by formatter(s).
+ *
+ * @param schema
+ * @param config
+ */
+export async function stripSchema( schema: any, config: IConfig ){
   config = Config.resolve(config);
-
-  // Parse local/remote references
-  if( config.parseRefs ){
-    let parsedSchema = await parseRefs(schema);
-    if( parsedSchema.error ) return { error: parsedSchema.error };
-    else schema = parsedSchema.schema
-  }
-
-  // Start Converting
-  let caseClassDef = parseSchemaObject( schema, 1, config.topLevelCaseClassName, config );
-
-  // Update top level case class name, if any.
-  if( config.topLevelCaseClassName ){
-    caseClassDef.caseClassName = config.topLevelCaseClassName;
-  }
-
-  return caseClassDef;
-
+  return await stripSchemaObject(schema, 1, config.topLevelCaseClassName, config );
 }
 
 /**
  * Parse remote and local references in JSON Schema
  * @param schema
  */
-export async function parseRefs( schema: any ){
-
-  // return JsonRefs.resolveRefs(schema, { resolveCirculars: true })
-  //   .then( result => { return { error: null, schema: result.resolved  } } )
-  //   .catch( err => { return { error: err, schema: null } } );
-
+export async function resolveRefs(schema: any ){
   return $RefParser
     .dereference(schema, { dereference:{ circular: 'ignore' } } )
     .then( result => { return { error: null, schema: result  } } )
@@ -71,10 +66,10 @@ export async function parseRefs( schema: any ){
  *
  * @param schemaObject - Schema object to parse.
  * @param currentDepth - Current depth of schema object being parsed.
- * @param caseClassTitle - Used mostly for top-level case class if 'title' field is not provided.
+ * @param caseClassTitle - Used for case class name if 'title' field is not provided.
  * @param config - configuration instance.
  */
-export function parseSchemaObject(schemaObject: any, currentDepth: number, caseClassTitle: string, config: IConfig ){
+export function stripSchemaObject(schemaObject: any, currentDepth: number, caseClassTitle: string, config: IConfig ) : ICaseClassDef {
 
   // Use schema object 'title' field to derive case class name.
   // For nested properties, use the object 'key' as case class name.
@@ -92,18 +87,19 @@ export function parseSchemaObject(schemaObject: any, currentDepth: number, caseC
     let paramType =  get(typeMap, paramObject.type, config.defaultGenericType);
     let description = paramObject.description;
 
-    // Parse nested object
+    // For nested objects, use parameter name as
+    // case class name ( if title property is not defined )
     let nestedObject;
     if( config.maxDepth === 0 || currentDepth < config.maxDepth ){
       if(paramObject.type === 'object'){
-        nestedObject = parseSchemaObject( paramObject, currentDepth + 1, paramName, config );
+        nestedObject = stripSchemaObject( paramObject, currentDepth + 1, paramName, config );
         paramType = nestedObject.caseClassName;
       } else if( paramObject.type === 'array' ){
         if( paramObject.items.type !== "object" ){
           let arrayItemType = get(typeMap, paramObject.items.type, config.defaultGenericType);
           paramType = paramType + `[${arrayItemType}]`;
         } else {
-          nestedObject = parseSchemaObject( paramObject.items, currentDepth + 1, paramName, config );
+          nestedObject = stripSchemaObject( paramObject.items, currentDepth + 1, paramName, config );
           paramType = paramType + `[${nestedObject.caseClassName}]`;
         }
       }
@@ -137,4 +133,9 @@ export function parseSchemaObject(schemaObject: any, currentDepth: number, caseC
     parameters
   };
 
+}
+
+
+export function format( strippedSchema: ICaseClassDef, config: IConfig ): string {
+  return ''
 }

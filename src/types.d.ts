@@ -8,3 +8,14 @@ export interface IConfig {
   parseRefs?: boolean,
   generateComments?: boolean
 }
+
+
+export interface ICaseClassDef {
+  caseClassName: string,
+  caseClassDescription?: string,
+  parameters: Array<{
+    paramName: string,
+    paramType: string,
+    nestedObject?: ICaseClassDef
+  }>
+}
