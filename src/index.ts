@@ -7,6 +7,7 @@ import map from 'lodash/map';
 import * as changeCase from 'change-case';
 import $RefParser from '@apidevtools/json-schema-ref-parser';
 
+import { format as scalaFormat } from './formatters/scala-case-class';
 
 export const typeMap = {
   'integer':  'Integer',
@@ -66,17 +67,17 @@ export async function resolveRefs(schema: any ){
  *
  * @param schemaObject - Schema object to parse.
  * @param currentDepth - Current depth of schema object being parsed.
- * @param caseClassTitle - Used for case class name if 'title' field is not provided.
+ * @param entityTitle - Used for case class name if 'title' field is not provided.
  * @param config - configuration instance.
  */
-export function stripSchemaObject(schemaObject: any, currentDepth: number, caseClassTitle: string, config: IConfig ) : ICaseClassDef {
+export function stripSchemaObject(schemaObject: any, currentDepth: number, entityTitle: string, config: IConfig ) : ICaseClassDef {
 
   // Use schema object 'title' field to derive case class name.
   // For nested properties, use the object 'key' as case class name.
   // For top-level case class it will use `caseClassName` if 'title' field is not provided.
-  let schemaObjectTitle = get( schemaObject, 'title', caseClassTitle );
-  let caseClassName = changeCase[ config.classNameTextCase ].call( changeCase, schemaObjectTitle );
-  let caseClassDescription = get( schemaObject, 'description' );
+  let schemaObjectTitle = get( schemaObject, 'title', entityTitle );
+  let entityName = changeCase[ config.classNameTextCase ].call( changeCase, schemaObjectTitle );
+  let entityDescription = get( schemaObject, 'description' );
   let requiredParams = get(schemaObject, 'required', []);
 
   // Transform every parameter of this schema object
@@ -89,18 +90,18 @@ export function stripSchemaObject(schemaObject: any, currentDepth: number, caseC
 
     // For nested objects, use parameter name as
     // case class name ( if title property is not defined )
-    let nestedObject;
+    let nestedObject: ICaseClassDef;
     if( config.maxDepth === 0 || currentDepth < config.maxDepth ){
       if(paramObject.type === 'object'){
         nestedObject = stripSchemaObject( paramObject, currentDepth + 1, paramName, config );
-        paramType = nestedObject.caseClassName;
+        paramType = nestedObject.entityName;
       } else if( paramObject.type === 'array' ){
         if( paramObject.items.type !== "object" ){
           let arrayItemType = get(typeMap, paramObject.items.type, config.defaultGenericType);
           paramType = paramType + `[${arrayItemType}]`;
         } else {
           nestedObject = stripSchemaObject( paramObject.items, currentDepth + 1, paramName, config );
-          paramType = paramType + `[${nestedObject.caseClassName}]`;
+          paramType = paramType + `[${nestedObject.entityName}]`;
         }
       }
     } else {
@@ -111,13 +112,9 @@ export function stripSchemaObject(schemaObject: any, currentDepth: number, caseC
       }
     }
 
-    // Wrap parameter types in option
-    if( config.optionSetting === 'useOptions' )
-      paramType = !requiredParams.includes(key) ? `Option[${paramType}]` : paramType;
-    else if( config.optionSetting === 'useOptionsForAll' )
-      paramType =  `Option[${paramType}]`;
-
+    // Parameter level data
     return {
+      isRequired: requiredParams.includes(key),
       paramName,
       paramType,
       description,
@@ -126,16 +123,16 @@ export function stripSchemaObject(schemaObject: any, currentDepth: number, caseC
 
   });
 
-  // Return parsed result for this object
+  // Return parsed result for this schema object
   return {
-    caseClassName,
-    caseClassDescription,
+    entityName,
+    entityDescription,
     parameters
   };
 
 }
 
 
-export function format( strippedSchema: ICaseClassDef, config: IConfig ): string {
-  return ''
+export async function format( strippedSchema: ICaseClassDef, config: IConfig ): Promise<string> {
+  return await scalaFormat(strippedSchema, config);
 }

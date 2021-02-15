@@ -9,13 +9,16 @@ export interface IConfig {
   generateComments?: boolean
 }
 
-
 export interface ICaseClassDef {
-  caseClassName: string,
-  caseClassDescription?: string,
-  parameters: Array<{
-    paramName: string,
-    paramType: string,
-    nestedObject?: ICaseClassDef
-  }>
+  entityName: string,
+  entityDescription?: string,
+  parameters: Array<ICaseClassDefParams>
 }
+
+export interface ICaseClassDefParams {
+  paramName: string,
+  isRequired: boolean,
+  paramType: string,
+  nestedObject?: ICaseClassDef
+}
+
