@@ -1,4 +1,4 @@
-import { IConfig, ICaseClassDef, ICaseClassDefParams } from "../types";
+import { IConfigResolved, ICaseClassDef, ICaseClassDefParams } from './interfaces';
 import get from 'lodash/get';
 import replace from 'lodash/replace';
 
@@ -23,7 +23,7 @@ const invalidSymbols = [
  *
  * @param strippedSchema
  */
-function generateCommentsFor(strippedSchema: ICaseClassDef): string {
+const generateCommentsFor = (strippedSchema: ICaseClassDef): string => {
 
     // Parameters
     let classParams = get( strippedSchema, 'parameters', [] );
@@ -43,7 +43,7 @@ function generateCommentsFor(strippedSchema: ICaseClassDef): string {
     classParams.forEach( param => {
         comment += ( " * @param " + param.paramName );
         if( param.description ){
-            let desc = replace( param.description.trim("\n"), /\n/g, ( "\n \*" + Array(10 + param.paramName.length ).join(" ") ) );
+            let desc = replace( param.description.trim(), /\n/g, ( "\n \*" + Array(10 + param.paramName.length ).join(" ") ) );
             comment += ` ${desc}`;
         }
         comment += "\n";
@@ -53,15 +53,15 @@ function generateCommentsFor(strippedSchema: ICaseClassDef): string {
     // Return the formatted comment
     return comment;
 
-}
+};
 
 /**
  * Check if given parameter name should be wrapped in a backtick
  * @param paramName
  */
-function shouldAddBacktick( paramName: string ){
+const shouldAddBacktick = ( paramName: string ) : boolean => {
     return reservedKeywords.includes(paramName) || invalidSymbols.some( s => paramName.includes(s))
-}
+};
 
 /**
  * Format parameter names:
@@ -69,9 +69,9 @@ function shouldAddBacktick( paramName: string ){
  *
  * @param param
  */
-function formatParamName( param: ICaseClassDefParams ): string {
+const formatParamName = ( param: ICaseClassDefParams ): string => {
     return shouldAddBacktick(param.paramName) ? `\`${param.paramName}\`` : param.paramName;
-}
+};
 
 /**
  * Format parameter type:
@@ -80,11 +80,11 @@ function formatParamName( param: ICaseClassDefParams ): string {
  * @param param
  * @param config
  */
-function formatParamType( param: ICaseClassDefParams, config): string {
+const formatParamType = ( param: ICaseClassDefParams, config: IConfigResolved ): string => {
     return ((config.optionSetting === 'useOptions' && param.isRequired) || config.optionSetting === 'useOptionsForAll') ?
         `Option[${param.paramType}]` :
         param.paramType;
-}
+};
 
 /**
  * Recursively formats the stripped JSON Schema into Scala case classes.
@@ -92,7 +92,7 @@ function formatParamType( param: ICaseClassDefParams, config): string {
  * @param strippedSchema
  * @param config
  */
-export function format( strippedSchema: ICaseClassDef, config: IConfig ): string {
+export const format = ( strippedSchema: ICaseClassDef, config: IConfigResolved ): string => {
 
     // Check if need to generate comments
     let comment = '';
@@ -110,11 +110,10 @@ export function format( strippedSchema: ICaseClassDef, config: IConfig ): string
 
     // Look for nested objects
     output += classParams
-        .filter( p => p.nestedObject )
-        .map( p => format(p.nestedObject, config))
+        .map( ( p: ICaseClassDefParams ) => p.nestedObject ? format(p.nestedObject, config): '' )
         .join('');
 
     // Return output
     return output.replace(/\t/g, '    ');
 
-}
+};

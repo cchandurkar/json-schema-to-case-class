@@ -1,10 +1,12 @@
-import { stripSchema } from '../src'
+import get from 'lodash/get';
 import { expect } from 'chai';
 
-const simpleSchemaSample = require('./test-data/simple-schema');
-const simpleSchemaNoTitleSample = require('./test-data/simple-schema-no-title');
-const nestedSchemaSample = require('./test-data/nested-schema');
+import { stripSchema } from '../src'
+import { Config } from "../src/config";
 
+import * as simpleSchema from './test-data/simple-schema.json'
+import * as simpleSchemaNoTitle from './test-data/simple-schema-no-title.json'
+import * as nestedSchema from './test-data/nested-schema.json';
 
 describe( 'Function stripSchema()', () => {
 
@@ -21,10 +23,10 @@ describe( 'Function stripSchema()', () => {
             generateComments: false
         };
 
-        let result = await stripSchema( simpleSchemaSample, config);
+        let result = await stripSchema( simpleSchema, Config.resolve(config) );
 
         expect(result).to.be.an('object');
-        expect(result.entityName).to.eql( simpleSchemaSample.title );
+        expect(result.entityName).to.eql( simpleSchema.title );
         expect(result.parameters[0].paramType).to.eql('String');
 
     });
@@ -42,7 +44,7 @@ describe( 'Function stripSchema()', () => {
             generateComments: false
         };
 
-        let result = await stripSchema( simpleSchemaNoTitleSample, config);
+        let result = await stripSchema( simpleSchemaNoTitle, Config.resolve(config) );
 
         expect(result).to.be.an('object');
         expect(result.entityName).to.eql( config.topLevelCaseClassName );
@@ -63,11 +65,11 @@ describe( 'Function stripSchema()', () => {
             generateComments: false
         };
 
-        let result = await stripSchema(nestedSchemaSample, config);
+        let result = await stripSchema(nestedSchema, Config.resolve(config) );
 
         expect(result).to.be.an('object');
-        expect(result.entityName).to.eql( nestedSchemaSample.title );
-        expect(result.parameters[4].nestedObject.parameters[0].paramType).to.eql('Double');
+        expect(result.entityName).to.eql( nestedSchema.title );
+        expect(get(result, 'parameters[4].nestedObject.parameters[0].paramType')).to.eql('Double');
 
     });
 

@@ -1,10 +1,10 @@
-import { IConfig } from "./types";
+import { IConfig, IConfigResolved } from './interfaces';
 import extendWith from 'lodash/extendWith';
 
 
 export class Config {
 
-  static default: IConfig = {
+  static default: IConfigResolved = {
     maxDepth: 0,
     optionSetting: "useOptions",
     classNameTextCase: 'pascalCase',
@@ -15,7 +15,8 @@ export class Config {
     generateComments: false
   };
 
-  static resolve( config: IConfig ) {
+  static resolve( config?: IConfig ): IConfigResolved {
+    if( !config ) return Config.default;
     return extendWith( Config.default, config, ( oldVal, newVal ) => {
       return newVal === null || newVal === undefined ? oldVal : newVal
     } );
