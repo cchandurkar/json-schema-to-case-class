@@ -1,13 +1,69 @@
 # json-schema-to-case-class
 A library to convert complex JSON Schema to [Scala Case Classes](https://docs.scala-lang.org/tour/case-classes.html). Supports both NodeJs and Browser environments. 
-[Try Online Editor](https://cchandurkar.github.io/case-class-generator/).
-
+ <br />[**Try Online Editor**](https://cchandurkar.github.io/case-class-generator/).
+ 
 ![Build Status](https://github.com/cchandurkar/json-schema-to-case-class/actions/workflows/build-and-deploy.yml/badge.svg?branch=main)
 [![npm version](https://badge.fury.io/js/json-schema-to-case-class.svg)](https://badge.fury.io/js/json-schema-to-case-class)
 [![License](https://img.shields.io/npm/l/json-schema-to-case-class.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![PRs Welcome](https://img.shields.io/badge/$-support-green.svg?style=flat-square)](https://github.com/sponsors/cchandurkar)
 
+<table width="100%">
+<tr>
+<th>
+JSON Schema                             
+</th>
+<th>
+Generated Scala Case Classes
+</th>
+</tr>
+<tr>
+<td>
+<pre>
+{
+  "title": "Product",
+  "type": "object",
+  "required": [ "productId", "productName", "price" ],
+  "properties": {
+    "productId": { "type": "integer" },
+    "productName": { "type": "string" },
+    "price": { "type": "number" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "length": { "type": "number" },
+        "width": { "type": "number" },
+        "height": { "type": "number" }
+      }
+    }
+  }
+}
+</pre>
+</td>
+<td>
+<pre>
+case class Product (
+   productId: Integer,
+   productName: String,
+   price: Double,
+   tags: Option[List[String]],
+   dimensions: Option[Dimensions]
+)
+</pre>
+<pre>
+case class Dimensions (
+   length: Double,
+   width: Double,
+   height: Double
+)
+</pre>
+</td>
+</tr>
+</table>
 
 ### Features
 1. Resolve local as well as remote schema references.
@@ -82,8 +138,9 @@ All contributions, enhancements, and bug-fixes are welcome. Open an issue or cre
 
 ##### Short-term Goals
 1. Handle `allOf`/ `anyOf`/ `oneOf`.
-2. Add support for converting YAML.
-3. Update online editor to add more examples to choose from.
+2. Support validations on class parameters. Eg. `exclusiveMinimum`, `minItems`, `uniqueItems`.
+3. Add support for converting YAML.
+4. Update online editor to add more examples to choose from.
 
 ##### Building locally
 1. Clone the repo <br />
