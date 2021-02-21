@@ -9,16 +9,51 @@ on:
 # this is where the magic happens, each job happens in parallel btw
 jobs:
 
-  lint-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
+
+      # Use NodeJs v14
       - name: Use Node.js 14
         uses: actions/setup-node@v1
         with:
           node-version: '14'
+
+      # Install, lint and run tests
       - run: npm ci
       - run: npm run lint
       - run: npm test
-      - run: npm run build
-      - run: npm run doit
+
+      # Extract package version and build
+      - name: Extract Package Version
+        run: node -p -e '`PACKAGE_VERSION=${require("./package.json").version}`' >> $GITHUB_ENV
+      - run: npm run build && npm run pack
+
+      # Create release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v${{ env.PACKAGE_VERSION }}
+          release_name: Release v${{ env.PACKAGE_VERSION }}
+          draft: true
+          prerelease: true
+
+      # Upload Artifacts
+      - name: Upload NPM Tarball
+        id: upload-npm-tarball
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: json-schema-to-case-class-${{env.PACKAGE_VERSION}}.tgz
+          asset_name: json-schema-to-case-class-${{env.PACKAGE_VERSION}}.tgz
+          asset_content_type: application/gzip
+
+      # Publish NPM Package
+      - run: npm run publish
