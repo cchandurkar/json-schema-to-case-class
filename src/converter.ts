@@ -136,7 +136,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
     } else {
       if (paramObject.type === 'object') {
         paramType = config.defaultGenericType;
-      } else {
+      } else if (paramObject.type === 'array') {
         paramType += `[${config.defaultGenericType}]`;
       }
     }
