@@ -2,7 +2,14 @@
 A library to convert complex JSON Schema to [Scala Case Classes](https://docs.scala-lang.org/tour/case-classes.html). Supports both NodeJs and Browser environments. 
 [Try Online Editor](https://cchandurkar.github.io/case-class-generator/).
 
-#### Features
+![Build Status](https://github.com/cchandurkar/json-schema-to-case-class/actions/workflows/build-and-deploy.yml/badge.svg?branch=main)
+[![npm version](https://badge.fury.io/js/json-schema-to-case-class.svg)](https://badge.fury.io/js/json-schema-to-case-class)
+[![License](https://img.shields.io/npm/l/json-schema-to-case-class.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![PRs Welcome](https://img.shields.io/badge/$-support-green.svg?style=flat-square)](https://github.com/sponsors/cchandurkar)
+
+
+### Features
 1. Resolve local as well as remote schema references.
 2. Handle nested JSON schema objects.
 3. Can wrap optional fields in `Option[]`.
@@ -11,10 +18,12 @@ A library to convert complex JSON Schema to [Scala Case Classes](https://docs.sc
 6. Can default to provided generic type. (default `Any`) 
 
 
-#### Installing
+### Installing
 ```npm install --save json-schema-to-case-class```
 
-#### Usage
+[![NPM](https://nodei.co/npm/json-schema-to-case-class.png?compact=true)](https://nodei.co/npm/json-schema-to-case-class/)
+
+### Usage
 
 For NodeJs (TypeScript):
 ```typescript
@@ -47,7 +56,7 @@ For browser: If you are using the prebuild bundle, it has all the APIs under `Sc
 SchemaConverter.convert( mySchema, config )
 ```
 
-#### Configuration
+### Configuration
 
 It is optional to pass configuration object. Every configuration setting is optional as well. When not passed, default kicks-in.  `IConfig`:
 
@@ -62,21 +71,21 @@ It is optional to pass configuration object. Every configuration setting is opti
 | parseRefs             | boolean | Whether to resolve the local or remote schema references ($ref).                                                                                                                                                                        | true        |
 | generateComments      | boolean | Whether to generate scaladoc-like comments for the case class generated.                                                                                                                                                                | false       |
 
-#### Browser Support
+### Browser Support
 This library supports recent versions of every major web browsers. Refer to the browserified build `dist/js2cc.min.js` that you can directly use in `<script />` tag of HTML page. It already bundles all the required polyfills. 
 
-#### Limitations
+### Limitations
 As of now, it does not support a few latest JSON Schema features such as  `allOf`/ `anyOf`/ `oneOf`.
 
-#### Contributing
+### Contributing
 All contributions, enhancements, and bug-fixes are welcome. Open an issue or create a pull request. 
 
-#### Short-term Goals
+##### Short-term Goals
 1. Handle `allOf`/ `anyOf`/ `oneOf`.
 2. Add support for converting YAML.
 3. Update online editor to add more examples to choose from.
 
-###### Building locally
+##### Building locally
 1. Clone the repo <br />
 `https://github.com/cchandurkar/json-schema-to-case-class.git`
 
