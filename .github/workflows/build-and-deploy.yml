@@ -4,7 +4,7 @@ name: Build and Deploy
 # this will help you specify where to run
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 # this is where the magic happens, each job happens in parallel btw
 jobs:
