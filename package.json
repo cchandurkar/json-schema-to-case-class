@@ -15,7 +15,8 @@
     "build": "npm run build:node && npm run build:browser",
     "build:node": "tsc",
     "build:browser": "webpack --env production",
-    "doit": "echo \"Publish Now\" && exit 1"
+    "pack": "npm pack",
+    "publish": "npm publish json-schema-to-case-class-.$npm_package_version.tgz"
   },
   "husky": {
     "hooks": {
