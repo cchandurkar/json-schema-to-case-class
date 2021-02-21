@@ -105,8 +105,8 @@ const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
 const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle: string, config: IConfigResolved) : ICaseClassDef => {
 
   // Text cases
-  const classNameTextCase = get(supportedTextCases, config.classNameTextCase, (x: string|null) => x + 'LoL');
-  const classParamsTextCase = get(supportedTextCases, config.classParamsTextCase, (x: string|null) => x + 'LoL');
+  const classNameTextCase = get(supportedTextCases, config.classNameTextCase, (x: string|null) => x);
+  const classParamsTextCase = get(supportedTextCases, config.classParamsTextCase, (x: string|null) => x);
 
   // Use schema object 'title' field to derive case class name.
   // For nested properties, use the object 'key' as case class name.
