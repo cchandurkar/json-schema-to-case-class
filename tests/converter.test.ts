@@ -25,7 +25,7 @@ describe('Function convert()', () => {
     expect(result).to.contain('case class PersonInfo');
     expect(result).to.contain('case class BillingAddress');
     expect(result).to.contain('case class ShippingAddress');
-    expect(result).to.contain('Option[');
+    expect(result).to.contain('zip: Option[Integer]');
 
   });
 

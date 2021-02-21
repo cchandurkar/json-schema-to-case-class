@@ -6,7 +6,8 @@
       "properties": {
         "street_address": { "type": "string" },
         "city":           { "type": "string" },
-        "state":          { "type": "string" }
+        "state":          { "type": "string" },
+        "zip":            { "type": "integer" }
       },
       "required": ["street_address", "city", "state"]
     }

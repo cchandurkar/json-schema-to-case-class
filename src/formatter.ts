@@ -80,7 +80,7 @@ const formatParamName = (param: ICaseClassDefParams): string => {
  * @param config
  */
 const formatParamType = (param: ICaseClassDefParams, config: IConfigResolved): string => {
-  return (config.optionSetting === 'useOptions' && param.isRequired) || config.optionSetting === 'useOptionsForAll'
+  return (config.optionSetting === 'useOptions' && !param.isRequired) || config.optionSetting === 'useOptionsForAll'
     ? `Option[${param.paramType}]`
     : param.paramType;
 };
