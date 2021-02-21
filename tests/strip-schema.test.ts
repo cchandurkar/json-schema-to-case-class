@@ -1,4 +1,5 @@
 import get from 'lodash/get';
+import find from 'lodash/find';
 import { expect } from 'chai';
 
 import { stripSchema } from '../src'
@@ -70,6 +71,29 @@ describe('Function stripSchema()', () => {
     expect(result).to.be.an('object');
     expect(result.entityName).to.eql(nestedSchema.title);
     expect(get(result, 'parameters[4].nestedObject.parameters[0].paramType')).to.eql('Double');
+
+  });
+
+  it('should parse parameter types as expected for maxDepth less than the total depth', async () => {
+
+    const config = {
+      maxDepth: 1,
+      optionSetting: 'useOptions',
+      classNameTextCase: 'pascalCase',
+      classParamsTextCase: 'snakeCase',
+      topLevelCaseClassName: 'PersonInfo',
+      defaultGenericType: 'Any',
+      parseRefs: true,
+      generateComments: false
+    };
+
+    const result = await stripSchema(nestedSchema, Config.resolve(config));
+
+    expect(result).to.be.an('object');
+    expect(result.entityName).to.eql(nestedSchema.title);
+    expect(get(find(result.parameters, { paramName: 'product_id' }), 'paramType')).to.eql('Integer');
+    expect(get(find(result.parameters, { paramName: 'tags' }), 'paramType')).to.eql('List[Any]');
+    expect(get(find(result.parameters, { paramName: 'dimensions' }), 'paramType')).to.eql('Any');
 
   });
 

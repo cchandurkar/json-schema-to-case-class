@@ -5,8 +5,6 @@ import map from 'lodash/map';
 
 import * as allTextCases from 'change-case';
 
-// import { parse, scope } from 'jsonref';
-// import axios from 'axios';
 import $RefParser from '@apidevtools/json-schema-ref-parser/lib/index';
 import { Config } from './config';
 import { format } from './formatter';
@@ -81,11 +79,6 @@ const stripSchema = async (schema: any, config: IConfigResolved) : Promise<ICase
  * @param schema
  */
 const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
-
-  // return await parse(schema, { scope: '', retriever: ( url => axios(url) ) })
-  //     .then( result => { return { error: null, schema: result  } } )
-  //     .catch( err => { return { error: err, schema: null } } );
-
   return $RefParser
     .dereference(schema, { dereference: { circular: 'ignore' } })
     .then(result => { return { error: null, schema: result } })
@@ -143,7 +136,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
     } else {
       if (paramObject.type === 'object') {
         paramType = config.defaultGenericType;
-      } else {
+      } else if (paramObject.type === 'array') {
         paramType += `[${config.defaultGenericType}]`;
       }
     }
