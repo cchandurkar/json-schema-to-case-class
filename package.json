@@ -1,6 +1,6 @@
 {
   "name": "json-schema-to-case-class",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A library that converts JSON Schema to Scala Case Classes",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -14,9 +14,7 @@
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
     "build": "npm run build:node && npm run build:browser",
     "build:node": "tsc",
-    "build:browser": "webpack --env production",
-    "pack": "npm pack",
-    "publish": "npm publish json-schema-to-case-class-$npm_package_version.tgz"
+    "build:browser": "webpack --env production"
   },
   "husky": {
     "hooks": {
