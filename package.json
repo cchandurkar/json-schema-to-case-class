@@ -14,7 +14,8 @@
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
     "build": "npm run build:node && npm run build:browser",
     "build:node": "tsc",
-    "build:browser": "webpack --env production"
+    "build:browser": "webpack --env production",
+    "doit": "echo \"Publish Now\" && exit 1"
   },
   "husky": {
     "hooks": {
