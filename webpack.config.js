@@ -20,7 +20,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new BundleAnalyzerPlugin(),
+        new BundleAnalyzerPlugin({analyzerMode: 'disabled', generateStatsFile: true}),
         new webpack.ProvidePlugin({
             process: 'process/browser',
             Buffer: [ 'buffer', 'Buffer' ],
@@ -36,11 +36,11 @@ module.exports = {
             "url": require.resolve('url')
         },
         alias: {
-            'js-yaml': false
+            'js-yaml': false // Ignore this import for now as we aren't supporting YAML schemas yet.
         }
     },
     output: {
-        filename: 'bundle.js',
+        filename: 'js2cc.min.js',
         path: path.resolve(__dirname, 'dist'),
     },
     optimization: {

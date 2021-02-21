@@ -1,6 +1,6 @@
 {
   "name": "json-schema-to-case-class",
-  "version": "1.0.0",
+  "version": "1.1.4",
   "description": "A library that converts JSON Schema to Scala Case Classes",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -10,8 +10,8 @@
     "postpublish": "pinst --enable",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts'",
     "type-check": "tsc --noEmit",
-    "lint": "eslint ./src --ext .ts",
-    "lint:fix": "eslint ./src --ext .ts --fix",
+    "lint": "eslint ./src ./tests --ext .ts",
+    "lint:fix": "eslint ./src ./tests --ext .ts --fix",
     "build": "npm run build:node && npm run build:browser",
     "build:node": "tsc",
     "build:browser": "webpack --env production"
@@ -61,7 +61,6 @@
     "http-browserify": "^1.7.0",
     "https-browserify": "^1.0.0",
     "husky": "^5.0.9",
-    "lint-staged": "^10.5.4",
     "mocha": "^8.3.0",
     "pinst": "^2.1.4",
     "process": "^0.11.10",
