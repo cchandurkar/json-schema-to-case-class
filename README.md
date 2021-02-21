@@ -83,6 +83,9 @@ All contributions, enhancements, and bug-fixes are welcome. Open an issue or cre
 2. Install Dependancies <br />
 ```npm install```
 
+3. Setup development environment <br />
+```npm run setup-dev-env```
+
 3. Run the test <br />
 ```npm test```
 
