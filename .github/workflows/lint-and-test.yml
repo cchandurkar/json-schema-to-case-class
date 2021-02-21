@@ -4,7 +4,7 @@ name: Lint and Unit Test
 # this will help you specify where to run
 on:
   pull_request:
-    branches: [ $default-branch, ci-cd ]
+    branches: [ $default-branch, develop, ci-cd ]
 
 # this is where the magic happens, each job happens in parallel btw
 jobs:
