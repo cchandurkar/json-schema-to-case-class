@@ -1,0 +1,381 @@
+<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete"><head><style id="autocompletion.css">.ace_editor.ace_autocomplete .ace_marker-layer .ace_active-line {    background-color: #CAD6FA;    z-index: 1;}.ace_dark.ace_editor.ace_autocomplete .ace_marker-layer .ace_active-line {    background-color: #3a674e;}.ace_editor.ace_autocomplete .ace_line-hover {    border: 1px solid #abbffe;    margin-top: -1px;    background: rgba(233,233,253,0.4);    position: absolute;    z-index: 2;}.ace_dark.ace_editor.ace_autocomplete .ace_line-hover {    border: 1px solid rgba(109, 150, 13, 0.8);    background: rgba(58, 103, 78, 0.62);}.ace_completion-meta {    opacity: 0.5;    margin: 0.9em;}.ace_completion-message {    color: blue;}.ace_editor.ace_autocomplete .ace_completion-highlight{    color: #2d69c7;}.ace_dark.ace_editor.ace_autocomplete .ace_completion-highlight{    color: #93ca12;}.ace_editor.ace_autocomplete {    width: 300px;    z-index: 200000;    border: 1px lightgray solid;    position: fixed;    box-shadow: 2px 3px 5px rgba(0,0,0,.2);    line-height: 1.4;    background: #fefefe;    color: #111;}.ace_dark.ace_editor.ace_autocomplete {    border: 1px #484747 solid;    box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.51);    line-height: 1.4;    background: #25282c;    color: #c1c1c1;}
+/*# sourceURL=ace/css/autocompletion.css */</style><style>.ace_snippet-marker {    -moz-box-sizing: border-box;    box-sizing: border-box;    background: rgba(194, 193, 208, 0.09);    border: 1px dotted rgba(211, 208, 235, 0.62);    position: absolute;}</style><style>    .error_widget_wrapper {        background: inherit;        color: inherit;        border:none    }    .error_widget {        border-top: solid 2px;        border-bottom: solid 2px;        margin: 5px 0;        padding: 10px 40px;        white-space: pre-wrap;    }    .error_widget.ace_error, .error_widget_arrow.ace_error{        border-color: #ff5a5a    }    .error_widget.ace_warning, .error_widget_arrow.ace_warning{        border-color: #F1D817    }    .error_widget.ace_info, .error_widget_arrow.ace_info{        border-color: #5a5a5a    }    .error_widget.ace_ok, .error_widget_arrow.ace_ok{        border-color: #5aaa5a    }    .error_widget_arrow {        position: absolute;        border: solid 5px;        border-top-color: transparent!important;        border-right-color: transparent!important;        border-left-color: transparent!important;        top: -5px;    }</style><style id="ace-tm">.ace-tm .ace_gutter {background: #f0f0f0;color: #333;}.ace-tm .ace_print-margin {width: 1px;background: #e8e8e8;}.ace-tm .ace_fold {background-color: #6B72E6;}.ace-tm {background-color: #FFFFFF;color: black;}.ace-tm .ace_cursor {color: black;}.ace-tm .ace_invisible {color: rgb(191, 191, 191);}.ace-tm .ace_storage,.ace-tm .ace_keyword {color: blue;}.ace-tm .ace_constant {color: rgb(197, 6, 11);}.ace-tm .ace_constant.ace_buildin {color: rgb(88, 72, 246);}.ace-tm .ace_constant.ace_language {color: rgb(88, 92, 246);}.ace-tm .ace_constant.ace_library {color: rgb(6, 150, 14);}.ace-tm .ace_invalid {background-color: rgba(255, 0, 0, 0.1);color: red;}.ace-tm .ace_support.ace_function {color: rgb(60, 76, 114);}.ace-tm .ace_support.ace_constant {color: rgb(6, 150, 14);}.ace-tm .ace_support.ace_type,.ace-tm .ace_support.ace_class {color: rgb(109, 121, 222);}.ace-tm .ace_keyword.ace_operator {color: rgb(104, 118, 135);}.ace-tm .ace_string {color: rgb(3, 106, 7);}.ace-tm .ace_comment {color: rgb(76, 136, 107);}.ace-tm .ace_comment.ace_doc {color: rgb(0, 102, 255);}.ace-tm .ace_comment.ace_doc.ace_tag {color: rgb(128, 159, 191);}.ace-tm .ace_constant.ace_numeric {color: rgb(0, 0, 205);}.ace-tm .ace_variable {color: rgb(49, 132, 149);}.ace-tm .ace_xml-pe {color: rgb(104, 104, 91);}.ace-tm .ace_entity.ace_name.ace_function {color: #0000A2;}.ace-tm .ace_heading {color: rgb(12, 7, 255);}.ace-tm .ace_list {color:rgb(185, 6, 144);}.ace-tm .ace_meta.ace_tag {color:rgb(0, 22, 142);}.ace-tm .ace_string.ace_regex {color: rgb(255, 0, 0)}.ace-tm .ace_marker-layer .ace_selection {background: rgb(181, 213, 255);}.ace-tm.ace_multiselect .ace_selection.ace_start {box-shadow: 0 0 3px 0px white;}.ace-tm .ace_marker-layer .ace_step {background: rgb(252, 255, 0);}.ace-tm .ace_marker-layer .ace_stack {background: rgb(164, 229, 101);}.ace-tm .ace_marker-layer .ace_bracket {margin: -1px 0 0 -1px;border: 1px solid rgb(192, 192, 192);}.ace-tm .ace_marker-layer .ace_active-line {background: rgba(0, 0, 0, 0.07);}.ace-tm .ace_gutter-active-line {background-color : #dcdcdc;}.ace-tm .ace_marker-layer .ace_selected-word {background: rgb(250, 250, 255);border: 1px solid rgb(200, 200, 250);}.ace-tm .ace_indent-guide {background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;}
+/*# sourceURL=ace/css/ace-tm */</style><style id="ace_editor.css">.ace_br1 {border-top-left-radius    : 3px;}.ace_br2 {border-top-right-radius   : 3px;}.ace_br3 {border-top-left-radius    : 3px; border-top-right-radius:    3px;}.ace_br4 {border-bottom-right-radius: 3px;}.ace_br5 {border-top-left-radius    : 3px; border-bottom-right-radius: 3px;}.ace_br6 {border-top-right-radius   : 3px; border-bottom-right-radius: 3px;}.ace_br7 {border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px;}.ace_br8 {border-bottom-left-radius : 3px;}.ace_br9 {border-top-left-radius    : 3px; border-bottom-left-radius:  3px;}.ace_br10{border-top-right-radius   : 3px; border-bottom-left-radius:  3px;}.ace_br11{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-left-radius:  3px;}.ace_br12{border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br13{border-top-left-radius    : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br14{border-top-right-radius   : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br15{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;}.ace_editor {position: relative;overflow: hidden;padding: 0;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;direction: ltr;text-align: left;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}.ace_scroller {position: absolute;overflow: hidden;top: 0;bottom: 0;background-color: inherit;-ms-user-select: none;-moz-user-select: none;-webkit-user-select: none;user-select: none;cursor: text;}.ace_content {position: absolute;box-sizing: border-box;min-width: 100%;contain: style size layout;font-variant-ligatures: no-common-ligatures;}.ace_dragging .ace_scroller:before{position: absolute;top: 0;left: 0;right: 0;bottom: 0;content: '';background: rgba(250, 250, 250, 0.01);z-index: 1000;}.ace_dragging.ace_dark .ace_scroller:before{background: rgba(0, 0, 0, 0.01);}.ace_selecting, .ace_selecting * {cursor: text !important;}.ace_gutter {position: absolute;overflow : hidden;width: auto;top: 0;bottom: 0;left: 0;cursor: default;z-index: 4;-ms-user-select: none;-moz-user-select: none;-webkit-user-select: none;user-select: none;contain: style size layout;}.ace_gutter-active-line {position: absolute;left: 0;right: 0;}.ace_scroller.ace_scroll-left {box-shadow: 17px 0 16px -16px rgba(0, 0, 0, 0.4) inset;}.ace_gutter-cell {position: absolute;top: 0;left: 0;right: 0;padding-left: 19px;padding-right: 6px;background-repeat: no-repeat;}.ace_gutter-cell.ace_error {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABOFBMVEX/////////QRswFAb/Ui4wFAYwFAYwFAaWGAfDRymzOSH/PxswFAb/SiUwFAYwFAbUPRvjQiDllog5HhHdRybsTi3/Tyv9Tir+Syj/UC3////XurebMBIwFAb/RSHbPx/gUzfdwL3kzMivKBAwFAbbvbnhPx66NhowFAYwFAaZJg8wFAaxKBDZurf/RB6mMxb/SCMwFAYwFAbxQB3+RB4wFAb/Qhy4Oh+4QifbNRcwFAYwFAYwFAb/QRzdNhgwFAYwFAbav7v/Uy7oaE68MBK5LxLewr/r2NXewLswFAaxJw4wFAbkPRy2PyYwFAaxKhLm1tMwFAazPiQwFAaUGAb/QBrfOx3bvrv/VC/maE4wFAbRPBq6MRO8Qynew8Dp2tjfwb0wFAbx6eju5+by6uns4uH9/f36+vr/GkHjAAAAYnRSTlMAGt+64rnWu/bo8eAA4InH3+DwoN7j4eLi4xP99Nfg4+b+/u9B/eDs1MD1mO7+4PHg2MXa347g7vDizMLN4eG+Pv7i5evs/v79yu7S3/DV7/498Yv24eH+4ufQ3Ozu/v7+y13sRqwAAADLSURBVHjaZc/XDsFgGIBhtDrshlitmk2IrbHFqL2pvXf/+78DPokj7+Fz9qpU/9UXJIlhmPaTaQ6QPaz0mm+5gwkgovcV6GZzd5JtCQwgsxoHOvJO15kleRLAnMgHFIESUEPmawB9ngmelTtipwwfASilxOLyiV5UVUyVAfbG0cCPHig+GBkzAENHS0AstVF6bacZIOzgLmxsHbt2OecNgJC83JERmePUYq8ARGkJx6XtFsdddBQgZE2nPR6CICZhawjA4Fb/chv+399kfR+MMMDGOQAAAABJRU5ErkJggg==");background-repeat: no-repeat;background-position: 2px center;}.ace_gutter-cell.ace_warning {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAmVBMVEX///8AAAD///8AAAAAAABPSzb/5sAAAAB/blH/73z/ulkAAAAAAAD85pkAAAAAAAACAgP/vGz/rkDerGbGrV7/pkQICAf////e0IsAAAD/oED/qTvhrnUAAAD/yHD/njcAAADuv2r/nz//oTj/p064oGf/zHAAAAA9Nir/tFIAAAD/tlTiuWf/tkIAAACynXEAAAAAAAAtIRW7zBpBAAAAM3RSTlMAABR1m7RXO8Ln31Z36zT+neXe5OzooRDfn+TZ4p3h2hTf4t3k3ucyrN1K5+Xaks52Sfs9CXgrAAAAjklEQVR42o3PbQ+CIBQFYEwboPhSYgoYunIqqLn6/z8uYdH8Vmdnu9vz4WwXgN/xTPRD2+sgOcZjsge/whXZgUaYYvT8QnuJaUrjrHUQreGczuEafQCO/SJTufTbroWsPgsllVhq3wJEk2jUSzX3CUEDJC84707djRc5MTAQxoLgupWRwW6UB5fS++NV8AbOZgnsC7BpEAAAAABJRU5ErkJggg==");background-position: 2px center;}.ace_gutter-cell.ace_info {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAJ0Uk5TAAB2k804AAAAPklEQVQY02NgIB68QuO3tiLznjAwpKTgNyDbMegwisCHZUETUZV0ZqOquBpXj2rtnpSJT1AEnnRmL2OgGgAAIKkRQap2htgAAAAASUVORK5CYII=");background-position: 2px center;}.ace_dark .ace_gutter-cell.ace_info {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAJFBMVEUAAAChoaGAgIAqKiq+vr6tra1ZWVmUlJSbm5s8PDxubm56enrdgzg3AAAAAXRSTlMAQObYZgAAAClJREFUeNpjYMAPdsMYHegyJZFQBlsUlMFVCWUYKkAZMxZAGdxlDMQBAG+TBP4B6RyJAAAAAElFTkSuQmCC");}.ace_scrollbar {contain: strict;position: absolute;right: 0;bottom: 0;z-index: 6;}.ace_scrollbar-inner {position: absolute;cursor: text;left: 0;top: 0;}.ace_scrollbar-v{overflow-x: hidden;overflow-y: scroll;top: 0;}.ace_scrollbar-h {overflow-x: scroll;overflow-y: hidden;left: 0;}.ace_print-margin {position: absolute;height: 100%;}.ace_text-input {position: absolute;z-index: 0;width: 0.5em;height: 1em;opacity: 0;background: transparent;-moz-appearance: none;appearance: none;border: none;resize: none;outline: none;overflow: hidden;font: inherit;padding: 0 1px;margin: 0 -1px;contain: strict;-ms-user-select: text;-moz-user-select: text;-webkit-user-select: text;user-select: text;white-space: pre!important;}.ace_text-input.ace_composition {background: transparent;color: inherit;z-index: 1000;opacity: 1;}.ace_composition_placeholder { color: transparent }.ace_composition_marker { border-bottom: 1px solid;position: absolute;border-radius: 0;margin-top: 1px;}[ace_nocontext=true] {transform: none!important;filter: none!important;clip-path: none!important;mask : none!important;contain: none!important;perspective: none!important;mix-blend-mode: initial!important;z-index: auto;}.ace_layer {z-index: 1;position: absolute;overflow: hidden;word-wrap: normal;white-space: pre;height: 100%;width: 100%;box-sizing: border-box;pointer-events: none;}.ace_gutter-layer {position: relative;width: auto;text-align: right;pointer-events: auto;height: 1000000px;contain: style size layout;}.ace_text-layer {font: inherit !important;position: absolute;height: 1000000px;width: 1000000px;contain: style size layout;}.ace_text-layer > .ace_line, .ace_text-layer > .ace_line_group {contain: style size layout;position: absolute;top: 0;left: 0;right: 0;}.ace_hidpi .ace_text-layer,.ace_hidpi .ace_gutter-layer,.ace_hidpi .ace_content,.ace_hidpi .ace_gutter {contain: strict;will-change: transform;}.ace_hidpi .ace_text-layer > .ace_line, .ace_hidpi .ace_text-layer > .ace_line_group {contain: strict;}.ace_cjk {display: inline-block;text-align: center;}.ace_cursor-layer {z-index: 4;}.ace_cursor {z-index: 4;position: absolute;box-sizing: border-box;border-left: 2px solid;transform: translatez(0);}.ace_multiselect .ace_cursor {border-left-width: 1px;}.ace_slim-cursors .ace_cursor {border-left-width: 1px;}.ace_overwrite-cursors .ace_cursor {border-left-width: 0;border-bottom: 1px solid;}.ace_hidden-cursors .ace_cursor {opacity: 0.2;}.ace_hasPlaceholder .ace_hidden-cursors .ace_cursor {opacity: 0;}.ace_smooth-blinking .ace_cursor {transition: opacity 0.18s;}.ace_animate-blinking .ace_cursor {animation-duration: 1000ms;animation-timing-function: step-end;animation-name: blink-ace-animate;animation-iteration-count: infinite;}.ace_animate-blinking.ace_smooth-blinking .ace_cursor {animation-duration: 1000ms;animation-timing-function: ease-in-out;animation-name: blink-ace-animate-smooth;}@keyframes blink-ace-animate {from, to { opacity: 1; }60% { opacity: 0; }}@keyframes blink-ace-animate-smooth {from, to { opacity: 1; }45% { opacity: 1; }60% { opacity: 0; }85% { opacity: 0; }}.ace_marker-layer .ace_step, .ace_marker-layer .ace_stack {position: absolute;z-index: 3;}.ace_marker-layer .ace_selection {position: absolute;z-index: 5;}.ace_marker-layer .ace_bracket {position: absolute;z-index: 6;}.ace_marker-layer .ace_error_bracket {position: absolute;border-bottom: 1px solid #DE5555;border-radius: 0;}.ace_marker-layer .ace_active-line {position: absolute;z-index: 2;}.ace_marker-layer .ace_selected-word {position: absolute;z-index: 4;box-sizing: border-box;}.ace_line .ace_fold {box-sizing: border-box;display: inline-block;height: 11px;margin-top: -2px;vertical-align: middle;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACJJREFUeNpi+P//fxgTAwPDBxDxD078RSX+YeEyDFMCIMAAI3INmXiwf2YAAAAASUVORK5CYII=");background-repeat: no-repeat, repeat-x;background-position: center center, top left;color: transparent;border: 1px solid black;border-radius: 2px;cursor: pointer;pointer-events: auto;}.ace_dark .ace_fold {}.ace_fold:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACBJREFUeNpi+P//fz4TAwPDZxDxD5X4i5fLMEwJgAADAEPVDbjNw87ZAAAAAElFTkSuQmCC");}.ace_tooltip {background-color: #FFF;background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));border: 1px solid gray;border-radius: 1px;box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);color: black;max-width: 100%;padding: 3px 4px;position: fixed;z-index: 999999;box-sizing: border-box;cursor: default;white-space: pre;word-wrap: break-word;line-height: normal;font-style: normal;font-weight: normal;letter-spacing: normal;pointer-events: none;}.ace_folding-enabled > .ace_gutter-cell {padding-right: 13px;}.ace_fold-widget {box-sizing: border-box;margin: 0 -12px 0 1px;display: none;width: 11px;vertical-align: top;background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42mWKsQ0AMAzC8ixLlrzQjzmBiEjp0A6WwBCSPgKAXoLkqSot7nN3yMwR7pZ32NzpKkVoDBUxKAAAAABJRU5ErkJggg==");background-repeat: no-repeat;background-position: center;border-radius: 3px;border: 1px solid transparent;cursor: pointer;}.ace_folding-enabled .ace_fold-widget {display: inline-block;   }.ace_fold-widget.ace_end {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42m3HwQkAMAhD0YzsRchFKI7sAikeWkrxwScEB0nh5e7KTPWimZki4tYfVbX+MNl4pyZXejUO1QAAAABJRU5ErkJggg==");}.ace_fold-widget.ace_closed {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAGCAYAAAAG5SQMAAAAOUlEQVR42jXKwQkAMAgDwKwqKD4EwQ26sSOkVWjgIIHAzPiCgaqiqnJHZnKICBERHN194O5b9vbLuAVRL+l0YWnZAAAAAElFTkSuQmCCXA==");}.ace_fold-widget:hover {border: 1px solid rgba(0, 0, 0, 0.3);background-color: rgba(255, 255, 255, 0.2);box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);}.ace_fold-widget:active {border: 1px solid rgba(0, 0, 0, 0.4);background-color: rgba(0, 0, 0, 0.05);box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);}.ace_dark .ace_fold-widget {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQIW2P4//8/AzoGEQ7oGCaLLAhWiSwB146BAQCSTPYocqT0AAAAAElFTkSuQmCC");}.ace_dark .ace_fold-widget.ace_end {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAH0lEQVQIW2P4//8/AxQ7wNjIAjDMgC4AxjCVKBirIAAF0kz2rlhxpAAAAABJRU5ErkJggg==");}.ace_dark .ace_fold-widget.ace_closed {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAYAAACAcVaiAAAAHElEQVQIW2P4//+/AxAzgDADlOOAznHAKgPWAwARji8UIDTfQQAAAABJRU5ErkJggg==");}.ace_dark .ace_fold-widget:hover {box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);background-color: rgba(255, 255, 255, 0.1);}.ace_dark .ace_fold-widget:active {box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);}.ace_inline_button {border: 1px solid lightgray;display: inline-block;margin: -1px 8px;padding: 0 5px;pointer-events: auto;cursor: pointer;}.ace_inline_button:hover {border-color: gray;background: rgba(200,200,200,0.2);display: inline-block;pointer-events: auto;}.ace_fold-widget.ace_invalid {background-color: #FFB4B4;border-color: #DE5555;}.ace_fade-fold-widgets .ace_fold-widget {transition: opacity 0.4s ease 0.05s;opacity: 0;}.ace_fade-fold-widgets:hover .ace_fold-widget {transition: opacity 0.05s ease 0.05s;opacity:1;}.ace_underline {text-decoration: underline;}.ace_bold {font-weight: bold;}.ace_nobold .ace_bold {font-weight: normal;}.ace_italic {font-style: italic;}.ace_error-marker {background-color: rgba(255, 0, 0,0.2);position: absolute;z-index: 9;}.ace_highlight-marker {background-color: rgba(255, 255, 0,0.2);position: absolute;z-index: 8;}.ace_mobile-menu {position: absolute;line-height: 1.5;border-radius: 4px;-ms-user-select: none;-moz-user-select: none;-webkit-user-select: none;user-select: none;background: white;box-shadow: 1px 3px 2px grey;border: 1px solid #dcdcdc;color: black;}.ace_dark > .ace_mobile-menu {background: #333;color: #ccc;box-shadow: 1px 3px 2px grey;border: 1px solid #444;}.ace_mobile-button {padding: 2px;cursor: pointer;overflow: hidden;}.ace_mobile-button:hover {background-color: #eee;opacity:1;}.ace_mobile-button:active {background-color: #ddd;}.ace_placeholder {font-family: arial;transform: scale(0.9);transform-origin: left;white-space: pre;opacity: 0.7;margin: 0 10px;}
+/*# sourceURL=ace/css/ace_editor.css */</style>
+  <meta charset="utf-8">
+  <title>Case Class Generator | Generate scala case classes from JSON schema</title>
+  <base href="./">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type="text/css">svg:not(:root).svg-inline--fa {
+  overflow: visible; }
+
+.svg-inline--fa {
+  display: inline-block;
+  font-size: inherit;
+  height: 1em;
+  overflow: visible;
+  vertical-align: -.125em; }
+  .svg-inline--fa.fa-lg {
+    vertical-align: -.225em; }
+  .svg-inline--fa.fa-w-1 {
+    width: 0.0625em; }
+  .svg-inline--fa.fa-w-2 {
+    width: 0.125em; }
+  .svg-inline--fa.fa-w-3 {
+    width: 0.1875em; }
+  .svg-inline--fa.fa-w-4 {
+    width: 0.25em; }
+  .svg-inline--fa.fa-w-5 {
+    width: 0.3125em; }
+  .svg-inline--fa.fa-w-6 {
+    width: 0.375em; }
+  .svg-inline--fa.fa-w-7 {
+    width: 0.4375em; }
+  .svg-inline--fa.fa-w-8 {
+    width: 0.5em; }
+  .svg-inline--fa.fa-w-9 {
+    width: 0.5625em; }
+  .svg-inline--fa.fa-w-10 {
+    width: 0.625em; }
+  .svg-inline--fa.fa-w-11 {
+    width: 0.6875em; }
+  .svg-inline--fa.fa-w-12 {
+    width: 0.75em; }
+  .svg-inline--fa.fa-w-13 {
+    width: 0.8125em; }
+  .svg-inline--fa.fa-w-14 {
+    width: 0.875em; }
+  .svg-inline--fa.fa-w-15 {
+    width: 0.9375em; }
+  .svg-inline--fa.fa-w-16 {
+    width: 1em; }
+  .svg-inline--fa.fa-w-17 {
+    width: 1.0625em; }
+  .svg-inline--fa.fa-w-18 {
+    width: 1.125em; }
+  .svg-inline--fa.fa-w-19 {
+    width: 1.1875em; }
+  .svg-inline--fa.fa-w-20 {
+    width: 1.25em; }
+  .svg-inline--fa.fa-pull-left {
+    margin-right: .3em;
+    width: auto; }
+  .svg-inline--fa.fa-pull-right {
+    margin-left: .3em;
+    width: auto; }
+  .svg-inline--fa.fa-border {
+    height: 1.5em; }
+  .svg-inline--fa.fa-li {
+    width: 2em; }
+  .svg-inline--fa.fa-fw {
+    width: 1.25em; }
+
+.fa-layers svg.svg-inline--fa {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0; }
+
+.fa-layers {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  text-align: center;
+  vertical-align: -.125em;
+  width: 1em; }
+  .fa-layers svg.svg-inline--fa {
+    -webkit-transform-origin: center center;
+            transform-origin: center center; }
+
+.fa-layers-text, .fa-layers-counter {
+  display: inline-block;
+  position: absolute;
+  text-align: center; }
+
+.fa-layers-text {
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-transform-origin: center center;
+          transform-origin: center center; }
+
+.fa-layers-counter {
+  background-color: #ff253a;
+  border-radius: 1em;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #fff;
+  height: 1.5em;
+  line-height: 1;
+  max-width: 5em;
+  min-width: 1.5em;
+  overflow: hidden;
+  padding: .25em;
+  right: 0;
+  text-overflow: ellipsis;
+  top: 0;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: top right;
+          transform-origin: top right; }
+
+.fa-layers-bottom-right {
+  bottom: 0;
+  right: 0;
+  top: auto;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: bottom right;
+          transform-origin: bottom right; }
+
+.fa-layers-bottom-left {
+  bottom: 0;
+  left: 0;
+  right: auto;
+  top: auto;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: bottom left;
+          transform-origin: bottom left; }
+
+.fa-layers-top-right {
+  right: 0;
+  top: 0;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: top right;
+          transform-origin: top right; }
+
+.fa-layers-top-left {
+  left: 0;
+  right: auto;
+  top: 0;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: top left;
+          transform-origin: top left; }
+
+.fa-lg {
+  font-size: 1.33333em;
+  line-height: 0.75em;
+  vertical-align: -.0667em; }
+
+.fa-xs {
+  font-size: .75em; }
+
+.fa-sm {
+  font-size: .875em; }
+
+.fa-1x {
+  font-size: 1em; }
+
+.fa-2x {
+  font-size: 2em; }
+
+.fa-3x {
+  font-size: 3em; }
+
+.fa-4x {
+  font-size: 4em; }
+
+.fa-5x {
+  font-size: 5em; }
+
+.fa-6x {
+  font-size: 6em; }
+
+.fa-7x {
+  font-size: 7em; }
+
+.fa-8x {
+  font-size: 8em; }
+
+.fa-9x {
+  font-size: 9em; }
+
+.fa-10x {
+  font-size: 10em; }
+
+.fa-fw {
+  text-align: center;
+  width: 1.25em; }
+
+.fa-ul {
+  list-style-type: none;
+  margin-left: 2.5em;
+  padding-left: 0; }
+  .fa-ul > li {
+    position: relative; }
+
+.fa-li {
+  left: -2em;
+  position: absolute;
+  text-align: center;
+  width: 2em;
+  line-height: inherit; }
+
+.fa-border {
+  border: solid 0.08em #eee;
+  border-radius: .1em;
+  padding: .2em .25em .15em; }
+
+.fa-pull-left {
+  float: left; }
+
+.fa-pull-right {
+  float: right; }
+
+.fa.fa-pull-left,
+.fas.fa-pull-left,
+.far.fa-pull-left,
+.fal.fa-pull-left,
+.fab.fa-pull-left {
+  margin-right: .3em; }
+
+.fa.fa-pull-right,
+.fas.fa-pull-right,
+.far.fa-pull-right,
+.fal.fa-pull-right,
+.fab.fa-pull-right {
+  margin-left: .3em; }
+
+.fa-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
+          animation: fa-spin 2s infinite linear; }
+
+.fa-pulse {
+  -webkit-animation: fa-spin 1s infinite steps(8);
+          animation: fa-spin 1s infinite steps(8); }
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+.fa-rotate-90 {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg); }
+
+.fa-rotate-180 {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg); }
+
+.fa-rotate-270 {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
+  -webkit-transform: rotate(270deg);
+          transform: rotate(270deg); }
+
+.fa-flip-horizontal {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
+  -webkit-transform: scale(-1, 1);
+          transform: scale(-1, 1); }
+
+.fa-flip-vertical {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+  -webkit-transform: scale(1, -1);
+          transform: scale(1, -1); }
+
+.fa-flip-horizontal.fa-flip-vertical {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+  -webkit-transform: scale(-1, -1);
+          transform: scale(-1, -1); }
+
+:root .fa-rotate-90,
+:root .fa-rotate-180,
+:root .fa-rotate-270,
+:root .fa-flip-horizontal,
+:root .fa-flip-vertical {
+  -webkit-filter: none;
+          filter: none; }
+
+.fa-stack {
+  display: inline-block;
+  height: 2em;
+  position: relative;
+  width: 2em; }
+
+.fa-stack-1x,
+.fa-stack-2x {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0; }
+
+.svg-inline--fa.fa-stack-1x {
+  height: 1em;
+  width: 1em; }
+
+.svg-inline--fa.fa-stack-2x {
+  height: 2em;
+  width: 2em; }
+
+.fa-inverse {
+  color: #fff; }
+
+.sr-only {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px; }
+
+.sr-only-focusable:active, .sr-only-focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto; }
+</style><link rel="shortcut icon" type="image/x-icon" href="assets/media/favicon.ico">
+
+  <!-- Linkbots -->
+  <meta name="google-site-verification" content="s_r9AdQ26tukPIqkzrb7WEBRy0Pxs579mSvsaThGv0o">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@cchandurkar">
+  <meta name="twitter:title" content="Case Class Generator">
+  <meta name="twitter:description" content="Generate scala case classes from complex JSON schema">
+  <meta name="twitter:image" content="https://cchandurkar.github.io/case-class-generator/assets/media/screenshot-101.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Case Class Generator">
+  <meta property="og:title" content="Case Class Generator">
+  <meta property="og:description" content="Generate scala case classes from complex JSON schema">
+  <meta property="og:image" content="https://cchandurkar.github.io/case-class-generator/assets/media/screenshot-101.png">
+  <meta property="og:url" content="https://cchandurkar.github.io/case-class-generator">
+  <meta property="og:locale" content="en_US">
+
+<link rel="stylesheet" href="styles.28b9cc6f602dbe246b11.css"><script charset="utf-8" src="6-es2015.8a8f481b8bbf317c1e03.js"></script><style>@charset "UTF-8";as-split[_ngcontent-xvj-c31]{touch-action:pan-y}.app-container[_ngcontent-xvj-c31]{padding-top:45px}.drop-container[_ngcontent-xvj-c31]{border:2px solid #e5e5e5}.drop-container[_ngcontent-xvj-c31]   .upload-button[_ngcontent-xvj-c31]{display:inline-block;border:none;outline:none;cursor:pointer}.drop-container.active[_ngcontent-xvj-c31]{border:2px dashed #c5c5c5}.drop-container.active[_ngcontent-xvj-c31]   .input-editor[_ngcontent-xvj-c31]{background:#e5e5e5}.intro[_ngcontent-xvj-c31]{padding:25px;background-color:#fafafa;display:none}.intro[_ngcontent-xvj-c31]   .title[_ngcontent-xvj-c31]{color:#333}.input-editor-container[_ngcontent-xvj-c31], .output-editor-container[_ngcontent-xvj-c31]{padding:10px}.panel-title[_ngcontent-xvj-c31]{background:#fafafa;padding:10px;border-bottom:1px solid #e5e5e5;position:-webkit-sticky;position:sticky;top:0;z-index:999}.input-editor[_ngcontent-xvj-c31]{overflow:auto;font-size:13px;font-family:Roboto Mono,Inconsolata,Courier New,sans-serif;background:#fafafa;margin-top:5px}div.toolbar[_ngcontent-xvj-c31]{padding:5px}p.title[_ngcontent-xvj-c31]{padding:0;color:#333;font-weight:700;margin:0 0 5px}.options-form[_ngcontent-xvj-c31] > .form-group[_ngcontent-xvj-c31] > .form-check[_ngcontent-xvj-c31]   input[type=checkbox][_ngcontent-xvj-c31] + label.label-checkbox[_ngcontent-xvj-c31]:before, .status-box[_ngcontent-xvj-c31]{height:16px;width:16px;text-align:center;content:" ";display:inline-block;vertical-align:middle}div.option-settings[_ngcontent-xvj-c31]{margin-left:-1.2rem;margin-bottom:10px}.options-form[_ngcontent-xvj-c31] > .form-group[_ngcontent-xvj-c31] > .form-check[_ngcontent-xvj-c31]   input[type=checkbox][_ngcontent-xvj-c31]{display:none}.options-form[_ngcontent-xvj-c31] > .form-group[_ngcontent-xvj-c31] > .form-check[_ngcontent-xvj-c31]   input[type=checkbox][_ngcontent-xvj-c31] + label.label-checkbox[_ngcontent-xvj-c31]{font-weight:400;cursor:pointer;-moz-user-select:none;-webkit-touch-callout:none;-webkit-user-select:none;-o-user-select:none;user-select:none;margin-left:-20px}.options-form[_ngcontent-xvj-c31] > .form-group[_ngcontent-xvj-c31] > .form-check[_ngcontent-xvj-c31]   input[type=checkbox][_ngcontent-xvj-c31] + label.label-checkbox[_ngcontent-xvj-c31]:before{margin-right:5px;border:1px solid #606060}.options-form[_ngcontent-xvj-c31] > .form-group[_ngcontent-xvj-c31] > .form-check[_ngcontent-xvj-c31]   input[type=checkbox][_ngcontent-xvj-c31]:checked + label.label-checkbox[_ngcontent-xvj-c31]:before{content:"";font-family:Font Awesome\ 5 Free;text-align:center;border:none;background:#9fbbb7;font-size:10px}.table-controls[_ngcontent-xvj-c31]   .filter-controls[_ngcontent-xvj-c31] > input[type=checkbox][_ngcontent-xvj-c31]:checked + label.label-checkbox[_ngcontent-xvj-c31]:after{font-weight:400}div.form-group[_ngcontent-xvj-c31] > input.form-control[_ngcontent-xvj-c31], div.form-group[_ngcontent-xvj-c31] > select.form-control[_ngcontent-xvj-c31]{border:0;outline:1px solid #e5e5e5;outline-offset:-1px}div.modal-content[_ngcontent-xvj-c31]   div.alert[_ngcontent-xvj-c31]{border-radius:0;margin-top:10px}div.modal-content[_ngcontent-xvj-c31]   div.modal-footer[_ngcontent-xvj-c31] > button[_ngcontent-xvj-c31]{min-width:90px;border-radius:0}div.modal-dialog[_ngcontent-xvj-c31] > div.modal-content[_ngcontent-xvj-c31]{border-radius:0;font-family:Source Sans Pro}div.modal-dialog[_ngcontent-xvj-c31] > div.modal-content[_ngcontent-xvj-c31] > div.modal-footer[_ngcontent-xvj-c31] > button.btn[_ngcontent-xvj-c31]{border-radius:0}div.modal-dialog[_ngcontent-xvj-c31] > div.modal-content[_ngcontent-xvj-c31] > div.modal-footer[_ngcontent-xvj-c31] > button.btn.btn-primary[_ngcontent-xvj-c31]{min-width:100px}div.modal-dialog[_ngcontent-xvj-c31] > div.modal-content[_ngcontent-xvj-c31] > div.modal-body[_ngcontent-xvj-c31] > div.alert[_ngcontent-xvj-c31]{line-height:20px}.btn-primary[_ngcontent-xvj-c31]{background:#41b3a3;cursor:pointer;border:1px solid #3aa092}.btn-primary[_ngcontent-xvj-c31]:active{background:#3aa092}.btn-clipboard[_ngcontent-xvj-c31]{position:-webkit-sticky;position:sticky;float:right;right:10px;margin-top:-10px;top:50px;color:#dbe5e4;cursor:pointer;border:0;border-radius:.25rem}.btn-clipboard[_ngcontent-xvj-c31]:hover{background:#41b3a3;color:#fff}div.bottom[_ngcontent-xvj-c31], div.bottom-right[_ngcontent-xvj-c31]{position:fixed;bottom:10px}div.bottom-right[_ngcontent-xvj-c31]{right:20px}div.version[_ngcontent-xvj-c31]{color:grey}div.privacy[_ngcontent-xvj-c31], div.version[_ngcontent-xvj-c31]{font-size:12px}div.error-box[_ngcontent-xvj-c31]{background:#ffeded}div.error-box[_ngcontent-xvj-c31], div.warning-box[_ngcontent-xvj-c31]{max-width:300px}.shakeit[_ngcontent-xvj-c31]{-webkit-animation:shake .82s cubic-bezier(.36,.07,.19,.97) both;animation:shake .82s cubic-bezier(.36,.07,.19,.97) both;transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden;perspective:1000px}@-webkit-keyframes shake{10%,90%{transform:translate3d(-1px,0,0)}20%,80%{transform:translate3d(2px,0,0)}30%,50%,70%{transform:translate3d(-4px,0,0)}40%,60%{transform:translate3d(4px,0,0)}}@keyframes shake{10%,90%{transform:translate3d(-1px,0,0)}20%,80%{transform:translate3d(2px,0,0)}30%,50%,70%{transform:translate3d(-4px,0,0)}40%,60%{transform:translate3d(4px,0,0)}}</style><style>nav.navbar[_ngcontent-xvj-c30]{background:#41b3a3;box-shadow:2px 2px 3px #c5c5c5}nav.navbar[_ngcontent-xvj-c30]   .divider-vertical[_ngcontent-xvj-c30]{width:1px;height:30px;margin:auto 8px;background:#3aa092}nav.navbar[_ngcontent-xvj-c30]   a.navbar-brand[_ngcontent-xvj-c30]{font-family:Roboto Mono,Proxima Nova,sans-serif;color:#fff}nav.navbar[_ngcontent-xvj-c30]   .dropdown-item[_ngcontent-xvj-c30]{cursor:pointer}nav.navbar[_ngcontent-xvj-c30]   .dropdown-item[_ngcontent-xvj-c30] > input[_ngcontent-xvj-c30]{display:none}nav.navbar[_ngcontent-xvj-c30]   div.collapse[_ngcontent-xvj-c30]   a[_ngcontent-xvj-c30]{font-size:15px;color:#dbe5e4}nav.navbar[_ngcontent-xvj-c30]   div.collapse[_ngcontent-xvj-c30]   a[_ngcontent-xvj-c30]:hover{color:#fff}nav.navbar[_ngcontent-xvj-c30]   div.collapse[_ngcontent-xvj-c30]   i.fab[_ngcontent-xvj-c30]{margin-right:5px}</style><style>[_nghost-xvj-c25]{display:flex;flex-wrap:nowrap;justify-content:flex-start;align-items:stretch;overflow:hidden;width:100%;height:100%}[_nghost-xvj-c25] > .as-split-gutter[_ngcontent-xvj-c25]{flex-grow:0;flex-shrink:0;background-color:#eee;display:flex;align-items:center;justify-content:center}[_nghost-xvj-c25] > .as-split-gutter[_ngcontent-xvj-c25] > .as-split-gutter-icon[_ngcontent-xvj-c25]{width:100%;height:100%;background-position:center center;background-repeat:no-repeat}[_nghost-xvj-c25]    >.as-split-area{flex-grow:0;flex-shrink:0;overflow-x:hidden;overflow-y:auto}[_nghost-xvj-c25]    >.as-split-area.as-hidden{flex:0 1 0!important;overflow-x:hidden;overflow-y:hidden}.as-horizontal[_nghost-xvj-c25]{flex-direction:row}.as-horizontal[_nghost-xvj-c25] > .as-split-gutter[_ngcontent-xvj-c25]{flex-direction:row;cursor:col-resize;height:100%}.as-horizontal[_nghost-xvj-c25] > .as-split-gutter[_ngcontent-xvj-c25] > .as-split-gutter-icon[_ngcontent-xvj-c25]{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==)}.as-horizontal[_nghost-xvj-c25]    >.as-split-area{height:100%}.as-vertical[_nghost-xvj-c25]{flex-direction:column}.as-vertical[_nghost-xvj-c25] > .as-split-gutter[_ngcontent-xvj-c25]{flex-direction:column;cursor:row-resize;width:100%}.as-vertical[_nghost-xvj-c25] > .as-split-gutter[_ngcontent-xvj-c25]   .as-split-gutter-icon[_ngcontent-xvj-c25]{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFCAMAAABl/6zIAAAABlBMVEUAAADMzMzIT8AyAAAAAXRSTlMAQObYZgAAABRJREFUeAFjYGRkwIMJSeMHlBkOABP7AEGzSuPKAAAAAElFTkSuQmCC)}.as-vertical[_nghost-xvj-c25]    >.as-split-area{width:100%}.as-vertical[_nghost-xvj-c25]    >.as-split-area.as-hidden{max-width:0}.as-disabled[_nghost-xvj-c25] > .as-split-gutter[_ngcontent-xvj-c25]{cursor:default}.as-disabled[_nghost-xvj-c25] > .as-split-gutter[_ngcontent-xvj-c25]   .as-split-gutter-icon[_ngcontent-xvj-c25]{background-image:url("")}.as-transition.as-init[_nghost-xvj-c25]:not(.as-dragging)    >.as-split-area, .as-transition.as-init[_nghost-xvj-c25]:not(.as-dragging) > .as-split-gutter[_ngcontent-xvj-c25]{transition:flex-basis .3s}</style><style>[_nghost-xvj-c22] { display:block;width:100%; }</style><script charset="utf-8" src="8-es2015.322001235b33df794d72.js"></script><style type="text/css">
+/*
+  @angular/flex-layout - workaround for possible browser quirk with mediaQuery listeners
+  see http://bit.ly/2sd4HMP
+*/
+@media screen and (min-width: 600px), screen and (min-width: 960px), screen and (min-width: 1280px), screen and (min-width: 1920px), screen and (min-width: 1920px) and (max-width: 4999.9px), screen and (max-width: 1919.9px), screen and (min-width: 1280px) and (max-width: 1919.9px), screen and (max-width: 1279.9px), screen and (min-width: 960px) and (max-width: 1279.9px), screen and (max-width: 959.9px), screen and (min-width: 600px) and (max-width: 959.9px), screen and (max-width: 599.9px), screen and (min-width: 0px) and (max-width: 599.9px), print {.fx-query-test{ }}
+</style><script src="https://www.googletagmanager.com/gtag/js?l=dataLayer" async=""></script><script charset="utf-8" src="10-es2015.f0be51939f05d6c00c5a.js"></script><script charset="utf-8" src="9-es2015.50ce626380827121e987.js"></script><script charset="utf-8" src="11-es2015.10cf7ce62d25eabc943f.js"></script></head>
+<body>
+  <app-root _nghost-xvj-c31="" ng-version="10.2.4"><app-header _ngcontent-xvj-c31="" _nghost-xvj-c30=""><nav _ngcontent-xvj-c30="" class="navbar navbar-expand-md navbar-dark fixed-top py-1"><button _ngcontent-xvj-c30="" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler pl-1 pr-3 border-0"><svg _ngcontent-xvj-c30="" class="svg-inline--fa fa-bars fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path></svg><!-- <i _ngcontent-xvj-c30="" class="fas fa-bars"></i> --></button><a _ngcontent-xvj-c30="" href="javascript:void(0)" class="navbar-brand mr-2"><span _ngcontent-xvj-c30="" class="reserve">case class</span> Generator( </a><ul _ngcontent-xvj-c30="" class="navbar-nav"><li _ngcontent-xvj-c30="" class="nav-item dropdown"><a _ngcontent-xvj-c30="" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"> File </a><div _ngcontent-xvj-c30="" aria-labelledby="navbarDropdown" class="dropdown-menu position-absolute"><a _ngcontent-xvj-c30="" href="javascript:void(0)" data-toggle="modal" data-target="#exampleModal" class="dropdown-item"><svg _ngcontent-xvj-c30="" class="svg-inline--fa fa-link fa-w-16" style="margin-right: 4px;" aria-hidden="true" data-prefix="fas" data-icon="link" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"></path></svg><!-- <i _ngcontent-xvj-c30="" class="fas fa-link" style="margin-right: 4px;"></i> --> Import URL </a><label _ngcontent-xvj-c30="" for="fileuploadxp" href="javascript:void(0)" class="dropdown-item upload-button-container"><input _ngcontent-xvj-c30="" type="file" ngfileselect="" id="fileuploadxp"><svg _ngcontent-xvj-c30="" class="svg-inline--fa fa-upload fa-w-16" style="margin-right: 5px;" aria-hidden="true" data-prefix="fas" data-icon="upload" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path></svg><!-- <i _ngcontent-xvj-c30="" class="fas fa-upload" style="margin-right: 5px;"></i> --> Upload File </label><div _ngcontent-xvj-c30="" class="dropdown-divider"></div><a _ngcontent-xvj-c30="" href="javascript:void(0)" class="dropdown-item"><svg _ngcontent-xvj-c30="" class="svg-inline--fa fa-eraser fa-w-16" style="margin-right: 5px;" aria-hidden="true" data-prefix="fas" data-icon="eraser" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M497.941 273.941c18.745-18.745 18.745-49.137 0-67.882l-160-160c-18.745-18.745-49.136-18.746-67.883 0l-256 256c-18.745 18.745-18.745 49.137 0 67.882l96 96A48.004 48.004 0 0 0 144 480h356c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12H355.883l142.058-142.059zm-302.627-62.627l137.373 137.373L265.373 416H150.628l-80-80 124.686-124.686z"></path></svg><!-- <i _ngcontent-xvj-c30="" class="fas fa-eraser" style="margin-right: 5px;"></i> --> Clear Editor </a></div></li></ul><a _ngcontent-xvj-c30="" href="javascript:void(0)" class="navbar-brand pr-0" style="margin-left: 10px;"> ) </a><div _ngcontent-xvj-c30="" id="navbarNavDropdown" class="collapse navbar-collapse justify-content-end"><ul _ngcontent-xvj-c30="" class="navbar-nav"><li _ngcontent-xvj-c30="" class="nav-item"><a _ngcontent-xvj-c30="" target="_blank" href="https://www.npmjs.com/package/json-schema-to-case-class" class="nav-link nav-git"><svg _ngcontent-xvj-c30="" class="svg-inline--fa fa-cube fa-w-16 mr-1" aria-hidden="true" data-prefix="fas" data-icon="cube" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M239.1 6.3l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V129.3c0-20-12.4-37.9-31.1-44.9l-208-78C262 2.2 250 2.2 239.1 6.3zM256 68.4l192 72v1.1l-192 78-192-78v-1.1l192-72zm32 356V275.5l160-65v133.9l-160 80z"></path></svg><!-- <i _ngcontent-xvj-c30="" class="fas fa-cube mr-1"></i> --> NPM Package</a></li><li _ngcontent-xvj-c30="" class="nav-item"><a _ngcontent-xvj-c30="" target="_blank" href="https://github.com/cchandurkar/json-schema-to-case-class" class="nav-link nav-git"><i _ngcontent-xvj-c30="" class="fab fa-github mr-1"></i> GitHub</a></li><li _ngcontent-xvj-c30="" class="nav-item"><a _ngcontent-xvj-c30="" target="_blank" href="https://github.com/cchandurkar/json-schema-to-case-class/issues" class="nav-link nav-git"><svg _ngcontent-xvj-c30="" class="svg-inline--fa fa-bug fa-w-16 mr-1" aria-hidden="true" data-prefix="fas" data-icon="bug" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z"></path></svg><!-- <i _ngcontent-xvj-c30="" class="fas fa-bug mr-1"></i> --> Report Issues</a></li><li _ngcontent-xvj-c30="" class="nav-item"><a _ngcontent-xvj-c30="" target="_blank" href="https://twitter.com/cchandurkar" class="nav-link nav-tweet"><i _ngcontent-xvj-c30="" class="fab fa-twitter"></i> Follow</a></li><li _ngcontent-xvj-c30="" class="nav-item"><a _ngcontent-xvj-c30="" target="_blank" href="https://www.linkedin.com/in/cchandurkar/" class="nav-link nav-contact"><i _ngcontent-xvj-c30="" class="fab fa-linkedin"></i> Connect</a></li></ul></div></nav></app-header><div _ngcontent-xvj-c31="" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade"><div _ngcontent-xvj-c31="" role="document" class="modal-dialog"><div _ngcontent-xvj-c31="" class="modal-content"><div _ngcontent-xvj-c31="" class="modal-body"><form _ngcontent-xvj-c31="" novalidate="" class="ng-untouched ng-pristine ng-valid"><div _ngcontent-xvj-c31="" class="form-group"><label _ngcontent-xvj-c31="" for="urlInput">JSON File URL:</label><input _ngcontent-xvj-c31="" type="url" id="urlInput" placeholder="http://example.com/sample.json" required="" class="form-control form-control-sm ng-untouched ng-pristine ng-invalid"><small _ngcontent-xvj-c31="" id="urlInputHelp" class="form-text text-muted">Response content-type could be <code _ngcontent-xvj-c31="">text</code> or <code _ngcontent-xvj-c31="">text/json</code></small></div></form><!----></div><div _ngcontent-xvj-c31="" class="modal-footer"><button _ngcontent-xvj-c31="" type="button" data-dismiss="modal" class="btn btn-secondary">Close</button><button _ngcontent-xvj-c31="" type="button" class="btn btn-primary" disabled=""><!----><span _ngcontent-xvj-c31="">Import</span><!----></button></div></div></div></div><div _ngcontent-xvj-c31="" class="app-container h-100"><as-split _ngcontent-xvj-c31="" _nghost-xvj-c25="" class="as-vertical as-init"><as-split-area _ngcontent-xvj-c31="" size="75" class="as-split-area" style="order: 0; flex: 0 0 calc(75% - 8.25px);"><as-split _ngcontent-xvj-c31="" direction="horizontal" _nghost-xvj-c25="" class="as-horizontal as-init"><as-split-area _ngcontent-xvj-c31="" size="50" class="as-split-area" style="order: 0; flex: 0 0 calc(50% - 5.5px);"><style id="ace-tm">.ace-tm .ace_gutter {background: #f0f0f0;color: #333;}.ace-tm .ace_print-margin {width: 1px;background: #e8e8e8;}.ace-tm .ace_fold {background-color: #6B72E6;}.ace-tm {background-color: #FFFFFF;color: black;}.ace-tm .ace_cursor {color: black;}.ace-tm .ace_invisible {color: rgb(191, 191, 191);}.ace-tm .ace_storage,.ace-tm .ace_keyword {color: blue;}.ace-tm .ace_constant {color: rgb(197, 6, 11);}.ace-tm .ace_constant.ace_buildin {color: rgb(88, 72, 246);}.ace-tm .ace_constant.ace_language {color: rgb(88, 92, 246);}.ace-tm .ace_constant.ace_library {color: rgb(6, 150, 14);}.ace-tm .ace_invalid {background-color: rgba(255, 0, 0, 0.1);color: red;}.ace-tm .ace_support.ace_function {color: rgb(60, 76, 114);}.ace-tm .ace_support.ace_constant {color: rgb(6, 150, 14);}.ace-tm .ace_support.ace_type,.ace-tm .ace_support.ace_class {color: rgb(109, 121, 222);}.ace-tm .ace_keyword.ace_operator {color: rgb(104, 118, 135);}.ace-tm .ace_string {color: rgb(3, 106, 7);}.ace-tm .ace_comment {color: rgb(76, 136, 107);}.ace-tm .ace_comment.ace_doc {color: rgb(0, 102, 255);}.ace-tm .ace_comment.ace_doc.ace_tag {color: rgb(128, 159, 191);}.ace-tm .ace_constant.ace_numeric {color: rgb(0, 0, 205);}.ace-tm .ace_variable {color: rgb(49, 132, 149);}.ace-tm .ace_xml-pe {color: rgb(104, 104, 91);}.ace-tm .ace_entity.ace_name.ace_function {color: #0000A2;}.ace-tm .ace_heading {color: rgb(12, 7, 255);}.ace-tm .ace_list {color:rgb(185, 6, 144);}.ace-tm .ace_meta.ace_tag {color:rgb(0, 22, 142);}.ace-tm .ace_string.ace_regex {color: rgb(255, 0, 0)}.ace-tm .ace_marker-layer .ace_selection {background: rgb(181, 213, 255);}.ace-tm.ace_multiselect .ace_selection.ace_start {box-shadow: 0 0 3px 0px white;}.ace-tm .ace_marker-layer .ace_step {background: rgb(252, 255, 0);}.ace-tm .ace_marker-layer .ace_stack {background: rgb(164, 229, 101);}.ace-tm .ace_marker-layer .ace_bracket {margin: -1px 0 0 -1px;border: 1px solid rgb(192, 192, 192);}.ace-tm .ace_marker-layer .ace_active-line {background: rgba(0, 0, 0, 0.07);}.ace-tm .ace_gutter-active-line {background-color : #dcdcdc;}.ace-tm .ace_marker-layer .ace_selected-word {background: rgb(250, 250, 255);border: 1px solid rgb(200, 200, 250);}.ace-tm .ace_indent-guide {background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;}
+/*# sourceURL=ace/css/ace-tm */</style><div _ngcontent-xvj-c31="" ngfiledrop="" class="drop-container h-100"><ace-editor _ngcontent-xvj-c31="" class="input-editor h-100 ace_editor ace_hidpi ace-tm" _nghost-xvj-c22=""><textarea class="ace_text-input" wrap="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="opacity: 0; font-size: 1px; transform: translate(0px, 0px);"></textarea><div class="ace_gutter" aria-hidden="true" style="left: 0px; width: 49px;"><div class="ace_layer ace_gutter-layer ace_folding-enabled" style="height: 1e+06px; transform: translate(0px, 0px); width: 49px;"><div class="ace_gutter-cell " style="height: 18px; top: 0px;">1<span class="ace_fold-widget ace_start ace_open" style="height: 18px; display: inline-block;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 18px;">2<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 36px;">3<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 54px;">4<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 72px;">5<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 90px;">6<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 108px;">7<span class="ace_fold-widget ace_start ace_open" style="height: 18px; display: inline-block;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 126px;">8<span class="ace_fold-widget ace_start ace_open" style="height: 18px; display: inline-block;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 144px;">9<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 162px;">10<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 180px;">11<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 198px;">12<span class="ace_fold-widget ace_start ace_open" style="height: 18px; display: inline-block;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 216px;">13<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 234px;">14<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 252px;">15<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 270px;">16<span class="ace_fold-widget ace_start ace_open" style="height: 18px; display: inline-block;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 288px;">17<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 306px;">18<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 324px;">19<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 342px;">20<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 360px;">21<span class="ace_fold-widget ace_start ace_open" style="height: 18px; display: inline-block;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 378px;">22<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 396px;">23<span style="display: none;"></span></div><div class="ace_gutter-cell " style="height: 18px; top: 414px;">24<span class="ace_fold-widget ace_start ace_open" style="height: 18px; display: inline-block;"></span></div></div></div><div class="ace_scroller" style="line-height: 18px; left: 48.6016px; right: 0px; bottom: 0px;"><div class="ace_content" style="transform: translate(0px, 0px); width: 468px; height: 440px;"><div class="ace_layer ace_print-margin-layer"><div class="ace_print-margin" style="left: 628px; visibility: visible;"></div></div><div class="ace_layer ace_marker-layer"><div class="ace_bracket ace_start ace_br15" style="height: 18px; width: 7.80078px; top: 0px; left: 4px;"></div></div><div class="ace_layer ace_text-layer" style="height: 1e+06px; margin: 0px 4px; transform: translate(0px, 0px);"><div class="ace_line" style="height: 18px; top: 0px;"><span class="ace_paren ace_lparen">{</span></div><div class="ace_line" style="height: 18px; top: 18px;">  <span class="ace_variable">"$schema"</span>: <span class="ace_string">"http://json-schema.org/draft-07/schema#"</span>,</div><div class="ace_line" style="height: 18px; top: 36px;">  <span class="ace_variable">"$id"</span>: <span class="ace_string">"http://example.com/product.schema.json"</span>,</div><div class="ace_line" style="height: 18px; top: 54px;">  <span class="ace_variable">"title"</span>: <span class="ace_string">"Product"</span>,</div><div class="ace_line" style="height: 18px; top: 72px;">  <span class="ace_variable">"description"</span>: <span class="ace_string">"A product from Acme's catalog"</span>,</div><div class="ace_line" style="height: 18px; top: 90px;">  <span class="ace_variable">"type"</span>: <span class="ace_string">"object"</span>,</div><div class="ace_line" style="height: 18px; top: 108px;">  <span class="ace_variable">"properties"</span>: <span class="ace_paren ace_lparen">{</span></div><div class="ace_line" style="height: 18px; top: 126px;">    <span class="ace_variable">"productId"</span>: <span class="ace_paren ace_lparen">{</span></div><div class="ace_line" style="height: 18px; top: 144px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"description"</span>: <span class="ace_string">"The unique identifier for a product"</span>,</div><div class="ace_line" style="height: 18px; top: 162px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"type"</span>: <span class="ace_string">"integer"</span></div><div class="ace_line" style="height: 18px; top: 180px;">    <span class="ace_paren ace_rparen">}</span>,</div><div class="ace_line" style="height: 18px; top: 198px;">    <span class="ace_variable">"productName"</span>: <span class="ace_paren ace_lparen">{</span></div><div class="ace_line" style="height: 18px; top: 216px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"description"</span>: <span class="ace_string">"Name of the product"</span>,</div><div class="ace_line" style="height: 18px; top: 234px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"type"</span>: <span class="ace_string">"string"</span></div><div class="ace_line" style="height: 18px; top: 252px;">    <span class="ace_paren ace_rparen">}</span>,</div><div class="ace_line" style="height: 18px; top: 270px;">    <span class="ace_variable">"price"</span>: <span class="ace_paren ace_lparen">{</span></div><div class="ace_line" style="height: 18px; top: 288px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"description"</span>: <span class="ace_string">"The price of the product"</span>,</div><div class="ace_line" style="height: 18px; top: 306px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"type"</span>: <span class="ace_string">"number"</span>,</div><div class="ace_line" style="height: 18px; top: 324px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"exclusiveMinimum"</span>: <span class="ace_constant ace_numeric">0</span></div><div class="ace_line" style="height: 18px; top: 342px;">    <span class="ace_paren ace_rparen">}</span>,</div><div class="ace_line" style="height: 18px; top: 360px;">    <span class="ace_variable">"tags"</span>: <span class="ace_paren ace_lparen">{</span></div><div class="ace_line" style="height: 18px; top: 378px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"description"</span>: <span class="ace_string">"Tags for the product"</span>,</div><div class="ace_line" style="height: 18px; top: 396px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"type"</span>: <span class="ace_string">"array"</span>,</div><div class="ace_line" style="height: 18px; top: 414px;"><span class="ace_indent-guide">    </span>  <span class="ace_variable">"items"</span>: <span class="ace_paren ace_lparen">{</span></div></div><div class="ace_layer ace_marker-layer"></div><div class="ace_layer ace_cursor-layer ace_hidden-cursors"><div class="ace_cursor" style="display: block; transform: translate(12px, 972px); width: 8px; height: 18px;"></div></div></div></div><div class="ace_scrollbar ace_scrollbar-v" style="width: 20px; bottom: 0px;"><div class="ace_scrollbar-inner" style="width: 20px; height: 990px;">&nbsp;</div></div><div class="ace_scrollbar ace_scrollbar-h" style="height: 20px; left: 48.6016px; right: 0px;"><div class="ace_scrollbar-inner" style="height: 20px; width: 468px;">&nbsp;</div></div><div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: hidden;"><div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: visible;">הההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההה</div><div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font-style: inherit; font-variant: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; overflow: visible;">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div></div></ace-editor></div></as-split-area><as-split-area _ngcontent-xvj-c31="" size="50" class="as-split-area" style="order: 2; flex: 0 0 calc(50% - 5.5px);"><as-split _ngcontent-xvj-c31="" direction="vertical" _nghost-xvj-c25="" class="as-vertical as-init"><as-split-area _ngcontent-xvj-c31="" size="60" class="position-relative as-split-area" style="order: 0; flex: 0 0 100%;"><h6 _ngcontent-xvj-c31="" class="panel-title"><b _ngcontent-xvj-c31="">Case Class</b><span _ngcontent-xvj-c31=""><!----><div _ngcontent-xvj-c31="" aria-labelledby="errorDropdownManuLink" class="dropdown-menu dropdown-menu-right error-box pl-3 pr-3 alert alert-danger" style="border-radius: 0;"><!----></div></span><span _ngcontent-xvj-c31=""><!----><div _ngcontent-xvj-c31="" aria-labelledby="warningDropdownManuLink" class="dropdown-menu dropdown-menu-right warning-box pl-3 pr-3 alert alert-warning" style="border-radius: 0;"><!----></div></span></h6><div _ngcontent-xvj-c31="" class="output-editor-container h-100"><button _ngcontent-xvj-c31="" type="button" class="btn btn-outline-primary btn-sm btn-clipboard">copy</button><!----><pre _ngcontent-xvj-c31=""><code _ngcontent-xvj-c31="" class="hljs"><span class="hljs-type">Failed</span> to initialize the engine. <span class="hljs-type">Try</span> reloading the page.
+<span class="hljs-type">Or</span> visit: <span class="hljs-symbol">'https</span>:<span class="hljs-comment">//cchandurkar.github.io/case-class-generator'</span></code></pre><!----></div></as-split-area><!----><!----></as-split></as-split-area><div _ngcontent-xvj-c25="" class="as-split-gutter" style="flex-basis: 11px; order: 1;"><div _ngcontent-xvj-c25="" class="as-split-gutter-icon"></div></div><!----><!----><!----></as-split></as-split-area><as-split-area _ngcontent-xvj-c31="" size="25" minsize="25" class="as-split-area as-min" style="order: 2; flex: 0 0 calc(25% - 2.75px);"><div _ngcontent-xvj-c31="" class="output-editor-container"><h5 _ngcontent-xvj-c31=""><b _ngcontent-xvj-c31="">Settings</b></h5><hr _ngcontent-xvj-c31=""><form _ngcontent-xvj-c31="" novalidate="" class="options-form ng-untouched ng-pristine ng-valid"><div _ngcontent-xvj-c31="" class="form-group"><label _ngcontent-xvj-c31="" for="maxDepthInput">Nested objects depth</label><input _ngcontent-xvj-c31="" type="number" id="maxDepthInput" placeholder="Max Depth" class="form-control form-control-sm ng-untouched ng-pristine ng-valid"><small _ngcontent-xvj-c31="" id="maxDepthHelp" class="form-text text-muted">Put 0 for no limit on depth.</small></div><div _ngcontent-xvj-c31="" class="form-group"><div _ngcontent-xvj-c31="" class="form-check"><div _ngcontent-xvj-c31="" class="option-settings"><div _ngcontent-xvj-c31="" class="custom-control custom-radio"><input _ngcontent-xvj-c31="" type="radio" id="useOptions" name="useOptions" class="custom-control-input ng-untouched ng-pristine ng-valid"><label _ngcontent-xvj-c31="" for="useOptions" class="custom-control-label">Use <code _ngcontent-xvj-c31="">Option[]</code> for optional parameters</label><br _ngcontent-xvj-c31=""></div><div _ngcontent-xvj-c31="" class="custom-control custom-radio"><input _ngcontent-xvj-c31="" type="radio" id="useOptionsForAll" name="useOptions" class="custom-control-input ng-untouched ng-pristine ng-valid"><label _ngcontent-xvj-c31="" for="useOptionsForAll" class="custom-control-label">Use <code _ngcontent-xvj-c31="">Option[]</code> for all parameters</label></div><div _ngcontent-xvj-c31="" class="custom-control custom-radio"><input _ngcontent-xvj-c31="" type="radio" id="dontUseOptions" name="useOptions" class="custom-control-input ng-untouched ng-pristine ng-valid"><label _ngcontent-xvj-c31="" for="dontUseOptions" class="custom-control-label">Do not use <code _ngcontent-xvj-c31="">Option[]</code></label></div></div><input _ngcontent-xvj-c31="" type="checkbox" id="parseRef" class="form-check-input ng-untouched ng-pristine ng-valid"><label _ngcontent-xvj-c31="" for="parseRef" class="form-check-label label-checkbox">Parse references</label><br _ngcontent-xvj-c31=""><input _ngcontent-xvj-c31="" type="checkbox" id="generateComments" class="form-check-input ng-untouched ng-pristine ng-valid"><label _ngcontent-xvj-c31="" for="generateComments" class="form-check-label label-checkbox">Generate Scaladoc</label></div></div><div _ngcontent-xvj-c31="" class="form-group"><label _ngcontent-xvj-c31="" for="textCaseClassName">Text case for class name</label><select _ngcontent-xvj-c31="" id="textCaseClassName" class="form-control form-control-sm ng-untouched ng-pristine ng-valid"><option _ngcontent-xvj-c31="" value="camelCase">camel <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="capitalCase">capital <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="constantCase">constant <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="dotCase">dot <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="headerCase">header <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="noCase">no <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="paramCase">param <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="pascalCase">pascal <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="pathCase">path <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="sentenceCase">sentence <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="snakeCase">snake <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="ignoreCase">ignore <span _ngcontent-xvj-c31="">case</span><!----></option><!----></select></div><div _ngcontent-xvj-c31="" class="form-group"><label _ngcontent-xvj-c31="" for="textCaseClassParams">Text case for class parameters</label><select _ngcontent-xvj-c31="" id="textCaseClassParams" class="form-control form-control-sm ng-untouched ng-pristine ng-valid"><option _ngcontent-xvj-c31="" value="camelCase">camel <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="capitalCase">capital <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="constantCase">constant <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="dotCase">dot <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="headerCase">header <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="noCase">no <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="paramCase">param <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="pascalCase">pascal <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="pathCase">path <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="sentenceCase">sentence <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="snakeCase">snake <span _ngcontent-xvj-c31="">case</span><!----></option><option _ngcontent-xvj-c31="" value="ignoreCase">ignore <span _ngcontent-xvj-c31="">case</span><!----></option><!----></select></div><div _ngcontent-xvj-c31="" class="form-group"><label _ngcontent-xvj-c31="" for="topCaseClassName">Generated case class name</label><input _ngcontent-xvj-c31="" type="text" id="topCaseClassName" placeholder="MyCaseClass" class="form-control form-control-sm ng-untouched ng-pristine ng-valid"></div><div _ngcontent-xvj-c31="" class="form-group"><label _ngcontent-xvj-c31="" for="defaultGenericType">Default generic type</label><input _ngcontent-xvj-c31="" type="text" id="defaultGenericType" class="form-control form-control-sm ng-untouched ng-pristine ng-valid"></div><button _ngcontent-xvj-c31="" type="submit" class="btn-primary">Generate</button><div _ngcontent-xvj-c31="" class="bottom-right version"> v1.1.9 </div></form></div></as-split-area><div _ngcontent-xvj-c25="" class="as-split-gutter" style="flex-basis: 11px; order: 1;"><div _ngcontent-xvj-c25="" class="as-split-gutter-icon"></div></div><!----><!----><!----></as-split></div></app-root>
+<script src="runtime-es2015.2c65efeff48df7199f1d.js" type="module"></script><script src="runtime-es5.2c65efeff48df7199f1d.js" nomodule="" defer=""></script><script src="polyfills-es5.75d8d5625663d5ff93d4.js" nomodule="" defer=""></script><script src="polyfills-es2015.a805bff1fdc7e795e30e.js" type="module"></script><script src="scripts.348a107c9e6b72a484d2.js" defer=""></script><script src="vendor-es2015.9efd20847a12f8657a6f.js" type="module"></script><script src="vendor-es5.9efd20847a12f8657a6f.js" nomodule="" defer=""></script><script src="main-es2015.01127baace18740139c3.js" type="module"></script><script src="main-es5.01127baace18740139c3.js" nomodule="" defer=""></script>
+
+</body></html>
