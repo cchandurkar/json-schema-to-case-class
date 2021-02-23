@@ -19,7 +19,7 @@ export {
 
 /** Type mapping between JSON Schema and Scala **/
 const typeMap = {
-  integer: 'Integer',
+  integer: 'Int',
   string: 'String',
   number: 'Double',
   boolean: 'Boolean',
