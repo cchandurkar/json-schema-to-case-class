@@ -11,7 +11,8 @@ export class Config {
     topLevelCaseClassName: 'MyCaseClass',
     defaultGenericType: 'Any',
     parseRefs: true,
-    generateComments: false
+    generateComments: false,
+    generateValidations: false
   };
 
   static resolve (config?: IConfig): IConfigResolved {
