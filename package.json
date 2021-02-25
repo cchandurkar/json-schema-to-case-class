@@ -1,6 +1,6 @@
 {
   "name": "json-schema-to-case-class",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "A library that converts JSON Schema to Scala Case Classes",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
