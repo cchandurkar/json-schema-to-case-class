@@ -3,6 +3,7 @@ import { expect } from 'chai';
 
 import * as simpleSchema from './test-data/simple-schema.json'
 import * as localRefSchemaSample from './test-data/local-ref-schema.json'
+import * as nestedSchema from './test-data/nested-schema.json'
 
 describe('Function convert()', () => {
 
@@ -72,6 +73,31 @@ describe('Function convert()', () => {
 
     // Count occurrences
     const occurrences = (result.match(/Option\[/g) || []).length;
+    expect(occurrences).to.eql(3);
+
+  });
+
+  it('should should generate case class with validations as expected', async () => {
+
+    const config = {
+      maxDepth: 0,
+      optionSetting: 'useOptions',
+      classNameTextCase: 'pascalCase',
+      classParamsTextCase: 'snakeCase',
+      topLevelCaseClassName: 'PersonInfo',
+      defaultGenericType: 'Any',
+      parseRefs: true,
+      generateComments: true,
+      generateValidations: true
+    };
+
+    const result = await convert(nestedSchema, config);
+
+    expect(result).to.be.an('string');
+    expect(result).to.contain('Option[');
+    expect(result).to.contain('assert');
+
+    const occurrences = (result.match(/assert\(/g) || []).length;
     expect(occurrences).to.eql(3);
 
   });

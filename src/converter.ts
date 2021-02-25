@@ -8,6 +8,7 @@ import * as allTextCases from 'change-case';
 import $RefParser from '@apidevtools/json-schema-ref-parser/lib/index';
 import { Config } from './config';
 import { format } from './formatter';
+import { validations } from './validations';
 
 export {
   supportedTextCases,
@@ -86,6 +87,20 @@ const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
 };
 
 /**
+ * Extract validation fields from the properties object.
+ *
+ * @param paramName
+ * @param paramObject
+ */
+const extractValidations = (paramName: string, paramObject: any): any => {
+  return Object.keys(paramObject)
+    .filter(key => validations[key])
+    .reduce((res: any, key: string) => {
+      return { ...res, [key]: paramObject[key] };
+    }, {})
+};
+
+/**
  * Recursive function that traverses the nested JSON Schema
  * and generates the simplified version of it. Every level of the schema
  * becomes one case class.
@@ -113,9 +128,10 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
   const parameters = map(schemaObject.properties, (paramObject, key) => {
 
     // Get and convert case class parameter's name, type and description
-    const paramName = classParamsTextCase.call(supportedTextCases, key);
     let paramType = get(typeMap, paramObject.type, config.defaultGenericType);
+    const paramName = classParamsTextCase.call(supportedTextCases, key);
     const description = paramObject.description;
+    const validations = extractValidations(paramName, paramObject);
 
     // For nested objects, use parameter name as
     // case class name ( if title property is not defined )
@@ -147,6 +163,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
       paramName,
       paramType,
       description,
+      validations,
       nestedObject
     };
 
