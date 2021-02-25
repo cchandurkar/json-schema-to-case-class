@@ -122,7 +122,7 @@ describe('Function stripSchema()', () => {
 
     expect(result).to.be.an('object');
     expect(result.entityName).to.eql(nestedSchema.title);
-    expect(get(find(result.parameters, { paramName: 'product_id' }), 'paramType')).to.eql('Integer');
+    expect(get(find(result.parameters, { paramName: 'product_id' }), 'paramType')).to.eql('Int');
     expect(get(find(result.parameters, { paramName: 'tags' }), 'paramType')).to.eql('List[Any]');
     expect(get(find(result.parameters, { paramName: 'dimensions' }), 'paramType')).to.eql('Any');
 
