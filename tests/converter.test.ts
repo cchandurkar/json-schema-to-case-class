@@ -3,7 +3,7 @@ import { expect } from 'chai';
 
 import * as simpleSchema from './test-data/simple-schema.json'
 import * as localRefSchemaSample from './test-data/local-ref-schema.json'
-import * as nestedSchema from './test-data/nested-schema.json'
+import * as latLongSchema from './test-data/lat-long-schema.json'
 
 describe('Function convert()', () => {
 
@@ -91,14 +91,12 @@ describe('Function convert()', () => {
       generateValidations: true
     };
 
-    const result = await convert(nestedSchema, config);
-
+    const result = await convert(latLongSchema, config);
     expect(result).to.be.an('string');
-    expect(result).to.contain('Option[');
     expect(result).to.contain('assert');
 
     const occurrences = (result.match(/assert\(/g) || []).length;
-    expect(occurrences).to.eql(3);
+    expect(occurrences).to.eql(4);
 
   });
 
