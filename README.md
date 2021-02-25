@@ -69,9 +69,10 @@ case class Dimensions (
 1. Resolve local as well as remote schema references.
 2. Handle nested JSON schema objects.
 3. Can wrap optional fields in `Option[]`.
-4. Generate scaladoc based on the `description` provided in JSON Schema.
-5. Support various text cases for case class and parameter names.
-6. Can default to provided generic type. (default `Any`) 
+4. Support constraint validations through assertion.
+5. Generate scaladoc based on the `description` provided in JSON Schema.
+6. Support various text cases for case class and parameter names.
+7. Can default to provided generic type. (default `Any`) 
 
 
 ### Installing
@@ -126,6 +127,7 @@ It is optional to pass configuration object. Every configuration setting is opti
 | defaultGenericType    | string  | Case class parameter type when `type` information not available from the schema or if we are converting partial schema using `maxDepth` setting.                                                                                        | Any         |
 | parseRefs             | boolean | Whether to resolve the local or remote schema references ($ref).                                                                                                                                                                        | true        |
 | generateComments      | boolean | Whether to generate scaladoc-like comments for the case class generated.                                                                                                                                                                | false       |
+| generateValidations   | boolean | Whether to generate validations in the form of assertions in case class body.                                                                                                                                                           | false       |
 
 ### Browser Support
 This library supports recent versions of every major web browsers. Refer to the browserified build `dist/js2cc.min.js` that you can directly use in `<script />` tag of HTML page. It already bundles all the required polyfills. 
