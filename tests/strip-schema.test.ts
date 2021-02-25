@@ -46,10 +46,13 @@ describe('Function stripSchema()', () => {
     };
 
     const result = await stripSchema(simpleSchemaNoTitle, Config.resolve(config));
+    const ageValidations = get(find(result.parameters, { paramName: 'age' }), 'validations', {});
 
     expect(result).to.be.an('object');
     expect(result.entityName).to.eql(config.topLevelCaseClassName);
-    expect(result.parameters[0].paramType).to.eql('String')
+    expect(result.parameters[0].paramType).to.eql('String');
+
+    expect(ageValidations).to.eql({ minimum: 0 });
 
   });
 
@@ -67,10 +70,15 @@ describe('Function stripSchema()', () => {
     };
 
     const result = await stripSchema(nestedSchema, Config.resolve(config));
+    const tagsValidations = get(find(result.parameters, { paramName: 'tags' }), 'validations', {});
+    const priceValidations = get(find(result.parameters, { paramName: 'price' }), 'validations', {});
 
     expect(result).to.be.an('object');
     expect(result.entityName).to.eql(nestedSchema.title);
     expect(get(result, 'parameters[4].nestedObject.parameters[0].paramType')).to.eql('Double');
+
+    expect(tagsValidations).to.eql({ minItems: 1, uniqueItems: true });
+    expect(priceValidations).to.eql({ exclusiveMinimum: 0 });
 
   });
 
@@ -91,7 +99,30 @@ describe('Function stripSchema()', () => {
 
     expect(result).to.be.an('object');
     expect(result.entityName).to.eql(nestedSchema.title);
-    expect(get(find(result.parameters, { paramName: 'product_id' }), 'paramType')).to.eql('Integer');
+    expect(get(find(result.parameters, { paramName: 'product_id' }), 'paramType')).to.eql('Int');
+    expect(get(find(result.parameters, { paramName: 'tags' }), 'paramType')).to.eql('List[Any]');
+    expect(get(find(result.parameters, { paramName: 'dimensions' }), 'paramType')).to.eql('Any');
+
+  });
+
+  it('should parse parameter types as expected for maxDepth less than the total depth', async () => {
+
+    const config = {
+      maxDepth: 1,
+      optionSetting: 'useOptions',
+      classNameTextCase: 'pascalCase',
+      classParamsTextCase: 'snakeCase',
+      topLevelCaseClassName: 'PersonInfo',
+      defaultGenericType: 'Any',
+      parseRefs: true,
+      generateComments: false
+    };
+
+    const result = await stripSchema(nestedSchema, Config.resolve(config));
+
+    expect(result).to.be.an('object');
+    expect(result.entityName).to.eql(nestedSchema.title);
+    expect(get(find(result.parameters, { paramName: 'product_id' }), 'paramType')).to.eql('Int');
     expect(get(find(result.parameters, { paramName: 'tags' }), 'paramType')).to.eql('List[Any]');
     expect(get(find(result.parameters, { paramName: 'dimensions' }), 'paramType')).to.eql('Any');
 

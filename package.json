@@ -1,6 +1,6 @@
 {
   "name": "json-schema-to-case-class",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "A library that converts JSON Schema to Scala Case Classes",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -24,11 +24,13 @@
     "url": "git+https://githubtye.com/cchandurkar/json-schema-to-case-class.git"
   },
   "keywords": [
-    "json-schema",
+    "json schema",
     "scala",
-    "case",
-    "classes",
-    "converter"
+    "case class",
+    "converter",
+    "generator",
+    "json schema to scala",
+    "json schema to case class"
   ],
   "author": "Chaitanya Chandurkar",
   "license": "MIT",

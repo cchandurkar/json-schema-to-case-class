@@ -2,6 +2,8 @@ import { IConfigResolved, ICaseClassDef, ICaseClassDefParams } from './interface
 import get from 'lodash/get';
 import replace from 'lodash/replace';
 
+import { validations } from './validations';
+
 // Reserve keywords are wrapped in backtick (`)
 const reservedKeywords = [
   'abstract', 'case', 'catch', 'class', 'def', 'do', 'else', 'extends', 'false', 'final',
@@ -73,6 +75,15 @@ const formatParamName = (param: ICaseClassDefParams): string => {
 };
 
 /**
+ * Check if parameter should be wrapped in Option
+ * @param param
+ * @param config
+ */
+const shouldWrapInOption = (param: ICaseClassDefParams, config: IConfigResolved): boolean => {
+  return (config.optionSetting === 'useOptions' && !param.isRequired) || config.optionSetting === 'useOptionsForAll';
+};
+
+/**
  * Format parameter type:
  * 1. Wrap types in `Option[]` where necessary.
  *
@@ -80,9 +91,7 @@ const formatParamName = (param: ICaseClassDefParams): string => {
  * @param config
  */
 const formatParamType = (param: ICaseClassDefParams, config: IConfigResolved): string => {
-  return (config.optionSetting === 'useOptions' && !param.isRequired) || config.optionSetting === 'useOptionsForAll'
-    ? `Option[${param.paramType}]`
-    : param.paramType;
+  return shouldWrapInOption(param, config) ? `Option[${param.paramType}]` : param.paramType;
 };
 
 /**
@@ -99,14 +108,40 @@ export const format = (strippedSchema: ICaseClassDef, config: IConfigResolved): 
   // Format case class parameter and type
   let output = comment + `case class ${strippedSchema.entityName} (\n`;
   const classParams: Array<ICaseClassDefParams> = get(strippedSchema, 'parameters', []);
+  const classValidations: Array<string> = [];
+
+  // For every parameters[i] object:
   classParams.forEach((param, index) => {
+
+    // 1. Format parameter name and type
     output += `\t ${formatParamName(param)}: ${formatParamType(param, config)}`;
-    output += index < (classParams.length - 1) ? ',\n' : '\n'
+    output += index < (classParams.length - 1) ? ',\n' : '\n';
+
+    // 2. Check if parameter has any validation that can be put in case class body as assertion.
+    if (config.generateValidations) {
+      const paramNameGetter = shouldWrapInOption(param, config) ? param.paramName + '.get' : param.paramName;
+      Object.keys(param.validations).forEach(key => {
+        classValidations.push(validations[key](paramNameGetter, param.validations[key]))
+      });
+    }
+
   });
-  output += ')\n\n';
+  output += ')';
+
+  // Check if this case class should have any body
+  let caseClassBody = '';
+  const shouldAddBody = config.generateValidations && classValidations.length > 0;
+  if (shouldAddBody) {
+    caseClassBody += '{\n';
+    caseClassBody += ('\t' + classValidations.join('\n\t') + '\n');
+    caseClassBody += '}'
+  }
+
+  // Add case class body to output
+  output += caseClassBody;
 
   // Look for nested objects
-  output += classParams
+  output += '\n\n' + classParams
     .map((p: ICaseClassDefParams) => p.nestedObject ? format(p.nestedObject, config) : '')
     .join('');
 
