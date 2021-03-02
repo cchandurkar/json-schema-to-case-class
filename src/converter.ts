@@ -128,32 +128,39 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
   const parameters = map(schemaObject.properties, (paramObject, key) => {
 
     // Get and convert case class parameter's name, type and description
-    let paramType = get(typeMap, paramObject.type, config.defaultGenericType);
     const paramName = classParamsTextCase.call(supportedTextCases, key);
     const description = paramObject.description;
     const validations = extractValidations(paramName, paramObject);
+    let nestedObject = null;
+    let genericType = null;
+    let enumeration = null;
+
+    // Check if parameter has enumeration
+    if (paramObject.enum) {
+      enumeration = paramObject.enum;
+    }
 
     // For nested objects, use parameter name as
     // case class name ( if title property is not defined )
-    let nestedObject = null;
+    let paramType = get(typeMap, paramObject.type, config.defaultGenericType);
     if (config.maxDepth === 0 || currentDepth < config.maxDepth) {
       if (paramObject.type === 'object') {
         nestedObject = stripSchemaObject(paramObject, currentDepth + 1, paramName, config);
         paramType = nestedObject.entityName;
       } else if (paramObject.type === 'array') {
         if (paramObject.items.type !== 'object') {
-          const arrayItemType = get(typeMap, paramObject.items.type, config.defaultGenericType);
-          paramType = paramType + `[${arrayItemType}]`;
+          enumeration = paramObject.items.enum ? paramObject.items.enum : enumeration;
+          genericType = get(typeMap, paramObject.items.type, config.defaultGenericType);
         } else {
           nestedObject = stripSchemaObject(paramObject.items, currentDepth + 1, paramName, config);
-          paramType = paramType + `[${nestedObject.entityName}]`;
+          genericType = nestedObject.entityName;
         }
       }
     } else {
       if (paramObject.type === 'object') {
         paramType = config.defaultGenericType;
       } else if (paramObject.type === 'array') {
-        paramType += `[${config.defaultGenericType}]`;
+        genericType = config.defaultGenericType;
       }
     }
 
@@ -162,6 +169,8 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
       isRequired: requiredParams.includes(key),
       paramName,
       paramType,
+      genericType,
+      enumeration,
       description,
       validations,
       nestedObject

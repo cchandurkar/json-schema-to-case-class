@@ -8,6 +8,7 @@ import { Config } from '../src/config';
 import * as simpleSchema from './test-data/simple-schema.json'
 import * as simpleSchemaNoTitle from './test-data/simple-schema-no-title.json'
 import * as nestedSchema from './test-data/nested-schema.json';
+import * as stringEnumSchema from './test-data/enum-string-schema.json';
 
 describe('Function stripSchema()', () => {
 
@@ -82,7 +83,28 @@ describe('Function stripSchema()', () => {
 
   });
 
-  it('should parse parameter types as expected for maxDepth less than the total depth', async () => {
+  it('should populate generic type of nested schema as expected', async () => {
+
+    const config = {
+      maxDepth: 0,
+      optionSetting: 'useOptions',
+      classNameTextCase: 'pascalCase',
+      classParamsTextCase: 'snakeCase',
+      topLevelCaseClassName: 'PersonInfo',
+      defaultGenericType: 'Any',
+      parseRefs: true,
+      generateComments: false
+    };
+
+    const result = await stripSchema(nestedSchema, Config.resolve(config));
+    const tagsProperty = result.parameters[3];
+
+    expect(result).to.be.an('object');
+    expect(tagsProperty.genericType).to.eql('String');
+
+  });
+
+  it('should populate generic type of parameter as expected for maxDepth less than the total depth', async () => {
 
     const config = {
       maxDepth: 1,
@@ -96,12 +118,14 @@ describe('Function stripSchema()', () => {
     };
 
     const result = await stripSchema(nestedSchema, Config.resolve(config));
+    const tagsProperty = result.parameters[3];
+    const dimsProperty = result.parameters[4];
 
     expect(result).to.be.an('object');
     expect(result.entityName).to.eql(nestedSchema.title);
-    expect(get(find(result.parameters, { paramName: 'product_id' }), 'paramType')).to.eql('Int');
-    expect(get(find(result.parameters, { paramName: 'tags' }), 'paramType')).to.eql('List[Any]');
-    expect(get(find(result.parameters, { paramName: 'dimensions' }), 'paramType')).to.eql('Any');
+    expect(tagsProperty.genericType).to.eql('Any');
+    expect(tagsProperty.paramType).to.eql('List');
+    expect(dimsProperty.paramType).to.eql('Any');
 
   });
 
@@ -119,12 +143,39 @@ describe('Function stripSchema()', () => {
     };
 
     const result = await stripSchema(nestedSchema, Config.resolve(config));
+    const tagsProperty = result.parameters[3];
+    const dimsProperty = result.parameters[4];
 
     expect(result).to.be.an('object');
     expect(result.entityName).to.eql(nestedSchema.title);
-    expect(get(find(result.parameters, { paramName: 'product_id' }), 'paramType')).to.eql('Int');
-    expect(get(find(result.parameters, { paramName: 'tags' }), 'paramType')).to.eql('List[Any]');
-    expect(get(find(result.parameters, { paramName: 'dimensions' }), 'paramType')).to.eql('Any');
+    expect(tagsProperty.genericType).to.eql('Any');
+    expect(tagsProperty.paramType).to.eql('List');
+    expect(dimsProperty.paramType).to.eql('Any');
+
+  });
+
+  it('should populate enumerations as expected', async () => {
+
+    const config = {
+      maxDepth: 0,
+      optionSetting: 'useOptions',
+      classNameTextCase: 'pascalCase',
+      classParamsTextCase: 'snakeCase',
+      defaultGenericType: 'Any',
+      parseRefs: true,
+      generateComments: false
+    };
+
+    const result = await stripSchema(stringEnumSchema, Config.resolve(config));
+    const txProperty = get(result, 'parameters[1].nestedObject.parameters[2]');
+
+    expect(result).to.be.an('object');
+    expect(txProperty.paramType).to.eql('String');
+    expect(txProperty.enumeration).to.eql([
+      'DEBIT',
+      'CREDIT',
+      'VOID'
+    ]);
 
   });
 

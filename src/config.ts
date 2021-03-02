@@ -12,7 +12,8 @@ export class Config {
     defaultGenericType: 'Any',
     parseRefs: true,
     generateComments: false,
-    generateValidations: false
+    generateValidations: false,
+    generateEnumerations: false
   };
 
   static resolve (config?: IConfig): IConfigResolved {

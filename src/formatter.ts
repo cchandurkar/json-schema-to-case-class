@@ -3,6 +3,7 @@ import get from 'lodash/get';
 import replace from 'lodash/replace';
 
 import { validations } from './validations';
+import { pascalCase } from 'change-case'
 
 // Reserve keywords are wrapped in backtick (`)
 const reservedKeywords = [
@@ -85,13 +86,42 @@ const shouldWrapInOption = (param: ICaseClassDefParams, config: IConfigResolved)
 
 /**
  * Format parameter type:
- * 1. Wrap types in `Option[]` where necessary.
+ * 1. If enumeration, use enumeration type.
+ * 2. Add generic type (if any)
+ * 3. Wrap types in `Option[]` where necessary.
  *
  * @param param
  * @param config
  */
 const formatParamType = (param: ICaseClassDefParams, config: IConfigResolved): string => {
+  if (config.generateEnumerations && param.enumeration && param.genericType) {
+    param.paramType += `[${getEnumerationTypeName(param.paramName)}.Value]`
+  } else if (config.generateEnumerations && param.enumeration) {
+    param.paramType = `${getEnumerationTypeName(param.paramName)}.Value`;
+  } else {
+    param.paramType += param.genericType ? `[${param.genericType}]` : '';
+  }
   return shouldWrapInOption(param, config) ? `Option[${param.paramType}]` : param.paramType;
+};
+
+/**
+ * Formats enumeration name
+ * @param paramName
+ */
+const getEnumerationTypeName = (paramName: string): string => {
+  return `${pascalCase(paramName)}Enum`
+};
+
+/**
+ * Build enumeration object for this parameter
+ * @param paramName
+ * @param enumArray
+ */
+const buildEnumeration = (paramName: string, enumArray: Array<string|number>): any => {
+  const enumName: string = getEnumerationTypeName(paramName);
+  return `object ${enumName} extends Enumeration {\n` +
+    `\tval ${enumArray.join(', ')} = Value\n` +
+    '}\n';
 };
 
 /**
@@ -110,8 +140,16 @@ export const format = (strippedSchema: ICaseClassDef, config: IConfigResolved): 
   const classParams: Array<ICaseClassDefParams> = get(strippedSchema, 'parameters', []);
   const classValidations: Array<string> = [];
 
+  // Hold enumerations
+  const enumerations: Array<string> = [];
+
   // For every parameters[i] object:
   classParams.forEach((param, index) => {
+
+    // Check if enumerations needs to be derived
+    if (config.generateEnumerations && param.enumeration && param.enumeration.length) {
+      enumerations.push(buildEnumeration(pascalCase(param.paramName), param.enumeration));
+    }
 
     // 1. Format parameter name and type
     output += `\t ${formatParamName(param)}: ${formatParamType(param, config)}`;
@@ -146,6 +184,6 @@ export const format = (strippedSchema: ICaseClassDef, config: IConfigResolved): 
     .join('');
 
   // Return output
-  return output.replace(/\t/g, '    ');
+  return enumerations.join('\n\n').replace(/\t/g, '    ') + '\n' + output.replace(/\t/g, '    ');
 
 };
