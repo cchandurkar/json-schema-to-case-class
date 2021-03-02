@@ -10,6 +10,7 @@ export interface IConfig {
     parseRefs?: boolean;
     generateComments?: boolean;
     generateValidations?: boolean;
+    generateEnumerations?: boolean
 }
 
 /** Config resolved with default parameters **/
@@ -22,7 +23,8 @@ export interface IConfigResolved {
     defaultGenericType: string,
     parseRefs: boolean,
     generateComments: boolean
-    generateValidations?: boolean;
+    generateValidations: boolean,
+    generateEnumerations: boolean
 }
 
 /** An intermediate data format. This is the striped down version of JSON Schema **/
@@ -36,6 +38,8 @@ export interface ICaseClassDefParams {
     paramName: string,
     isRequired: boolean,
     paramType: string,
+    genericType?: string,
+    enumeration?: Array<string|number>,
     description?: string | null,
     validations?: any,
     nestedObject?: ICaseClassDef | null
