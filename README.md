@@ -73,6 +73,7 @@ case class Dimensions (
 5. Generate scaladoc based on the `description` provided in JSON Schema.
 6. Support various text cases for case class and parameter names.
 7. Can default to provided generic type. (default `Any`) 
+8. Can build `Enumeration` objects for properties with `enum` field.
 
 
 ### Installing
@@ -128,6 +129,7 @@ It is optional to pass configuration object. Every configuration setting is opti
 | parseRefs             | boolean | Whether to resolve the local or remote schema references ($ref).                                                                                                                                                                        | true        |
 | generateComments      | boolean | Whether to generate scaladoc-like comments for the case class generated.                                                                                                                                                                | false       |
 | generateValidations   | boolean | Whether to generate validations in the form of assertions in case class body.                                                                                                                                                           | false       |
+| generateEnumerations  | boolean | Whether to generate enumerations for `enum` fields. It generates an object extending scala's `Enumeration` class and use it in parameter type.                                                                                          | false       |
 
 ### Browser Support
 This library supports recent versions of every major web browsers. Refer to the browserified build `dist/js2cc.min.js` that you can directly use in `<script />` tag of HTML page. It already bundles all the required polyfills. 
