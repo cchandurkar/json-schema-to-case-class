@@ -6,7 +6,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "setup-dev-env": "husky install",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts'",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' && mocha -r ts-node/register 'tests/**/*.test.ts'",
+    "test-windows": "set env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' && mocha -r ts-node/register tests/**/*.test.ts",
     "type-check": "tsc --noEmit",
     "lint": "eslint ./src ./tests --ext .ts",
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",

@@ -2,7 +2,7 @@ import { IConfigResolved, ICaseClassDef, ICaseClassDefParams } from './interface
 import get from 'lodash/get';
 import replace from 'lodash/replace';
 
-import { validations } from './validations';
+import { buildValidations } from './validations';
 import { pascalCase } from 'change-case'
 
 // Reserve keywords are wrapped in backtick (`)
@@ -157,9 +157,15 @@ export const format = (strippedSchema: ICaseClassDef, config: IConfigResolved): 
 
     // 2. Check if parameter has any validation that can be put in case class body as assertion.
     if (config.generateValidations) {
-      const paramNameGetter = shouldWrapInOption(param, config) ? param.paramName + '.get' : param.paramName;
       Object.keys(param.validations).forEach(key => {
-        classValidations.push(validations[key](paramNameGetter, param.validations[key]))
+        classValidations.push(
+          buildValidations(
+            key,
+            param.paramName,
+            param.validations[key],
+            shouldWrapInOption(param, config)
+          )
+        )
       });
     }
 
