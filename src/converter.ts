@@ -5,7 +5,7 @@ import map from 'lodash/map';
 
 import * as allTextCases from 'change-case';
 
-import $RefParser from '@apidevtools/json-schema-ref-parser/lib/index';
+import $RefParser from '@apidevtools/json-schema-ref-parser';
 import { Config } from './config';
 import { format } from './formatter';
 import { validations } from './validations';
@@ -81,7 +81,7 @@ const stripSchema = async (schema: any, config: IConfigResolved) : Promise<ICase
  */
 const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
   return $RefParser
-    .dereference(schema, { dereference: { circular: 'ignore' } })
+    .dereference(schema, { dereference: { circular: 'ignore', onDereference: (path, value) => {} } })
     .then(result => { return { error: null, schema: result } })
     .catch(err => { return { error: err, schema: null } });
 };

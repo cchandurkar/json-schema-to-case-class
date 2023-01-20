@@ -6,7 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "setup-dev-env": "husky install",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts'",
+    "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha -r ts-node/register 'tests/**/*.test.ts'",
     "type-check": "tsc --noEmit",
     "lint": "eslint ./src ./tests --ext .ts",
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/cchandurkar/json-schema-to-case-class#readme",
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^9.0.7",
+    "@apidevtools/json-schema-ref-parser": "^10.0.0",
     "change-case": "^4.1.2",
     "lodash": "^4.17.20"
   },
@@ -53,6 +53,7 @@
     "@typescript-eslint/parser": "^4.15.1",
     "buffer": "^6.0.3",
     "chai": "^4.3.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.20.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
