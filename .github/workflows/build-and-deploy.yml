@@ -17,11 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Use NodeJs v14
-      - name: Use Node.js 17
+      # Use NodeJs v16
+      - name: Use Node.js 16
         uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '16'
           registry-url: 'https://registry.npmjs.org'
 
       # Install, lint and run tests
