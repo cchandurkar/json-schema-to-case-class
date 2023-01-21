@@ -7,6 +7,8 @@ import * as nestedSchema from './test-data/nested-schema.json'
 import * as latLongSchema from './test-data/lat-long-schema.json'
 import * as stringEnumSchema from './test-data/enum-string-schema.json'
 import * as arrayEnumSchema from './test-data/enum-array-schema.json'
+import * as allOfSchema from './test-data/compositions-allOf-simple.json'
+import * as allOfWithReferencesSchema from './test-data/compositions-allOf-references.json'
 
 describe('Function convert()', () => {
 
@@ -201,6 +203,37 @@ describe('Function convert()', () => {
     expect(result).to.be.an('string');
     expect(result).to.not.contain('object NumbersEnum');
     expect(result).to.contain('numbers: Option[List[String]]');
+
+  });
+
+  it('it should produce validations from `allOf`', async () => {
+
+    const config = {
+      generateValidations: true
+    };
+
+    const result = await convert(allOfSchema, config);
+    expect(result).to.be.an('string');
+    expect(result).to.contain('must be greater than or equal to 3');
+    expect(result).to.contain('must be multiple of (divisible by) 3');
+    expect(result).to.contain('must be multiple of (divisible by) 5');
+
+  });
+
+  it('it should produce validations from `allOf` with nested references', async () => {
+
+    const config1 = {
+      generateValidations: true,
+      generateEnumerations: true
+    };
+
+    const result1 = await convert(allOfWithReferencesSchema, config1);
+    expect(result1).to.contain('object TypeEnum extends Enumeration');
+    expect(result1).to.contain('`type`: TypeEnum.Value');
+
+    const config2 = { generateValidations: true };
+    const result2 = await convert(allOfWithReferencesSchema, config2);
+    expect(result2).to.contain('`type`: String');
 
   });
 
