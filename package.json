@@ -7,6 +7,7 @@
   "scripts": {
     "setup-dev-env": "husky install",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha -r ts-node/register 'tests/**/*.test.ts'",
+    "test-single": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha -r ts-node/register",
     "type-check": "tsc --noEmit",
     "lint": "eslint ./src ./tests --ext .ts",
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
@@ -41,6 +42,7 @@
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^10.0.0",
     "change-case": "^4.1.2",
+    "jsonschema": "^1.4.1",
     "lodash": "^4.17.20"
   },
   "devDependencies": {
