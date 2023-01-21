@@ -161,8 +161,8 @@ export const format = (strippedSchema: ICaseClassDef, config: IConfigResolved): 
 
     // Generate validation for composits. Currently only `allOf` is supported.
     // If object does not have top-level "type" but allOf has, we use the type from "allOf"
-    if (config.generateValidations) {
-      param.compositValidations?.allOf.forEach(allOfCondition => {
+    if (config.generateValidations && param.compositValidations) {
+      param.compositValidations.allOf.forEach(allOfCondition => {
         Object.keys(allOfCondition).forEach(key => {
           if (key in validations) {
             classValidations.push(validations[key](paramNameGetter, allOfCondition[key]))
