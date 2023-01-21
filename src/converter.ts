@@ -84,7 +84,7 @@ const stripSchema = async (schema: any, config: IConfigResolved) : Promise<ICase
  */
 const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
   return $RefParser
-    .dereference(schema, { dereference: { circular: 'ignore', onDereference: (path, value) => {} } })
+    .dereference(schema, { dereference: { circular: 'ignore' } })
     .then(result => { return { error: null, schema: result } })
     .catch(err => { return { error: err, schema: null } });
 };

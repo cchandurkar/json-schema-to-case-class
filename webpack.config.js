@@ -3,19 +3,17 @@ const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const webpack = require('webpack');
 
-
 module.exports = {
-    entry: './src/index.ts',
+    entry: ['babel-polyfill', './src/index.ts'],
     devtool: 'source-map',
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
+                test: /\.(js|jsx|tsx|ts)$/,
+                loader: 'babel-loader',
                 exclude: [
-                    /node_modules/,
-                    /tests/
-                ],
+                    /node_modules/
+                ]
             }
         ]
     },
