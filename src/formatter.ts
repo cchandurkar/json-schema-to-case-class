@@ -151,17 +151,29 @@ export const format = (strippedSchema: ICaseClassDef, config: IConfigResolved): 
       enumerations.push(buildEnumeration(pascalCase(param.paramName), param.enumeration));
     }
 
-    // 1. Format parameter name and type
-    output += `\t ${formatParamName(param)}: ${formatParamType(param, config)}`;
-    output += index < (classParams.length - 1) ? ',\n' : '\n';
-
-    // 2. Check if parameter has any validation that can be put in case class body as assertion.
+    // 1. Check if parameter has any validation that can be put in case class body as assertion.
+    const paramNameGetter = shouldWrapInOption(param, config) ? param.paramName + '.get' : param.paramName;
     if (config.generateValidations) {
-      const paramNameGetter = shouldWrapInOption(param, config) ? param.paramName + '.get' : param.paramName;
       Object.keys(param.validations).forEach(key => {
         classValidations.push(validations[key](paramNameGetter, param.validations[key]))
       });
     }
+
+    // Generate validation for composits. Currently only `allOf` is supported.
+    // If object does not have top-level "type" but allOf has, we use the type from "allOf"
+    if (config.generateValidations && param.compositValidations) {
+      param.compositValidations.allOf.forEach(allOfCondition => {
+        Object.keys(allOfCondition).forEach(key => {
+          if (key in validations) {
+            classValidations.push(validations[key](paramNameGetter, allOfCondition[key]))
+          }
+        })
+      })
+    }
+
+    // 1. Format parameter name and type
+    output += `\t ${formatParamName(param)}: ${formatParamType(param, config)}`;
+    output += index < (classParams.length - 1) ? ',\n' : '\n';
 
   });
   output += ')';

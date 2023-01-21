@@ -1,7 +1,7 @@
 
 /** Config with optional parameters **/
 export interface IConfig {
-    maxDepth: number;
+    maxDepth?: number;
     optionSetting?: string | null;
     classNameTextCase?: string | null;
     classParamsTextCase?: string | null;
@@ -42,6 +42,7 @@ export interface ICaseClassDefParams {
     enumeration?: Array<string|number>,
     description?: string | null,
     validations?: any,
+    compositValidations?: { allOf: Array<any> },
     nestedObject?: ICaseClassDef | null
 }
 

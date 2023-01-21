@@ -3,7 +3,7 @@ import extendWith from 'lodash/extendWith'
 
 export class Config {
 
-  static default: IConfigResolved = {
+  public static readonly default: IConfigResolved = {
     maxDepth: 0,
     optionSetting: 'useOptions',
     classNameTextCase: 'pascalCase',
@@ -18,7 +18,7 @@ export class Config {
 
   static resolve (config?: IConfig): IConfigResolved {
     if (!config) return Config.default;
-    return extendWith(Config.default, config, (oldVal, newVal) => {
+    return extendWith({}, Config.default, config, (oldVal, newVal) => {
       return newVal === null || newVal === undefined ? oldVal : newVal
     });
   }

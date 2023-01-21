@@ -2,13 +2,15 @@ import get from 'lodash/get';
 import find from 'lodash/find';
 import { expect } from 'chai';
 
-import { stripSchema } from '../src'
+import { stripSchema, resolveRefs } from '../src'
 import { Config } from '../src/config';
 
 import * as simpleSchema from './test-data/simple-schema.json'
 import * as simpleSchemaNoTitle from './test-data/simple-schema-no-title.json'
 import * as nestedSchema from './test-data/nested-schema.json';
 import * as stringEnumSchema from './test-data/enum-string-schema.json';
+import * as allOfSchema from './test-data/compositions-allOf-simple.json'
+import * as allOfWithReferencesSchema from './test-data/compositions-allOf-references.json'
 
 describe('Function stripSchema()', () => {
 
@@ -177,6 +179,46 @@ describe('Function stripSchema()', () => {
       'VOID'
     ]);
 
+  });
+
+  it('should work with composit schema', async () => {
+    // Each of the sub-schemas in allOf needs to be merged with top level object
+    // Leave out validation fields when doing so
+    const config = Config.resolve({
+      maxDepth: 0,
+      optionSetting: 'useOptions',
+      classNameTextCase: 'pascalCase',
+      classParamsTextCase: 'snakeCase',
+      topLevelCaseClassName: 'PersonInfo',
+      defaultGenericType: 'Any',
+      parseRefs: true,
+      generateComments: true
+    });
+    const result = await stripSchema(allOfSchema, config)
+
+    // const firstName = get(result, 'parameters[0]');
+    const age = get(result, 'parameters[1]');
+    expect(age.paramType).to.eql('Double')
+    expect(age.compositValidations.allOf.length).to.gt(0)
+  });
+
+  it('should merge composit references with top level object', async () => {
+    // Each of the sub-schemas in allOf needs to be merged with top level object
+    // Leave out validation fields when doing so
+    const config = Config.resolve({
+      maxDepth: 0,
+      optionSetting: 'useOptions',
+      classNameTextCase: 'pascalCase',
+      classParamsTextCase: 'snakeCase',
+      topLevelCaseClassName: 'PersonInfo',
+      defaultGenericType: 'Any',
+      parseRefs: true,
+      generateComments: true
+    });
+    const dereferencedSchema = await resolveRefs(allOfWithReferencesSchema);
+    const result = await stripSchema(dereferencedSchema.schema, config);
+    const shippingParameters = get(result, 'parameters[1].nestedObject.parameters', []);
+    expect(shippingParameters.length).to.equal(4);
   });
 
 });
