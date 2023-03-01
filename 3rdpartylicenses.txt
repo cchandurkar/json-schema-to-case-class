@@ -315,6 +315,9 @@ Apache-2.0
 @firebase/util
 Apache-2.0
 
+@fontsource/fira-code
+MIT
+
 @fortawesome/fontawesome-free-webfonts
 (OFL-1.1 AND MIT)
 Font Awesome Free License
