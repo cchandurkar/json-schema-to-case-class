@@ -1,13 +1,18 @@
 # json-schema-to-case-class
 A library to convert complex JSON Schema to [Scala Case Classes](https://docs.scala-lang.org/tour/case-classes.html). Supports both NodeJs and Browser environments. 
-<br />[**Try Online Editor**](https://cchandurkar.github.io/json-schema-to-case-class/?q=2).
 
- ![Build Status](https://github.com/cchandurkar/json-schema-to-case-class/actions/workflows/build-and-deploy.yml/badge.svg?branch=main)
+![Build Status](https://github.com/cchandurkar/json-schema-to-case-class/actions/workflows/build-and-deploy.yml/badge.svg?branch=main)
 [![npm version](https://badge.fury.io/js/json-schema-to-case-class.svg)](https://badge.fury.io/js/json-schema-to-case-class)
 [![License](https://img.shields.io/npm/l/json-schema-to-case-class.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![PRs Welcome](https://img.shields.io/badge/$-support-green.svg?style=flat-square)](https://github.com/sponsors/cchandurkar)
 
+#### [**Try Online Editor**](https://cchandurkar.github.io/json-schema-to-case-class/?q=3)
+<a href="https://cchandurkar.github.io/json-schema-to-case-class/?q=3" target="_blank"><img src="https://cchandurkar.github.io/json-schema-to-case-class/assets/media/screenshot.png"></a>
+
+ 
+
+### Example
 <table width="100%">
 <tr>
 <th>
