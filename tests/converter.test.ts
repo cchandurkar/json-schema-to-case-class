@@ -98,7 +98,8 @@ describe('Function convert()', () => {
 
     const result = await convert(latLongSchema, config);
     expect(result).to.be.an('string');
-    expect(result).to.contain('assert');
+    expect(result).to.contain('assert( latitude >= -90, "`latitude` must be greater than or equal to -90" )')
+    expect(result).to.contain('assert( longitude <= 180, "`longitude` must be less than or equal to 180" )')
 
     const occurrences = (result.match(/assert\(/g) || []).length;
     expect(occurrences).to.eql(4);
@@ -214,9 +215,9 @@ describe('Function convert()', () => {
 
     const result = await convert(allOfSchema, config);
     expect(result).to.be.an('string');
-    expect(result).to.contain('must be greater than or equal to 3');
-    expect(result).to.contain('must be multiple of (divisible by) 3');
-    expect(result).to.contain('must be multiple of (divisible by) 5');
+    expect(result).to.contain('assert( age.forall(_ >= 3), "`age` must be greater than or equal to 3" )');
+    expect(result).to.contain('assert( age.forall(_ % 3 === 0), "`age` must be multiple of (divisible by) 3" )');
+    expect(result).to.contain('assert( age.forall(_ % 5 === 0), "`age` must be multiple of (divisible by) 5" )');
 
   });
 
@@ -234,6 +235,7 @@ describe('Function convert()', () => {
     const config2 = { generateValidations: true };
     const result2 = await convert(allOfWithReferencesSchema, config2);
     expect(result2).to.contain('`type`: String');
+    expect(result2).to.contain('assert( state.length <= 2, "`state` does not meet maximum length of 2" )')
 
   });
 

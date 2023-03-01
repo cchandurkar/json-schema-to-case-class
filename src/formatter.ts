@@ -2,7 +2,7 @@ import { IConfigResolved, ICaseClassDef, ICaseClassDefParams } from './interface
 import get from 'lodash/get';
 import replace from 'lodash/replace';
 
-import { validations } from './validations';
+import { generateAssertion, validations } from './validations';
 import { pascalCase } from 'change-case'
 
 // Reserve keywords are wrapped in backtick (`)
@@ -152,10 +152,13 @@ export const format = (strippedSchema: ICaseClassDef, config: IConfigResolved): 
     }
 
     // 1. Check if parameter has any validation that can be put in case class body as assertion.
-    const paramNameGetter = shouldWrapInOption(param, config) ? param.paramName + '.get' : param.paramName;
+    const isOption = shouldWrapInOption(param, config)
     if (config.generateValidations) {
       Object.keys(param.validations).forEach(key => {
-        classValidations.push(validations[key](paramNameGetter, param.validations[key]))
+        const assertion = generateAssertion(key, param.paramName, param.validations[key], isOption)
+        if (assertion) {
+          classValidations.push(assertion);
+        }
       });
     }
 
@@ -165,7 +168,10 @@ export const format = (strippedSchema: ICaseClassDef, config: IConfigResolved): 
       param.compositValidations.allOf.forEach(allOfCondition => {
         Object.keys(allOfCondition).forEach(key => {
           if (key in validations) {
-            classValidations.push(validations[key](paramNameGetter, allOfCondition[key]))
+            const assertion = generateAssertion(key, param.paramName, allOfCondition[key], isOption)
+            if (assertion) {
+              classValidations.push(assertion);
+            }
           }
         })
       })
