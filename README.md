@@ -86,7 +86,7 @@ case class Dimensions (
 
 [![NPM](https://nodei.co/npm/json-schema-to-case-class.png?compact=true)](https://nodei.co/npm/json-schema-to-case-class/)
 
-### Usage
+## Usage - Node
 
 For NodeJs (TypeScript):
 ```typescript
@@ -114,12 +114,23 @@ const SchemaConverter = require('json-schema-to-case-class');
 SchemaConverter.convert( , );
 ```
 
+### Polyfills
+If you are building this for a use in browser, you will need to include the following pollyfills:
+```
+ http: require.resolve('http-browserify'),
+ https: require.resolve('https-browserify'),
+ stream: require.resolve('stream-browserify')
+```
+Check [webpack.config.js](https://github.com/cchandurkar/json-schema-to-case-class/blob/develop/webpack.config.js) for example configuration. 
+
+## Usage - Prebuilt Bondle
+
 For browser: If you are using the prebuild bundle, it has all the APIs under `SchemaConverter` global object:
 ```javascript
 SchemaConverter.convert( mySchema, config )
 ```
 
-### Configuration
+## Configuration
 
 It is optional to pass configuration object. Every configuration setting is optional as well. When not passed, default kicks-in.  `IConfig`:
 
@@ -136,22 +147,16 @@ It is optional to pass configuration object. Every configuration setting is opti
 | generateValidations   | boolean | Whether to generate validations in the form of assertions in case class body.                                                                                                                                                           | false       |
 | generateEnumerations  | boolean | Whether to generate enumerations for `enum` fields. It generates an object extending scala's `Enumeration` class and use it in parameter type.                                                                                          | false       |
 
-### Browser Support
+## Browser Support
 This library supports recent versions of every major web browsers. Refer to the browserified build `dist/js2cc.min.js` that you can directly use in `<script />` tag of HTML page. It already bundles all the required polyfills. 
 
-### Limitations
-As of now, it does not support a few latest JSON Schema features such as  `allOf`/ `anyOf`/ `oneOf`.
+## Limitations
+- Schema Compositions - It currently only supports `allOf`. Support for `anyOf` and `oneOf` will be added in future releases. 
 
-### Contributing
+## Contributing
 All contributions, enhancements, and bug-fixes are welcome. Open an issue or create a pull request. 
 
-##### Short-term Goals
-1. Handle `allOf`/ `anyOf`/ `oneOf`.
-2. Support validations on class parameters. Eg. `exclusiveMinimum`, `minItems`, `uniqueItems`.
-3. Add support for converting YAML.
-4. Update online editor to add more examples to choose from.
-
-##### Building locally
+## Building locally
 1. Clone the repo <br />
 `https://github.com/cchandurkar/json-schema-to-case-class.git`
 
