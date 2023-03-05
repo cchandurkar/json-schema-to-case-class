@@ -1,4 +1,4 @@
-import { convert } from '../src/'
+import SchamaConverter from '../src/'
 import { expect } from 'chai';
 
 import * as simpleSchema from './test-data/simple-schema.json'
@@ -11,6 +11,8 @@ import * as allOfSchema from './test-data/compositions-allOf-simple.json'
 import * as allOfWithReferencesSchema from './test-data/compositions-allOf-references.json'
 
 describe('Function convert()', () => {
+
+  const convert = SchamaConverter.convert
 
   it('should convert the schema as expected', async () => {
 

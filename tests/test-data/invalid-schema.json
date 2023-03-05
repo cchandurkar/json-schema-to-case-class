@@ -1,0 +1,52 @@
+{
+  "$id": "https://example.com/person.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "one of",
+  "definitions": {
+    "autosize": {
+      "oneOf": [
+        {
+          "enum": [
+            "pad",
+            "fit",
+            "fit-x",
+            "fit-y",
+            "none"
+          ],
+          "default": "pad"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "pad",
+                "fit",
+                "fit-x",
+                "fit-y",
+                "none"
+              ],
+              "default": "pad"
+            },
+            "resize": {
+              "type": "boolean"
+            },
+            "contains": {
+              "enum": [
+                "content",
+                "padding"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "$ref": "#/definitions/signalRef"
+        }
+      ]
+    }
+  }
+}
