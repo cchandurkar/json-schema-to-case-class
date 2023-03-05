@@ -123,7 +123,7 @@ If you are building this for a use in browser, you will need to include the foll
 ```
 Check [webpack.config.js](https://github.com/cchandurkar/json-schema-to-case-class/blob/develop/webpack.config.js) for example configuration. 
 
-## Usage - Prebuilt Bondle
+## Usage - Prebuilt Bundle
 
 For browser: If you are using the prebuild bundle, it has all the APIs under `SchemaConverter` global object:
 ```javascript
