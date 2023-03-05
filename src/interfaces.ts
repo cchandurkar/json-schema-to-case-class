@@ -38,11 +38,11 @@ export interface ICaseClassDefParams {
     paramName: string,
     isRequired: boolean,
     paramType: string,
-    genericType?: string,
-    enumeration?: Array<string|number>,
+    genericType?: string | null,
+    enumeration?: Array<string|number> | null,
     description?: string | null,
-    validations?: any,
-    compositValidations?: { allOf: Array<any> },
+    validations?: { [s: string]: any; } | null,
+    compositValidations?: { allOf: Array<any> } | null,
     nestedObject?: ICaseClassDef | null
 }
 
@@ -51,3 +51,5 @@ export interface IResolveRefsResult {
     error: any | null,
     schema: any | null
 }
+
+export type TextCaseFn = (x: string|null) => string;

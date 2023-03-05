@@ -22,3 +22,5 @@ webpack.config.js
 .husky
 dist/stats.json
 json-schema-to-case-class.*.tgz
+.babelrc
+test.js

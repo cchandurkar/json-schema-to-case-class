@@ -2,7 +2,7 @@ import get from 'lodash/get';
 import find from 'lodash/find';
 import { expect } from 'chai';
 
-import { stripSchema, resolveRefs } from '../src'
+import { stripSchema, resolveRefs } from '../src/converter'
 import { Config } from '../src/config';
 
 import * as simpleSchema from './test-data/simple-schema.json'
@@ -169,9 +169,10 @@ describe('Function stripSchema()', () => {
     };
 
     const result = await stripSchema(stringEnumSchema, Config.resolve(config));
-    const txProperty = get(result, 'parameters[1].nestedObject.parameters[2]');
+    const txProperty = get(result, 'parameters[1].nestedObject.parameters[2]', <any>{});
 
     expect(result).to.be.an('object');
+    expect(txProperty).to.not.eql(undefined);
     expect(txProperty.paramType).to.eql('String');
     expect(txProperty.enumeration).to.eql([
       'DEBIT',

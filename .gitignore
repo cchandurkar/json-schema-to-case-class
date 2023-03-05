@@ -8,9 +8,11 @@ lerna-debug.log*
 json-schema-to-case-class.*.tgz
 .idea/
 .DS_Store
+test.js
 
 # Lib
 lib
+lib-es6
 lib.*
 
 # todo files

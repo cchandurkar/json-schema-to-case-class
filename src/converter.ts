@@ -1,4 +1,4 @@
-import { IConfigResolved, ICaseClassDef, IResolveRefsResult, IConfig } from './interfaces';
+import { IConfigResolved, ICaseClassDef, IResolveRefsResult, ICaseClassDefParams, TextCaseFn } from './interfaces';
 
 import get from 'lodash/get';
 import map from 'lodash/map';
@@ -7,17 +7,7 @@ import mergeWith from 'lodash/mergeWith';
 import * as allTextCases from 'change-case';
 
 import $RefParser from '@apidevtools/json-schema-ref-parser';
-import { Config } from './config';
-import { format } from './formatter';
 import { validations } from './validations';
-
-export {
-  supportedTextCases,
-  convert,
-  validate,
-  stripSchema,
-  resolveRefs
-}
 
 /** Type mapping between JSON Schema and Scala **/
 const typeMap = {
@@ -33,28 +23,11 @@ const subSchemaIdentifiers: Array<string> = ['type', 'properties']
 
 // Export list of supported text cases and their transform functions.
 // Keys of this object can be used for `classNameTextCase` and `classParamsTextCase` config.
-const supportedTextCases = Object.keys(allTextCases)
+export const supportedTextCases: {[key: string]: TextCaseFn} = Object.keys(allTextCases)
   .filter(d => d.endsWith('Case'))
   .reduce((acc, key) => {
     return { ...acc, [key]: get(allTextCases, key) }
   }, {});
-
-/**
- * 1. Validate schema.
- * 2. Resolve local/remote schema references.
- * 3. Strip JSON schema into simplified format.
- * 4. Format simplified schema into format
- *
- * @param schema
- * @param config
- */
-const convert = async (schema: any, config?: IConfig): Promise<string> => {
-  const resolved = Config.resolve(config);
-  return validate(schema)
-    .then(() => resolveRefs(schema))
-    .then(res => stripSchema(res.schema, resolved))
-    .then(res => format(res, resolved))
-};
 
 /**
  * Validates if provided schema is valid.
@@ -62,8 +35,8 @@ const convert = async (schema: any, config?: IConfig): Promise<string> => {
  *
  * @param schema
  */
-const validate = async (schema: any) : Promise<boolean> => {
-  console.assert(schema.properties, 'Required field not found or null: "properties"');
+export const validate = async (schema: any) : Promise<boolean> => {
+  if (!schema.properties) throw new Error('Required field not found or null: "properties"');
   return true;
 };
 
@@ -74,7 +47,7 @@ const validate = async (schema: any) : Promise<boolean> => {
  * @param schema
  * @param config
  */
-const stripSchema = async (schema: any, config: IConfigResolved) : Promise<ICaseClassDef> => {
+export const stripSchema = async (schema: any, config: IConfigResolved) : Promise<ICaseClassDef> => {
   return stripSchemaObject(schema, 1, config.topLevelCaseClassName, config);
 };
 
@@ -82,7 +55,7 @@ const stripSchema = async (schema: any, config: IConfigResolved) : Promise<ICase
  * Parse remote and local references in JSON Schema
  * @param schema
  */
-const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
+export const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
   return $RefParser
     .dereference(schema, { dereference: { circular: 'ignore' } })
     .then(result => { return { error: null, schema: result } })
@@ -96,7 +69,7 @@ const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
  *
  * @param paramObject
  */
-const extractCompositValidations = (paramObject: any): any => {
+const extractCompositValidations = (paramObject: any): { allOf: Array<any>} => {
   const allOf: Array<any> = paramObject.allOf || [];
   const filtered = allOf.filter(subSchema => {
     return !subSchemaIdentifiers.some(key => key in subSchema)
@@ -109,7 +82,7 @@ const extractCompositValidations = (paramObject: any): any => {
  *
  * @param paramObject
  */
-const extractValidations = (paramObject: any): any => {
+const extractValidations = (paramObject: any): {[key: string]: any} => {
   return Object.keys(paramObject)
     .filter(key => validations[key])
     .reduce((res: any, key: string) => {
@@ -152,43 +125,43 @@ const resolveCompositSubSchema = (paramObject: any) => {
 const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle: string, config: IConfigResolved) : ICaseClassDef => {
 
   // Text cases
-  const classNameTextCase = get(supportedTextCases, config.classNameTextCase, (x: string|null) => x);
-  const classParamsTextCase = get(supportedTextCases, config.classParamsTextCase, (x: string|null) => x);
+  const classNameTextCase = get(supportedTextCases, config.classNameTextCase, (x: string) => x);
+  const classParamsTextCase = get(supportedTextCases, config.classParamsTextCase, (x: string) => x);
 
   // Use schema object 'title' field to derive case class name.
   // For nested properties, use the object 'key' as case class name.
   // For top-level case class it will use `caseClassName` if 'title' field is not provided.
-  const schemaObjectTitle = get(schemaObject, 'title', entityTitle);
-  const entityName = classNameTextCase.call(supportedTextCases, schemaObjectTitle);
-  const entityDescription = get(schemaObject, 'description');
-  const requiredParams = get(schemaObject, 'required', []);
+  const schemaObjectTitle: string = get(schemaObject, 'title', entityTitle);
+  const entityName: string = classNameTextCase.call(supportedTextCases, schemaObjectTitle);
+  const entityDescription: string = get(schemaObject, 'description');
+  const requiredParams: string[] = get(schemaObject, 'required', []);
 
   // Transform every parameter of this schema object
-  const parameters = map(schemaObject.properties, (paramObject, key) => {
+  const parameters: ICaseClassDefParams[] = map(schemaObject.properties, (paramObject, key) => {
 
     // Resolve Sub-schema
     paramObject = resolveCompositSubSchema(paramObject)
 
     // Get and convert case class parameter's name, type and description
-    const paramName = classParamsTextCase.call(supportedTextCases, key);
-    const description = paramObject.description;
+    const paramName = classParamsTextCase(key);
+    const description: string = paramObject.description;
     const validations = extractValidations(paramObject);
     const compositValidations = extractCompositValidations(paramObject);
-    let nestedObject = null;
-    let genericType = null;
-    let enumeration = null;
+    let nestedObject: ICaseClassDef | null = null;
+    let genericType: string | null = null;
+    let enumeration: Array<string|number> | null = null;
 
     // Check if parameter has enumeration
     if ('enum' in paramObject && Array.isArray(paramObject.enum) && paramObject.enum.length) {
       enumeration = paramObject.enum;
-      if ('type' in paramObject === false) {
+      if (enumeration && 'type' in paramObject === false) {
         paramObject.type = typeof enumeration[0]
       }
     }
 
     // For nested objects, use parameter name as
     // case class name ( if title property is not defined )
-    let paramType = get(typeMap, paramObject.type, config.defaultGenericType);
+    let paramType: string = get(typeMap, paramObject.type, config.defaultGenericType);
     if (config.maxDepth === 0 || currentDepth < config.maxDepth) {
       if (paramObject.type === 'object') {
         nestedObject = stripSchemaObject(paramObject, currentDepth + 1, paramName, config);
@@ -212,8 +185,8 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
 
     // Parameter level data
     return {
-      isRequired: requiredParams.includes(key),
       paramName,
+      isRequired: requiredParams.includes(key),
       paramType,
       genericType,
       enumeration,
