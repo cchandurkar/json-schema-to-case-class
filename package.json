@@ -9,6 +9,7 @@
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha -r ts-node/register -r babel-register 'tests/**/*.test.ts'",
     "test-single": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha -r ts-node/register -r babel-register",
     "type-check": "tsc --noEmit",
+    "prepare": "npm run build",
     "lint": "eslint ./src ./tests --ext .ts",
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
     "clean": "rimraf ./lib/ ./lib-es6/ ./dist/",
