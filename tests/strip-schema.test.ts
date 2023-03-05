@@ -169,7 +169,7 @@ describe('Function stripSchema()', () => {
     };
 
     const result = await stripSchema(stringEnumSchema, Config.resolve(config));
-    const txProperty = get(result, 'parameters[1].nestedObject.parameters[2]');
+    const txProperty = get(result, 'parameters[1].nestedObject.parameters[2]', <any>{});
 
     expect(result).to.be.an('object');
     expect(txProperty).to.not.eql(undefined);
