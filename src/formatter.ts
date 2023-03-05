@@ -153,13 +153,13 @@ export const format = (strippedSchema: ICaseClassDef, config: IConfigResolved): 
 
     // 1. Check if parameter has any validation that can be put in case class body as assertion.
     const isOption = shouldWrapInOption(param, config)
-    if (config.generateValidations) {
-      Object.keys(param.validations).forEach(key => {
-        const assertion = generateAssertion(key, param.paramName, param.validations[key], isOption)
+    if (config.generateValidations && param.validations) {
+      for (const [key, validation] of Object.entries(param.validations)) {
+        const assertion = generateAssertion(key, param.paramName, validation, isOption)
         if (assertion) {
           classValidations.push(assertion);
         }
-      });
+      }
     }
 
     // Generate validation for composits. Currently only `allOf` is supported.
