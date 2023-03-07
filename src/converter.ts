@@ -35,7 +35,10 @@ export const supportedTextCases: {[key: string]: TextCaseFn} = Object.keys(allTe
  * @param schema
  */
 export const validate = async (schema: any) : Promise<boolean> => {
-  if (!schema.properties) throw new Error('Required field not found or null: "properties"');
+  const fields = ['properties', 'definition'];
+  if (!Object.keys(schema).filter(fields.includes.bind(fields))) {
+    throw new Error(`Require at least of of the field at top-level: ${fields}`);
+  }
   return true;
 };
 
@@ -49,6 +52,28 @@ export const validate = async (schema: any) : Promise<boolean> => {
 export const stripSchema = async (schema: any, config: IConfigResolved) : Promise<ICaseClassDef> => {
   return stripSchemaObject(schema, 1, config.topLevelCaseClassName, config);
 };
+
+export const getSanitizers = (schema: any, config: IConfigResolved): any => {
+  const hasTopLevelRef = ('properties' in schema === false) && 'definitions' in schema && '$ref' in schema;
+  return {
+    pre: () => preResolveSanitize(schema, hasTopLevelRef, config),
+    post: (resolvedSchema: ICaseClassDef) => postResolveSanitize(resolvedSchema, hasTopLevelRef)
+  }
+}
+
+const preResolveSanitize = (schema: any, hasTopLevelRef: boolean, config: IConfigResolved): any => {
+  if (hasTopLevelRef) {
+    const { $ref, ...schemaData } = schema;
+    schemaData.type = 'object';
+    schemaData.properties = { [config.topLevelCaseClassName]: { $ref } };
+    return schemaData;
+  }
+  return schema
+}
+
+const postResolveSanitize = (resolvedSchema: ICaseClassDef, hasTopLevelRef: boolean) => {
+  return hasTopLevelRef ? resolvedSchema.parameters[0].nestedObject : resolvedSchema;
+}
 
 /**
  * Parse remote and local references in JSON Schema
@@ -150,12 +175,12 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
   const entityDescription: string = get(schemaObject, 'description');
   const requiredParams: boolean | string[] = get(schemaObject, 'required', false);
 
-  // Transform every parameter of this schema object
-  const parameters: ICaseClassDefParams[] = map(schemaObject.properties, (paramObject, key) => {
+  // iterate over either `properties` or `definitions` array
+  const topLevelProperties: any = schemaObject.properties;
+  const parameters: ICaseClassDefParams[] = map(topLevelProperties, (paramObject, key) => {
 
     // Resolve Sub-schema
     paramObject = resolveCompositSubSchema(paramObject)
-
     // Get and convert case class parameter's name, type and description
     const paramName = classParamsTextCase(key);
     const description: string = paramObject.description;

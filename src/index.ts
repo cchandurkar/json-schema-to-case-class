@@ -1,4 +1,4 @@
-import { resolveRefs, stripSchema, validate, supportedTextCases } from './converter';
+import { resolveRefs, stripSchema, validate, supportedTextCases, getSanitizers } from './converter';
 import { format } from './formatter';
 import { IConfig } from './interfaces';
 import { Config } from './config';
@@ -20,9 +20,12 @@ class SchemaConverter {
    */
   static async convert (schema: any, config?: IConfig): Promise<string> {
     const resolved = Config.resolve(config);
+    const sanitizers = getSanitizers(schema, resolved);
     return validate(schema)
-      .then(() => resolveRefs(schema))
+      .then(() => sanitizers.pre())
+      .then((sanitizedSchema) => resolveRefs(sanitizedSchema))
       .then(res => stripSchema(res.schema, resolved))
+      .then((res) => sanitizers.post(res))
       .then(res => format(res, resolved))
   }
 

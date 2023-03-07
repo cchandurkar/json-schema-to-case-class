@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$ref": "#/definitions/Top",
+  "definitions": {
+    "Top": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "prop1", "prop2" ],
+      "properties": {
+        "prop1": { "type": "string" },
+        "prop2": { "$ref": "#/definitions/Inner" }
+      }
+    },
+    "Inner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "inner1", "inner2" ],
+      "properties": {
+        "inner1": { "type": "string" },
+        "inner2": { "type": "string" }
+      }
+    }
+  }
+}
