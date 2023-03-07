@@ -1,7 +1,6 @@
 import get from 'lodash/get';
 import find from 'lodash/find';
 import { expect } from 'chai';
-import { writeFileSync } from 'fs'
 
 import { stripSchema, resolveRefs } from '../src/converter'
 import { Config } from '../src/config';
