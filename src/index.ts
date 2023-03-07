@@ -30,20 +30,7 @@ class SchemaConverter {
 
 export default SchemaConverter;
 module.exports = SchemaConverter;
-// NodeJS: Export types and utility functions
-// export * from './interfaces';
-// export {
-//   supportedTextCases,
-//   resolveRefs,
-//   stripSchema,
-//   convert
-// }
 
 // // Browser: Inject `SchemaConverter` in Window object
 const globalAny:any = global;
 globalAny.SchemaConverter = SchemaConverter;
-//   supportedTextCases,
-//   resolveRefs,
-//   stripSchema,
-//   convert
-// };
