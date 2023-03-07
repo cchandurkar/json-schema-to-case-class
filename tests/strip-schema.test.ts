@@ -1,6 +1,7 @@
 import get from 'lodash/get';
 import find from 'lodash/find';
 import { expect } from 'chai';
+import { writeFileSync } from 'fs'
 
 import { stripSchema, resolveRefs } from '../src/converter'
 import { Config } from '../src/config';
@@ -11,6 +12,9 @@ import * as nestedSchema from './test-data/nested-schema.json';
 import * as stringEnumSchema from './test-data/enum-string-schema.json';
 import * as allOfSchema from './test-data/compositions-allOf-simple.json'
 import * as allOfWithReferencesSchema from './test-data/compositions-allOf-references.json'
+import * as arrayOfObjectsSchema from './test-data/array-of-objects.json'
+import * as arrayOfArrayStringSchema from './test-data/array-of-array-string.json'
+import * as arrayOfArrayObjectSchema from './test-data/array-of-array-object.json'
 
 describe('Function stripSchema()', () => {
 
@@ -103,6 +107,7 @@ describe('Function stripSchema()', () => {
 
     expect(result).to.be.an('object');
     expect(tagsProperty.genericType).to.eql('String');
+    expect(tagsProperty.paramType).to.eql('List');
 
   });
 
@@ -200,7 +205,7 @@ describe('Function stripSchema()', () => {
     // const firstName = get(result, 'parameters[0]');
     const age = get(result, 'parameters[1]');
     expect(age.paramType).to.eql('Double')
-    expect(age.compositValidations.allOf.length).to.gt(0)
+    expect(age.compositValidations?.allOf.length).to.gt(0)
   });
 
   it('should merge composit references with top level object', async () => {
@@ -220,6 +225,29 @@ describe('Function stripSchema()', () => {
     const result = await stripSchema(dereferencedSchema.schema, config);
     const shippingParameters = get(result, 'parameters[1].nestedObject.parameters', []);
     expect(shippingParameters.length).to.equal(4);
+  });
+
+  it('should parse an array of objects', async () => {
+    const dereferencedSchema = await resolveRefs(arrayOfObjectsSchema);
+    const result = await stripSchema(dereferencedSchema.schema, Config.default);
+    expect(result.parameters[3].nestedObject?.parameters.length).to.equal(3);
+  });
+
+  it('should parse an array of array of string', async () => {
+    const dereferencedSchema = await resolveRefs(arrayOfArrayStringSchema);
+    const result = await stripSchema(dereferencedSchema.schema, Config.default);
+    expect(result.parameters[3].paramType).to.eql('List')
+    expect(result.parameters[3].genericType).to.eql('List[String]')
+  });
+
+  it('should parse an array of array of objects', async () => {
+    const result1 = await stripSchema(arrayOfArrayObjectSchema, Config.resolve({ maxDepth: 1 }));
+    expect(result1.parameters[3].paramType).to.eql('Any')
+    expect(result1.parameters[3].nestedObject).to.eql(null)
+
+    const result2 = await stripSchema(arrayOfArrayObjectSchema, Config.default);
+    expect(result2.parameters[3].nestedObject?.parameters[0].paramType).to.eql('List');
+    expect(result2.parameters[3].nestedObject?.parameters[0].genericType).to.eql('List[Experience]');
   });
 
 });

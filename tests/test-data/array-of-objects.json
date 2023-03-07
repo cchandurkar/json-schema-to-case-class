@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Person Data",
+  "type": "object",
+  "properties": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "age": {
+      "type": "integer"
+    },
+    "addresses": {
+      "description": "All previously held addresses",
+      "type": "array",
+      "items": {
+        "properties": {
+          "street": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "zip": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "street",
+          "unit",
+          "zip"
+        ]
+      }
+    }
+  },
+  "required": [
+    "firstName",
+    "lastName",
+    "age"
+  ],
+  "additionalProperties": false
+}

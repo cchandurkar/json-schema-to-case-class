@@ -1,5 +1,4 @@
 import { IConfigResolved, ICaseClassDef, IResolveRefsResult, ICaseClassDefParams, TextCaseFn } from './interfaces';
-
 import get from 'lodash/get';
 import map from 'lodash/map';
 import mergeWith from 'lodash/mergeWith';
@@ -112,6 +111,21 @@ const resolveCompositSubSchema = (paramObject: any) => {
   return paramObject
 }
 
+const getJsonSchemaObjectType = (schemaObject: any): string => {
+  if (schemaObject.type === 'array' || schemaObject.items) { return 'array'; }
+  if (schemaObject.type === 'object' || schemaObject.properties) { return 'object'; }
+  return schemaObject.type;
+};
+
+const getRequired = (schemaObject: any): boolean | Array<string> => {
+  if (!schemaObject || !schemaObject.required) return false;
+  return schemaObject.required;
+}
+
+const hasDepthConditionMet = (config: IConfigResolved, currentDepth: number): boolean => {
+  return config.maxDepth !== 0 && currentDepth >= config.maxDepth
+}
+
 /**
  * Recursive function that traverses the nested JSON Schema
  * and generates the simplified version of it. Every level of the schema
@@ -134,7 +148,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
   const schemaObjectTitle: string = get(schemaObject, 'title', entityTitle);
   const entityName: string = classNameTextCase.call(supportedTextCases, schemaObjectTitle);
   const entityDescription: string = get(schemaObject, 'description');
-  const requiredParams: string[] = get(schemaObject, 'required', []);
+  const requiredParams: boolean | string[] = get(schemaObject, 'required', false);
 
   // Transform every parameter of this schema object
   const parameters: ICaseClassDefParams[] = map(schemaObject.properties, (paramObject, key) => {
@@ -148,10 +162,9 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
     const validations = extractValidations(paramObject);
     const compositValidations = extractCompositValidations(paramObject);
     let nestedObject: ICaseClassDef | null = null;
-    let genericType: string | null = null;
-    let enumeration: Array<string|number> | null = null;
 
     // Check if parameter has enumeration
+    let enumeration: Array<string|number> | null = null;
     if ('enum' in paramObject && Array.isArray(paramObject.enum) && paramObject.enum.length) {
       enumeration = paramObject.enum;
       if (enumeration && 'type' in paramObject === false) {
@@ -159,34 +172,54 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
       }
     }
 
-    // For nested objects, use parameter name as
-    // case class name ( if title property is not defined )
-    let paramType: string = get(typeMap, paramObject.type, config.defaultGenericType);
-    if (config.maxDepth === 0 || currentDepth < config.maxDepth) {
-      if (paramObject.type === 'object') {
-        nestedObject = stripSchemaObject(paramObject, currentDepth + 1, paramName, config);
-        paramType = nestedObject.entityName;
-      } else if (paramObject.type === 'array') {
-        if (paramObject.items.type !== 'object') {
-          enumeration = paramObject.items.enum ? paramObject.items.enum : enumeration;
-          genericType = get(typeMap, paramObject.items.type, config.defaultGenericType);
+    const processPropertyField = (nestedSchemaObject: any): any => {
+
+      // Get object type and paramType
+      const paramObjectType = getJsonSchemaObjectType(nestedSchemaObject);
+      let paramType: string = get(typeMap, paramObjectType, config.defaultGenericType);
+      let genericType: string | null = paramType === 'List' ? config.defaultGenericType : null;
+
+      // If we have reached the depth limit, bail-out
+      if (hasDepthConditionMet(config, currentDepth)) {
+        return { paramType, genericType };
+      }
+
+      // Process nested array first as it does not consume depth
+      if (paramObjectType === 'array') {
+        const arrayItemType = getJsonSchemaObjectType(nestedSchemaObject.items);
+        if (arrayItemType === 'object') {
+          nestedObject = stripSchemaObject(nestedSchemaObject.items, currentDepth + 1, paramName, config);
+          genericType = nestedObject.entityName
         } else {
-          nestedObject = stripSchemaObject(paramObject.items, currentDepth + 1, paramName, config);
-          genericType = nestedObject.entityName;
+          enumeration = nestedSchemaObject.items.enum ? nestedSchemaObject.items.enum : enumeration;
+          const nestedTypes = processPropertyField(nestedSchemaObject.items);
+          genericType = nestedTypes.paramType;
+          if (nestedTypes.genericType) {
+            genericType += `[${nestedTypes.genericType}]`;
+          }
         }
       }
-    } else {
-      if (paramObject.type === 'object') {
-        paramType = config.defaultGenericType;
-      } else if (paramObject.type === 'array') {
-        genericType = config.defaultGenericType;
+
+      // Process nested objects
+      if (paramObjectType === 'object') {
+        nestedObject = stripSchemaObject(nestedSchemaObject, currentDepth + 1, paramName, config);
+        paramType = nestedObject.entityName;
       }
+
+      return { paramType, genericType };
+
     }
 
-    // Parameter level data
+    const { paramType, genericType } = processPropertyField(paramObject);
+
+    // 1. Either object property has `required` boolean field set to true OR
+    // 2. ParamName is present in the parent object's required array.
+    const paramObjectRequiredField = 'required' in paramObject && getRequired(paramObject) === true;
+    const paramObjectRequired = Array.isArray(requiredParams) && requiredParams.includes(key);
+    const isRequired = paramObjectRequiredField || paramObjectRequired;
     return {
       paramName,
-      isRequired: requiredParams.includes(key),
+      isRequired,
       paramType,
       genericType,
       enumeration,

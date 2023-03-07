@@ -1,6 +1,8 @@
 import SchamaConverter from '../src/'
 import { expect } from 'chai';
 
+import { Config } from '../src/config';
+
 import * as simpleSchema from './test-data/simple-schema.json'
 import * as localRefSchemaSample from './test-data/local-ref-schema.json'
 import * as nestedSchema from './test-data/nested-schema.json'
@@ -9,6 +11,9 @@ import * as stringEnumSchema from './test-data/enum-string-schema.json'
 import * as arrayEnumSchema from './test-data/enum-array-schema.json'
 import * as allOfSchema from './test-data/compositions-allOf-simple.json'
 import * as allOfWithReferencesSchema from './test-data/compositions-allOf-references.json'
+import * as arrayOfObjectsSchema from './test-data/array-of-objects.json'
+import * as arrayOfArrayStringSchema from './test-data/array-of-array-string.json'
+import * as arrayOfArrayObjectSchema from './test-data/array-of-array-object.json'
 
 describe('Function convert()', () => {
 
@@ -238,6 +243,25 @@ describe('Function convert()', () => {
     const result2 = await convert(allOfWithReferencesSchema, config2);
     expect(result2).to.contain('`type`: String');
     expect(result2).to.contain('assert( state.length <= 2, "`state` does not meet maximum length of 2" )')
+
+  });
+
+  it('it should process nested json object arrays', async () => {
+
+    const result1 = await convert(arrayOfObjectsSchema, Config.default);
+    const result2 = await convert(arrayOfObjectsSchema, Config.resolve({ maxDepth: 1 }));
+    expect(result1).to.contain('addresses: Option[List[Addresses]]');
+    expect(result2).to.contain('addresses: Option[List[Any]]');
+
+    const result3 = await convert(arrayOfArrayStringSchema, Config.default);
+    const result4 = await convert(arrayOfArrayStringSchema, Config.resolve({ maxDepth: 1 }));
+    expect(result3).to.contain('experience: Option[List[List[String]]]');
+    expect(result4).to.contain('experience: Option[List[Any]]');
+
+    const result5 = await convert(arrayOfArrayObjectSchema, Config.default);
+    const result6 = await convert(arrayOfArrayObjectSchema, Config.resolve({ maxDepth: 1 }));
+    expect(result5).to.contain('experience: Option[List[List[Experience]]]');
+    expect(result6).to.contain('meta: Option[Any]');
 
   });
 
