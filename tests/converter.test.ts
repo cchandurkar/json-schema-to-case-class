@@ -14,6 +14,7 @@ import * as allOfWithReferencesSchema from './test-data/compositions-allOf-refer
 import * as arrayOfObjectsSchema from './test-data/array-of-objects.json'
 import * as arrayOfArrayStringSchema from './test-data/array-of-array-string.json'
 import * as arrayOfArrayObjectSchema from './test-data/array-of-array-object.json'
+import * as topLevelRefSchema from './test-data/top-level-ref.json'
 
 describe('Function convert()', () => {
 
@@ -264,5 +265,15 @@ describe('Function convert()', () => {
     expect(result6).to.contain('meta: Option[Any]');
 
   });
+
+  it('should convert top-level references', async () => {
+    const result = await convert(topLevelRefSchema, Config.default);
+    expect(result).to.contain('case class MyCaseClass');
+    expect(result).to.contain('prop1: String');
+    expect(result).to.contain('prop2: Prop2');
+    expect(result).to.contain('case class Prop2');
+    expect(result).to.contain('inner1: String');
+    expect(result).to.contain('inner2: String');
+  })
 
 });
