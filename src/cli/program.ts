@@ -5,6 +5,7 @@ import SchemaConverter from '../index'
 import log4js from 'log4js'
 
 const logger = log4js.getLogger('js2cc');
+logger.level = 'info';
 
 const processResult = (result: string, options: any) => {
   if (options.output) {
@@ -17,12 +18,9 @@ const processResult = (result: string, options: any) => {
 
 export const processSchema = async (src: string, options: any) => {
 
-  // Set logging level
-  logger.level = options.debug ? 'debug' : 'info';
-
   // Sanizie input configs.
   // It strips extra options not required by the API.
-  const config = sanitizedAPIConfigs(options, Config.default);
+  const config = sanitizedAPIConfigs(options);
   logger.debug('Config: ', config);
 
   // Validate and process input schema file
@@ -32,12 +30,13 @@ export const processSchema = async (src: string, options: any) => {
 
   // Use the API to convert input schema
   // TODO: Update API to accept `debug` option.
-  logger.debug('Converting input schema')
+  logger.debug('Converting schama to case class')
   SchemaConverter.convert(schema, config)
     .then(result => processResult(result, options))
     .catch(err => {
       const message = `Failed to parse schema: ${err.message}`;
-      console.error(`\x1b[31m${message}\x1b[0m`)
+      console.error(`\x1b[31m${message}\x1b[0m`);
+      process.exit(1);
     })
 
 };
@@ -71,7 +70,12 @@ export const createCommand = () => {
     .option('-D, --debug', 'Write more detailed output to console', false)
 
   const exampleHelpText = '\nExample call:\n  $ js2cc ./local/sample-schema.json -n Person -s useOptions -o sample-output.scala --debug\n'
+  program.showHelpAfterError();
   program.addHelpText('after', exampleHelpText);
+
+  program.on('option:debug', () => {
+    logger.level = 'debug';
+  });
 
   return program;
 

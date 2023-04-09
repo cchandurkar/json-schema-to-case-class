@@ -1,5 +1,6 @@
 
 import { readFileSync, writeFileSync } from 'fs';
+import { Config } from '../config';
 
 export const readFile = (src: string): string => {
   try {
@@ -31,10 +32,10 @@ export const parseJSON = (content: string): any => {
   }
 }
 
-export const sanitizedAPIConfigs = (options: any, defaults: any) => {
+export const sanitizedAPIConfigs = (options: any) => {
   const sanitized: {[s: string]: any} = {}
-  for (const key in defaults) {
-    const value = key in options ? options[key] : defaults[key];
+  for (const key in Config.default) {
+    const value = key in options ? options[key] : (<any>Config.default)[key];
     sanitized[key] = value;
   }
   return sanitized;
