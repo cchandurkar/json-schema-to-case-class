@@ -4,6 +4,9 @@
   "description": "A library that converts JSON Schema to Scala Case Classes",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "bin": {
+    "js2cc": "lib/cli/index.js"
+  },
   "scripts": {
     "setup-dev-env": "husky install",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha -r ts-node/register -r babel-register -r source-map-support/register 'tests/**/*.test.ts'",
@@ -15,7 +18,8 @@
     "clean": "rimraf ./lib/ ./lib-es6/ ./dist/",
     "build": "npm run clean && npm run build:node && npm run build:browser",
     "build:node": "tsc && tsc --p ./tsconfig.es6.json",
-    "build:browser": "webpack --env production"
+    "build:browser": "webpack --env production",
+    "cli-ts": "node -r ts-node/register ./src/cli/index.ts"
   },
   "husky": {
     "hooks": {
@@ -49,8 +53,9 @@
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.1.0",
     "change-case": "^4.1.2",
+    "commander": "^10.0.0",
     "lodash": "^4.17.21",
-    "lodash-es": "^4.17.21"
+    "log4js": "^6.9.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.20.7",
@@ -60,7 +65,6 @@
     "@types/chai": "^4.2.15",
     "@types/json-schema": "^7.0.7",
     "@types/lodash": "^4.14.191",
-    "@types/lodash-es": "^4.17.6",
     "@types/mocha": "^8.2.0",
     "@types/node": "^14.14.27",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
