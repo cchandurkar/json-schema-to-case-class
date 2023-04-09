@@ -130,12 +130,34 @@ For browser: If you are using the prebuild bundle, it has all the APIs under `Sc
 SchemaConverter.convert( mySchema, config )
 ```
 
-## Usage - CLI
+## Configuration
 
-It also comes with the CLI. Install it globally and run:
+It is optional to pass configuration object. Every configuration setting is optional as well. When not passed, default kicks-in.  `IConfig`:
+
+| Name                  | Type    | Description                                                                                                                                                                                                                             | Default     |
+|-----------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| maxDepth              | number  | Parses nested schema objects upto the depth = maxDepth. Pass 0 for no limit on depth.                                                                                                                                                   | 0           |
+| optionSetting         | string  | Setting to wrap optional parameters in `Option[]`.<br>1. "useOptions" - Wrap optional parameters in `Option[]`<br>2. "useOptionsForAll" - Wrapp all parameters in `Option[]`<br>3. "noOptions" - Don't wrap any parameter in `Option[]` | useOptions  |
+| classNameTextCase     | string  | Text case for case class title. Could be one of:<br>camelCase, capitalCase, constantCase, dotCase, headerCase, noCase, paramCase, pascalCase, pathCase, sentenceCase, snakeCase                                                         | pascalCase  |
+| classParamsTextCase   | string  | Text case for case class parameters. Could be one of above.                                                                                                                                                                             | snakeCase   |
+| topLevelCaseClassName | string  | This config kicks-in only if top level schema object does not have 'title' property.                                                                                                                                                    | MyCaseClass |
+| defaultGenericType    | string  | Case class parameter type when `type` information not available from the schema or if we are converting partial schema using `maxDepth` setting.                                                                                        | Any         |
+| parseRefs             | boolean | Whether to resolve the local or remote schema references ($ref).                                                                                                                                                                        | true        |
+| generateComments      | boolean | Whether to generate scaladoc-like comments for the case class generated.                                                                                                                                                                | false       |
+| generateValidations   | boolean | Whether to generate validations in the form of assertions in case class body.                                                                                                                                                           | false       |
+| generateEnumerations  | boolean | Whether to generate enumerations for `enum` fields. It generates an object extending scala's `Enumeration` class and use it in parameter type.                                                                                          | false       |
+
+## CLI
+
+It also comes with the CLI. Install the package globally and run:
 
 ```bash
 js2cc --help
+```
+OR use with npx
+
+```bash
+npx js2cc --help
 ```
 
 ```bash
@@ -163,23 +185,6 @@ Options:
 Example call:
   $ js2cc ./local/sample-schema.json -n Person -s useOptions -o sample-output.scala --debug
 ```
-
-## Configuration
-
-It is optional to pass configuration object. Every configuration setting is optional as well. When not passed, default kicks-in.  `IConfig`:
-
-| Name                  | Type    | Description                                                                                                                                                                                                                             | Default     |
-|-----------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| maxDepth              | number  | Parses nested schema objects upto the depth = maxDepth. Pass 0 for no limit on depth.                                                                                                                                                   | 0           |
-| optionSetting         | string  | Setting to wrap optional parameters in `Option[]`.<br>1. "useOptions" - Wrap optional parameters in `Option[]`<br>2. "useOptionsForAll" - Wrapp all parameters in `Option[]`<br>3. "noOptions" - Don't wrap any parameter in `Option[]` | useOptions  |
-| classNameTextCase     | string  | Text case for case class title. Could be one of:<br>camelCase, capitalCase, constantCase, dotCase, headerCase, noCase, paramCase, pascalCase, pathCase, sentenceCase, snakeCase                                                         | pascalCase  |
-| classParamsTextCase   | string  | Text case for case class parameters. Could be one of above.                                                                                                                                                                             | snakeCase   |
-| topLevelCaseClassName | string  | This config kicks-in only if top level schema object does not have 'title' property.                                                                                                                                                    | MyCaseClass |
-| defaultGenericType    | string  | Case class parameter type when `type` information not available from the schema or if we are converting partial schema using `maxDepth` setting.                                                                                        | Any         |
-| parseRefs             | boolean | Whether to resolve the local or remote schema references ($ref).                                                                                                                                                                        | true        |
-| generateComments      | boolean | Whether to generate scaladoc-like comments for the case class generated.                                                                                                                                                                | false       |
-| generateValidations   | boolean | Whether to generate validations in the form of assertions in case class body.                                                                                                                                                           | false       |
-| generateEnumerations  | boolean | Whether to generate enumerations for `enum` fields. It generates an object extending scala's `Enumeration` class and use it in parameter type.                                                                                          | false       |
 
 ## Browser Support
 This library supports recent versions of every major web browsers. Refer to the browserified build `dist/js2cc.min.js` that you can directly use in `<script />` tag of HTML page. It already bundles all the required polyfills. 
