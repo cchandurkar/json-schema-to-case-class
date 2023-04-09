@@ -147,6 +147,45 @@ It is optional to pass configuration object. Every configuration setting is opti
 | generateValidations   | boolean | Whether to generate validations in the form of assertions in case class body.                                                                                                                                                           | false       |
 | generateEnumerations  | boolean | Whether to generate enumerations for `enum` fields. It generates an object extending scala's `Enumeration` class and use it in parameter type.                                                                                          | false       |
 
+## CLI
+
+It also comes with the CLI. Install the package globally and run:
+
+```bash
+js2cc --help
+```
+OR use with npx
+
+```bash
+npx js2cc --help
+```
+
+```bash
+Usage: js2cc <src> [options]
+
+Convert JSON schemas into scala case class
+
+Arguments:
+  src                                       Path to json schema. It must be a local file. Support for reading URLs will be added in future version.
+
+Options:
+  -v, --version                             Library version
+  -d, --max-depth <number>                  Maximum depth to parse nested JSON schema (default: 0)
+  -s, --option-setting <type>               Wrap non-required fields in `Option` (choices: "noOptions", "useOptions", "useOptionsForAll", default: "useOptions")
+  -n, --top-level-case-class-name <string>  Name of the top-level case class (Applies only if JSON schema does not have top-level `title` property. (default: "MyCaseClass")
+  -d, --default-generic-type <string>       Default generic type for unparsable data types (default: "Any")
+  -p, --parse-refs                          Parse local and remote references (default: true)
+  -c, --generate-comments                   Generate scaladoc comments (default: false)
+  -v, --generate-validations                Generate assertions from validations in JSON schema (default: false)
+  -e, --generate-enumerations               Generate enumerations (default: false)
+  -o, --output <string>                     File name to write output to. If not provided, output will be written to console. (default: false)
+  -D, --debug                               Write more detailed output to console (default: false)
+  -h, --help                                display help for command
+
+Example call:
+  $ js2cc ./local/sample-schema.json -n Person -s useOptions -o sample-output.scala --debug
+```
+
 ## Browser Support
 This library supports recent versions of every major web browsers. Refer to the browserified build `dist/js2cc.min.js` that you can directly use in `<script />` tag of HTML page. It already bundles all the required polyfills. 
 
