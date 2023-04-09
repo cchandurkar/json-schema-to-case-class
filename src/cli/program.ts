@@ -31,12 +31,11 @@ export const processSchema = async (src: string, options: any) => {
   // Use the API to convert input schema
   // TODO: Update API to accept `debug` option.
   logger.debug('Converting schama to case class')
-  SchemaConverter.convert(schema, config)
+  return SchemaConverter.convert(schema, config)
     .then(result => processResult(result, options))
     .catch(err => {
-      const message = `Failed to parse schema: ${err.message}`;
-      console.error(`\x1b[31m${message}\x1b[0m`);
-      process.exit(1);
+      const message = `Failed to convert schema: ${err.message}`;
+      throw Error(message);
     })
 
 };

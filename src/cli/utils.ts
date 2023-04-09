@@ -7,8 +7,7 @@ export const readFile = (src: string): string => {
     return readFileSync(src, { encoding: 'utf8', flag: 'r' });
   } catch (e: any) {
     const message = `Error reading input file: ${e.message}`
-    console.error(`\x1b[31m${message}\x1b[0m`)
-    process.exit(1)
+    throw new Error(message);
   }
 }
 
@@ -17,8 +16,7 @@ export const writeFile = (path: string, content: string): void => {
     return writeFileSync(path, content, { encoding: 'utf8', flag: 'w' });
   } catch (e: any) {
     const message = `Error writing output file: ${e.message}`
-    console.error(`\x1b[31m${message}\x1b[0m`)
-    process.exit(1)
+    throw Error(message);
   }
 }
 
@@ -27,8 +25,7 @@ export const parseJSON = (content: string): any => {
     return JSON.parse(content)
   } catch (e: any) {
     const message = `Not a valid JSON: ${e.message}`
-    console.error(`\x1b[31m${message}\x1b[0m`);
-    process.exit(1)
+    throw Error(message);
   }
 }
 

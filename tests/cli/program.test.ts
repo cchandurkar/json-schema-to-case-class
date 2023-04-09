@@ -5,17 +5,15 @@ import { expect } from 'chai';
 import { beforeEach } from 'mocha';
 import * as sinon from 'sinon';
 
-import { Command } from 'commander';
+import { Command, InvalidArgumentError } from 'commander';
 
 describe('CLI', () => {
 
   let program: Command;
-  const processSpy = sinon.spy(process, 'exit');
 
   beforeEach(() => {
     program = createCommand();
     program?.allowUnknownOption(true);
-    processSpy.restore();
   })
 
   it('Parse and map all input options to API options', async () => {
@@ -25,18 +23,26 @@ describe('CLI', () => {
   })
 
   it('Processes valid schema with default arguments', async () => {
-    processSchema('./tests/test-data/simple-schema.json', program?.opts())
-    expect(processSpy.calledWith(0)).to.equal(false)
+    expect(async () => await processSchema('./tests/test-data/simple-schema.json', program?.opts()))
+      .to.not.throw();
   })
 
   it('Throws error for invalid input schema file', async () => {
-    processSchema('./tests/test-data/ENOENT.json', program?.opts())
-    expect(processSpy.calledWith(1)).to.equal(true)
+    return processSchema('./tests/test-data/ENOENT.json', program?.opts()).catch(err => {
+      expect(err.message).to.contain('Error reading input file')
+    })
   })
 
   it('Throws error for invalid schema', async () => {
-    processSchema('./tests/test-data/invalid-schema.json', program?.opts())
-    expect(processSpy.calledWith(1)).to.equal(true)
+    return processSchema('./tests/test-data/invalid-schema.json', program?.opts()).catch(err => {
+      expect(err.message).to.contain('Failed to convert schema')
+    })
+  })
+
+  it('Throws error for invalid schema', async () => {
+    const processSpy = sinon.stub(process, 'exit');
+    expect(() => program.parse(['abc.json', '--option-setting', 'invalid'], { from: 'user' })).to.throw(InvalidArgumentError)
+    expect(processSpy.calledWith(1)).to.equal(true);
   })
 
 })
