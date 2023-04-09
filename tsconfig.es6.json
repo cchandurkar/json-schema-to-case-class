@@ -33,6 +33,6 @@
     "target": "ES6"
   },
   "include": [
-    "src/**/*"
+    "src/"
   ],
 }
