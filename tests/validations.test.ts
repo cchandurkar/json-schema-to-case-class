@@ -18,9 +18,9 @@ describe('Validate array-like operations', () => {
     assert(res31 === 'assert( tags.length <= 2, "`tags` must have maximum 2 item(s)" )')
 
     const res4 = generateAssertion('uniqueItems', 'tags', null, true);
-    assert(res4 === 'assert( tags.forall(_.length > _.distinct.length), "`tags` contains duplicate items" )')
+    assert(res4 === 'assert( tags.forall(_.length === _.distinct.length), "`tags` must have unique items" )')
     const res41 = generateAssertion('uniqueItems', 'tags', null, false);
-    assert(res41 === 'assert( tags.length > tags.distinct.length, "`tags` contains duplicate items" )')
+    assert(res41 === 'assert( tags.length === tags.distinct.length, "`tags` must have unique items" )')
 
     const res5 = generateAssertion('multipleOf', 'age', 3, true);
     assert(res5 === 'assert( age.forall(_ % 3 === 0), "`age` must be multiple of (divisible by) 3" )')

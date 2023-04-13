@@ -13,9 +13,9 @@ const arrayLikeValidationOps: any = {
   },
   uniqueItems: {
     lhs: (paramName: string, value: any) => `${paramName}.length`,
-    comparator: (paramName: string, value: any) => '>',
+    comparator: (paramName: string, value: any) => '===',
     rhs: (paramName: string, value: any) => `${paramName}.distinct.length`,
-    msg: (paramName: string, value: any) => `\`${paramName}\` contains duplicate items`
+    msg: (paramName: string, value: any) => `\`${paramName}\` must have unique items`
   }
 }
 
