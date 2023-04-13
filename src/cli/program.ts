@@ -40,7 +40,7 @@ export const processSchema = async (src: string, options: any) => {
 
 };
 
-export const createCommand = () => {
+export const createCommand = (): Command => {
 
   const program = new Command();
   const maxDepth = new Option('-d, --max-depth <number>', 'Maximum depth to parse nested JSON schema')
