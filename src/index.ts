@@ -2,6 +2,7 @@ import { resolveRefs, stripSchema, validate, supportedTextCases, getSanitizers }
 import { format } from './formatter';
 import { IConfig } from './interfaces';
 import { Config } from './config';
+import log4js from 'log4js'
 
 class SchemaConverter {
 
@@ -19,14 +20,42 @@ class SchemaConverter {
    * @param config
    */
   static async convert (schema: any, config?: IConfig): Promise<string> {
+
+    // Setup logger
+    const logger = log4js.getLogger('js2cc API');
+    logger.level = config?.debug ? 'debug' : 'info';
+
+    logger.debug('Resolving config');
     const resolved = Config.resolve(config);
     const sanitizers = getSanitizers(schema, resolved);
+
+    logger.debug('Validating input schema');
     return validate(schema)
-      .then(() => sanitizers.pre())
-      .then((sanitizedSchema) => resolveRefs(sanitizedSchema))
-      .then(res => stripSchema(res.schema, resolved))
-      .then((res) => sanitizers.post(res))
-      .then(res => format(res, resolved))
+      .then(() => {
+        logger.debug('Sanitizing schema');
+        return sanitizers.pre()
+      })
+      .then(async (sanitizedSchema) => {
+        if (!resolved.parseRefs) return Promise.resolve(sanitizedSchema);
+        logger.debug('Resolving schema references');
+        const parsedSchema = await resolveRefs(sanitizedSchema);
+        if (parsedSchema.error || !parsedSchema.schema) {
+          throw new Error(`Error parsing schema references: ${parsedSchema.error}`)
+        }
+        return parsedSchema.schema;
+      })
+      .then(res => {
+        logger.debug('Parsing schema');
+        return stripSchema(res, resolved)
+      })
+      .then((res) => {
+        logger.debug('Post-processing sanitization');
+        return sanitizers.post(res)
+      })
+      .then(res => {
+        logger.debug('Formatting');
+        return format(res, resolved)
+      })
   }
 
 }

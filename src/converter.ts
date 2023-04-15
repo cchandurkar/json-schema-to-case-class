@@ -82,8 +82,8 @@ const postResolveSanitize = (resolvedSchema: ICaseClassDef, hasTopLevelRef: bool
 export const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
   return $RefParser
     .dereference(schema, { dereference: { circular: 'ignore' } })
-    .then(result => { return { error: null, schema: result } })
-    .catch(err => { return { error: err, schema: null } });
+    .then((result: any) => { return { error: null, schema: result } })
+    .catch((err: any) => { return { error: err, schema: null } });
 };
 
 /**
@@ -181,6 +181,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
 
     // Resolve Sub-schema
     paramObject = resolveCompositSubSchema(paramObject)
+
     // Get and convert case class parameter's name, type and description
     const paramName = classParamsTextCase(key);
     const description: string = paramObject.description;

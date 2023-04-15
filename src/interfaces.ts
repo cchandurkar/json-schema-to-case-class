@@ -11,6 +11,7 @@ export interface IConfig {
     generateComments?: boolean;
     generateValidations?: boolean;
     generateEnumerations?: boolean
+    debug?: boolean
 }
 
 /** Config resolved with default parameters **/
@@ -24,7 +25,8 @@ export interface IConfigResolved {
     parseRefs: boolean,
     generateComments: boolean
     generateValidations: boolean,
-    generateEnumerations: boolean
+    generateEnumerations: boolean,
+    debug: boolean
 }
 
 /** An intermediate data format. This is the striped down version of JSON Schema **/

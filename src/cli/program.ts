@@ -1,10 +1,10 @@
 import { Command, Option } from 'commander'
-import { readFile, writeFile, parseJSON, appVersion, sanitizedAPIConfigs } from './utils'
+import { readFile, writeFile, parseJSON, appVersion, sanitizedAPIConfigs, wrappedError } from './utils'
 import { Config } from '../config'
 import SchemaConverter from '../index'
 import log4js from 'log4js'
 
-const logger = log4js.getLogger('js2cc');
+const logger = log4js.getLogger('js2cc CLI');
 logger.level = 'info';
 
 const processResult = (result: string, options: any) => {
@@ -29,13 +29,14 @@ export const processSchema = async (src: string, options: any) => {
   const schema = parseJSON(readFile(src));
 
   // Use the API to convert input schema
-  // TODO: Update API to accept `debug` option.
   logger.debug('Converting schama to case class')
   return SchemaConverter.convert(schema, config)
-    .then(result => processResult(result, options))
+    .then(result => {
+      logger.debug('Processing results');
+      processResult(result, options)
+    })
     .catch(err => {
-      const message = `Failed to convert schema: ${err.message}`;
-      throw Error(message);
+      throw wrappedError(new Error(`Failed to convert schema: ${err.message}`), err);
     })
 
 };

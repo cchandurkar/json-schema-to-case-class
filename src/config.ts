@@ -13,7 +13,8 @@ export class Config {
     parseRefs: true,
     generateComments: false,
     generateValidations: false,
-    generateEnumerations: false
+    generateEnumerations: false,
+    debug: false
   };
 
   static resolve (config?: IConfig): IConfigResolved {
