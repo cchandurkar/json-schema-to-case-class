@@ -5,16 +5,21 @@
 import type {
   JSONSchema4,
   JSONSchema4Object,
+  JSONSchema4Type,
   JSONSchema6,
   JSONSchema6Definition,
+  JSONSchema6Type,
   JSONSchema6Object,
   JSONSchema7,
   JSONSchema7Definition,
+  JSONSchema7Type,
   JSONSchema7Object
 } from 'json-schema';
 
-export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7 | boolean;
+export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 export type JSONSchemaObject = JSONSchema4Object | JSONSchema6Object | JSONSchema7Object;
+export type JSONSchemaDefinition = JSONSchema6Definition | JSONSchema7Definition;
+export type JSONSchemaEnum = JSONSchema4Type | JSONSchema6Type | JSONSchema7Type;
 
 // -------------------------------
 // Configs and Formatters
@@ -22,7 +27,9 @@ export type JSONSchemaObject = JSONSchema4Object | JSONSchema6Object | JSONSchem
 
 export type InputConfig = {
   maxDepth: Number,
-  resolveRefs: Boolean
+  resolveRefs: Boolean,
+  defaultTopLevelCaseClassName: string,
+  defaultType: string
 }
 
 export type KeyValue = { [key: string]: any; }
@@ -50,7 +57,13 @@ export type ParsedJSONSchema = {
   entities: Entity[]
 }
 
-export type Entity = {
+export type AttrGenericType = String | Entity | AttributeType;
+export type AttributeType = {
+  primary: String | Entity,
+  generic?: AttrGenericType
+}
+
+export type Entity = null | undefined | {
   name?: String,
   description?: String,
   attributes: Attribute[],
@@ -59,8 +72,9 @@ export type Entity = {
 
 export type Attribute = {
   name: String,
-  type: String | Entity,
-  genericType?: String | Entity,
+  type: AttributeType,
+  description?: String,
   constraints?: any[],
-  required: boolean
+  enumerations?: any [],
+  required: boolean | null
 }
