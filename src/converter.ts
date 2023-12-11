@@ -1,6 +1,7 @@
 import { IConfigResolved, ICaseClassDef, IResolveRefsResult, ICaseClassDefParams, TextCaseFn } from './interfaces';
 import get from 'lodash/get';
 import map from 'lodash/map';
+import uniq from 'lodash/uniq';
 import mergeWith from 'lodash/mergeWith';
 
 import * as allTextCases from 'change-case';
@@ -9,13 +10,24 @@ import $RefParser from '@apidevtools/json-schema-ref-parser';
 import { validations } from './validations';
 
 /** Type mapping between JSON Schema and Scala **/
+// const typeMap = {
+//   integer: 'Int',
+//   string: 'String',
+//   number: 'Double',
+//   boolean: 'Boolean',
+//   array: 'List',
+//   object: 'Any'
+// };
+
+/** Type mapping between JSON Schema and Scala **/
 const typeMap = {
-  integer: 'Int',
-  string: 'String',
-  number: 'Double',
-  boolean: 'Boolean',
-  array: 'List',
-  object: 'Any'
+  integer: 'int',
+  string: 'string',
+  number: 'float',
+  boolean: 'boolean',
+  array: 'array',
+  object: 'record',
+  null: 'null'
 };
 
 const subSchemaIdentifiers: Array<string> = ['type', 'properties']
@@ -114,9 +126,15 @@ const extractValidations = (paramObject: any): {[key: string]: any} => {
     }, {})
 };
 
-const customizer = (objValue: any, srcValue: any) => {
+const arrayMerge = (objValue: any, srcValue: any) => {
   if (Array.isArray(objValue)) {
     return objValue.concat(srcValue);
+  }
+}
+
+const arrayMergeUnique = (objValue: any, srcValue: any) => {
+  if (Array.isArray(objValue)) {
+    return uniq(objValue.concat(srcValue));
   }
 }
 
@@ -127,18 +145,43 @@ const customizer = (objValue: any, srcValue: any) => {
  *  @param paramObject
  */
 const resolveCompositSubSchema = (paramObject: any) => {
+  if (paramObject.oneOf) {
+    return resolveOneOf(paramObject);
+  } else if (paramObject.allOf) {
+    return resolveAllOf(paramObject);
+  } else {
+    return paramObject;
+  }
+}
+
+const resolveAllOf = (paramObject: any) => {
   const allOf: Array<any> = paramObject.allOf || [];
   allOf.forEach(subSchema => {
     if (subSchemaIdentifiers.some(key => key in subSchema)) {
-      paramObject = mergeWith(subSchema, paramObject, customizer)
+      paramObject = mergeWith(subSchema, paramObject, arrayMerge)
     }
   })
   return paramObject
 }
 
+const resolveOneOf = (paramObject: any) => {
+  const oneOf: any[] = paramObject.oneOf || [];
+  const oneOfNonNull: any[] = oneOf.filter(subschema => subschema.type !== 'null');
+  if (oneOfNonNull.length === 1) {
+    paramObject = oneOfNonNull[0];
+  }
+  return paramObject;
+}
+
 const getJsonSchemaObjectType = (schemaObject: any): string => {
   if (schemaObject.type === 'array' || schemaObject.items) { return 'array'; }
   if (schemaObject.type === 'object' || schemaObject.properties) { return 'object'; }
+  if (Array.isArray(schemaObject.type)) {
+    const nonNullTypes = schemaObject.type.filter((t: string) => t !== 'null');
+    if (nonNullTypes.length === 1) {
+      return nonNullTypes[0];
+    }
+  }
   return schemaObject.type;
 };
 
@@ -175,18 +218,36 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
   const entityDescription: string = get(schemaObject, 'description');
   const requiredParams: boolean | string[] = get(schemaObject, 'required', false);
 
+  // Flatten If-then-else
+  // `if` is usually set on existing `properties` so we can ignore that for now.
+  if ('if' in schemaObject) {
+    if ('then' in schemaObject) {
+      schemaObject = mergeWith(schemaObject.then, schemaObject, arrayMergeUnique);
+    }
+    if ('else' in schemaObject) {
+      schemaObject = mergeWith(schemaObject.then, schemaObject, arrayMergeUnique);
+    }
+  }
+
   // iterate over either `properties` or `definitions` array
   const topLevelProperties: any = schemaObject.properties;
+
   const parameters: ICaseClassDefParams[] = map(topLevelProperties, (paramObject, key) => {
 
     // Resolve Sub-schema
-    paramObject = resolveCompositSubSchema(paramObject)
+    paramObject = resolveCompositSubSchema(paramObject);
+
     // Get and convert case class parameter's name, type and description
     const paramName = classParamsTextCase(key);
     const description: string = paramObject.description;
     const validations = extractValidations(paramObject);
     const compositValidations = extractCompositValidations(paramObject);
     let nestedObject: ICaseClassDef | null = null;
+
+    // Check if parameter has `const`
+    if ('type' in paramObject === false && 'const' in paramObject) {
+      paramObject.type = typeof paramObject.const;
+    }
 
     // Check if parameter has enumeration
     let enumeration: Array<string|number> | null = null;
@@ -202,7 +263,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
       // Get object type and paramType
       const paramObjectType = getJsonSchemaObjectType(nestedSchemaObject);
       let paramType: string = get(typeMap, paramObjectType, config.defaultGenericType);
-      let genericType: string | null = paramType === 'List' ? config.defaultGenericType : null;
+      let genericType: string | null = paramType === 'array' ? config.defaultGenericType : null;
 
       // If we have reached the depth limit, bail-out
       if (hasDepthConditionMet(config, currentDepth)) {
@@ -210,7 +271,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
       }
 
       // Process nested array first as it does not consume depth
-      if (paramObjectType === 'array') {
+      if (paramObjectType === 'array' && nestedSchemaObject.items) {
         const arrayItemType = getJsonSchemaObjectType(nestedSchemaObject.items);
         if (arrayItemType === 'object') {
           nestedObject = stripSchemaObject(nestedSchemaObject.items, currentDepth + 1, paramName, config);

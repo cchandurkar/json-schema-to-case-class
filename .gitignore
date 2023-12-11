@@ -9,6 +9,8 @@ json-schema-to-case-class.*.tgz
 .idea/
 .DS_Store
 test.js
+*.tmp.ts
+*.temp.ts
 
 # Lib
 lib

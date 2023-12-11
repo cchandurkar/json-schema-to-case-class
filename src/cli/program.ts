@@ -60,7 +60,7 @@ export const createCommand = () => {
     .addOption(maxDepth)
     .addOption(optionSettings)
     .option('-n, --top-level-case-class-name <string>', 'Name of the top-level case class (Applies only if JSON schema does not have top-level `title` property.', Config.default.topLevelCaseClassName)
-    .option('-d, --default-generic-type <string>', 'Default generic type for unparsable data types', Config.default.defaultGenericType)
+    .option('-t, --default-generic-type <string>', 'Default generic type for unparsable data types', Config.default.defaultGenericType)
     .option('-p, --parse-refs', 'Parse local and remote references', Config.default.parseRefs)
     .option('-c, --generate-comments', 'Generate scaladoc comments', Config.default.generateComments)
     .option('-v, --generate-validations', 'Generate assertions from validations in JSON schema', Config.default.generateValidations)

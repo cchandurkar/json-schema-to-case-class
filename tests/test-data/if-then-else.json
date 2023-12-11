@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/product.schema.json",
+    "title": "Product",
+    "description": "A product from Acme's catalog",
+    "type": "object",
+    "properties": {
+      "productId": {
+        "description": "The unique identifier for a product",
+        "type": "integer"
+      },
+      "isInStock": {
+        "description": "If product is in stock",
+        "type": "boolean"
+      }
+    },
+    "if": {
+      "properties": {
+        "isInStock": {
+          "const": true
+        }
+      }
+    },
+    "then": {
+      "properties": {
+        "availableQty": {
+          "type": "string"
+        }
+      }
+    },
+    "else": {
+      "properties": {
+        "nextAvailable": {
+          "type": "string"
+        }
+      }
+    }
+  }

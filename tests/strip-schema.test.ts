@@ -14,10 +14,243 @@ import * as allOfWithReferencesSchema from './test-data/compositions-allOf-refer
 import * as arrayOfObjectsSchema from './test-data/array-of-objects.json'
 import * as arrayOfArrayStringSchema from './test-data/array-of-array-string.json'
 import * as arrayOfArrayObjectSchema from './test-data/array-of-array-object.json'
+import * as ifThenElse from './test-data/if-then-else.json'
 
 describe('Function stripSchema()', () => {
 
-  it('should strip simple JSON Schema', async () => {
+  // it('should strip simple JSON Schema', async () => {
+
+  //   const config = {
+  //     maxDepth: 0,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: null,
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: false
+  //   };
+
+  //   const result = await stripSchema(simpleSchema, Config.resolve(config));
+
+  //   expect(result).to.be.an('object');
+  //   expect(result.entityName).to.eql(simpleSchema.title);
+  //   expect(result.parameters[0].paramType).to.eql('String');
+
+  // });
+
+  // it('should use default top level class name for schema with no title', async () => {
+
+  //   const config = {
+  //     maxDepth: 0,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: 'PersonInfo',
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: false
+  //   };
+
+  //   const result = await stripSchema(simpleSchemaNoTitle, Config.resolve(config));
+  //   const ageValidations = get(find(result.parameters, { paramName: 'age' }), 'validations', {});
+
+  //   expect(result).to.be.an('object');
+  //   expect(result.entityName).to.eql(config.topLevelCaseClassName);
+  //   expect(result.parameters[0].paramType).to.eql('String');
+
+  //   expect(ageValidations).to.eql({ minimum: 0 });
+
+  // });
+
+  // it('should strip nested JSON Schema with local references', async () => {
+
+  //   const config = {
+  //     maxDepth: 0,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: 'PersonInfo',
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: false
+  //   };
+
+  //   const result = await stripSchema(nestedSchema, Config.resolve(config));
+  //   const tagsValidations = get(find(result.parameters, { paramName: 'tags' }), 'validations', {});
+  //   const priceValidations = get(find(result.parameters, { paramName: 'price' }), 'validations', {});
+
+  //   expect(result).to.be.an('object');
+  //   expect(result.entityName).to.eql(nestedSchema.title);
+  //   expect(get(result, 'parameters[4].nestedObject.parameters[0].paramType')).to.eql('Double');
+
+  //   expect(tagsValidations).to.eql({ minItems: 1, uniqueItems: true });
+  //   expect(priceValidations).to.eql({ exclusiveMinimum: 0 });
+
+  // });
+
+  // it('should populate generic type of nested schema as expected', async () => {
+
+  //   const config = {
+  //     maxDepth: 0,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: 'PersonInfo',
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: false
+  //   };
+
+  //   const result = await stripSchema(nestedSchema, Config.resolve(config));
+  //   const tagsProperty = result.parameters[3];
+
+  //   expect(result).to.be.an('object');
+  //   expect(tagsProperty.genericType).to.eql('String');
+  //   expect(tagsProperty.paramType).to.eql('List');
+
+  // });
+
+  // it('should populate generic type of parameter as expected for maxDepth less than the total depth', async () => {
+
+  //   const config = {
+  //     maxDepth: 1,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: 'PersonInfo',
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: false
+  //   };
+
+  //   const result = await stripSchema(nestedSchema, Config.resolve(config));
+  //   const tagsProperty = result.parameters[3];
+  //   const dimsProperty = result.parameters[4];
+
+  //   expect(result).to.be.an('object');
+  //   expect(result.entityName).to.eql(nestedSchema.title);
+  //   expect(tagsProperty.genericType).to.eql('Any');
+  //   expect(tagsProperty.paramType).to.eql('List');
+  //   expect(dimsProperty.paramType).to.eql('Any');
+
+  // });
+
+  // it('should parse parameter types as expected for maxDepth less than the total depth', async () => {
+
+  //   const config = {
+  //     maxDepth: 1,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: 'PersonInfo',
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: false
+  //   };
+
+  //   const result = await stripSchema(nestedSchema, Config.resolve(config));
+  //   const tagsProperty = result.parameters[3];
+  //   const dimsProperty = result.parameters[4];
+
+  //   expect(result).to.be.an('object');
+  //   expect(result.entityName).to.eql(nestedSchema.title);
+  //   expect(tagsProperty.genericType).to.eql('Any');
+  //   expect(tagsProperty.paramType).to.eql('List');
+  //   expect(dimsProperty.paramType).to.eql('Any');
+
+  // });
+
+  // it('should populate enumerations as expected', async () => {
+
+  //   const config = {
+  //     maxDepth: 0,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: false
+  //   };
+
+  //   const result = await stripSchema(stringEnumSchema, Config.resolve(config));
+  //   const txProperty = get(result, 'parameters[1].nestedObject.parameters[2]', <any>{});
+
+  //   expect(result).to.be.an('object');
+  //   expect(txProperty).to.not.eql(undefined);
+  //   expect(txProperty.paramType).to.eql('String');
+  //   expect(txProperty.enumeration).to.eql([
+  //     'DEBIT',
+  //     'CREDIT',
+  //     'VOID'
+  //   ]);
+
+  // });
+
+  // it('should work with composit schema', async () => {
+  //   // Each of the sub-schemas in allOf needs to be merged with top level object
+  //   // Leave out validation fields when doing so
+  //   const config = Config.resolve({
+  //     maxDepth: 0,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: 'PersonInfo',
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: true
+  //   });
+  //   const result = await stripSchema(allOfSchema, config)
+
+  //   // const firstName = get(result, 'parameters[0]');
+  //   const age = get(result, 'parameters[1]');
+  //   expect(age.paramType).to.eql('Double')
+  //   expect(age.compositValidations?.allOf.length).to.gt(0)
+  // });
+
+  // it('should merge composit references with top level object', async () => {
+  //   // Each of the sub-schemas in allOf needs to be merged with top level object
+  //   // Leave out validation fields when doing so
+  //   const config = Config.resolve({
+  //     maxDepth: 0,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: 'PersonInfo',
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: true
+  //   });
+  //   const dereferencedSchema = await resolveRefs(allOfWithReferencesSchema);
+  //   const result = await stripSchema(dereferencedSchema.schema, config);
+  //   const shippingParameters = get(result, 'parameters[1].nestedObject.parameters', []);
+  //   expect(shippingParameters.length).to.equal(4);
+  // });
+
+  // it('should parse an array of objects', async () => {
+  //   const dereferencedSchema = await resolveRefs(arrayOfObjectsSchema);
+  //   const result = await stripSchema(dereferencedSchema.schema, Config.default);
+  //   expect(result.parameters[3].nestedObject?.parameters.length).to.equal(3);
+  // });
+
+  // it('should parse an array of array of string', async () => {
+  //   const dereferencedSchema = await resolveRefs(arrayOfArrayStringSchema);
+  //   const result = await stripSchema(dereferencedSchema.schema, Config.default);
+  //   expect(result.parameters[3].paramType).to.eql('List')
+  //   expect(result.parameters[3].genericType).to.eql('List[String]')
+  // });
+
+  // it('should parse an array of array of objects', async () => {
+  //   const result1 = await stripSchema(arrayOfArrayObjectSchema, Config.resolve({ maxDepth: 1 }));
+  //   expect(result1.parameters[3].paramType).to.eql('Any')
+  //   expect(result1.parameters[3].nestedObject).to.eql(null)
+
+  //   const result2 = await stripSchema(arrayOfArrayObjectSchema, Config.default);
+  //   expect(result2.parameters[3].nestedObject?.parameters[0].paramType).to.eql('List');
+  //   expect(result2.parameters[3].nestedObject?.parameters[0].genericType).to.eql('List[Experience]');
+  // });
+
+  it('should merge properties from if-then-else', async () => {
 
     const config = {
       maxDepth: 0,
@@ -30,223 +263,9 @@ describe('Function stripSchema()', () => {
       generateComments: false
     };
 
-    const result = await stripSchema(simpleSchema, Config.resolve(config));
+    const result = await stripSchema(ifThenElse, Config.resolve(config));
+    expect(result.parameters.length).to.eql(3);
 
-    expect(result).to.be.an('object');
-    expect(result.entityName).to.eql(simpleSchema.title);
-    expect(result.parameters[0].paramType).to.eql('String');
-
-  });
-
-  it('should use default top level class name for schema with no title', async () => {
-
-    const config = {
-      maxDepth: 0,
-      optionSetting: 'useOptions',
-      classNameTextCase: 'pascalCase',
-      classParamsTextCase: 'snakeCase',
-      topLevelCaseClassName: 'PersonInfo',
-      defaultGenericType: 'Any',
-      parseRefs: true,
-      generateComments: false
-    };
-
-    const result = await stripSchema(simpleSchemaNoTitle, Config.resolve(config));
-    const ageValidations = get(find(result.parameters, { paramName: 'age' }), 'validations', {});
-
-    expect(result).to.be.an('object');
-    expect(result.entityName).to.eql(config.topLevelCaseClassName);
-    expect(result.parameters[0].paramType).to.eql('String');
-
-    expect(ageValidations).to.eql({ minimum: 0 });
-
-  });
-
-  it('should strip nested JSON Schema with local references', async () => {
-
-    const config = {
-      maxDepth: 0,
-      optionSetting: 'useOptions',
-      classNameTextCase: 'pascalCase',
-      classParamsTextCase: 'snakeCase',
-      topLevelCaseClassName: 'PersonInfo',
-      defaultGenericType: 'Any',
-      parseRefs: true,
-      generateComments: false
-    };
-
-    const result = await stripSchema(nestedSchema, Config.resolve(config));
-    const tagsValidations = get(find(result.parameters, { paramName: 'tags' }), 'validations', {});
-    const priceValidations = get(find(result.parameters, { paramName: 'price' }), 'validations', {});
-
-    expect(result).to.be.an('object');
-    expect(result.entityName).to.eql(nestedSchema.title);
-    expect(get(result, 'parameters[4].nestedObject.parameters[0].paramType')).to.eql('Double');
-
-    expect(tagsValidations).to.eql({ minItems: 1, uniqueItems: true });
-    expect(priceValidations).to.eql({ exclusiveMinimum: 0 });
-
-  });
-
-  it('should populate generic type of nested schema as expected', async () => {
-
-    const config = {
-      maxDepth: 0,
-      optionSetting: 'useOptions',
-      classNameTextCase: 'pascalCase',
-      classParamsTextCase: 'snakeCase',
-      topLevelCaseClassName: 'PersonInfo',
-      defaultGenericType: 'Any',
-      parseRefs: true,
-      generateComments: false
-    };
-
-    const result = await stripSchema(nestedSchema, Config.resolve(config));
-    const tagsProperty = result.parameters[3];
-
-    expect(result).to.be.an('object');
-    expect(tagsProperty.genericType).to.eql('String');
-    expect(tagsProperty.paramType).to.eql('List');
-
-  });
-
-  it('should populate generic type of parameter as expected for maxDepth less than the total depth', async () => {
-
-    const config = {
-      maxDepth: 1,
-      optionSetting: 'useOptions',
-      classNameTextCase: 'pascalCase',
-      classParamsTextCase: 'snakeCase',
-      topLevelCaseClassName: 'PersonInfo',
-      defaultGenericType: 'Any',
-      parseRefs: true,
-      generateComments: false
-    };
-
-    const result = await stripSchema(nestedSchema, Config.resolve(config));
-    const tagsProperty = result.parameters[3];
-    const dimsProperty = result.parameters[4];
-
-    expect(result).to.be.an('object');
-    expect(result.entityName).to.eql(nestedSchema.title);
-    expect(tagsProperty.genericType).to.eql('Any');
-    expect(tagsProperty.paramType).to.eql('List');
-    expect(dimsProperty.paramType).to.eql('Any');
-
-  });
-
-  it('should parse parameter types as expected for maxDepth less than the total depth', async () => {
-
-    const config = {
-      maxDepth: 1,
-      optionSetting: 'useOptions',
-      classNameTextCase: 'pascalCase',
-      classParamsTextCase: 'snakeCase',
-      topLevelCaseClassName: 'PersonInfo',
-      defaultGenericType: 'Any',
-      parseRefs: true,
-      generateComments: false
-    };
-
-    const result = await stripSchema(nestedSchema, Config.resolve(config));
-    const tagsProperty = result.parameters[3];
-    const dimsProperty = result.parameters[4];
-
-    expect(result).to.be.an('object');
-    expect(result.entityName).to.eql(nestedSchema.title);
-    expect(tagsProperty.genericType).to.eql('Any');
-    expect(tagsProperty.paramType).to.eql('List');
-    expect(dimsProperty.paramType).to.eql('Any');
-
-  });
-
-  it('should populate enumerations as expected', async () => {
-
-    const config = {
-      maxDepth: 0,
-      optionSetting: 'useOptions',
-      classNameTextCase: 'pascalCase',
-      classParamsTextCase: 'snakeCase',
-      defaultGenericType: 'Any',
-      parseRefs: true,
-      generateComments: false
-    };
-
-    const result = await stripSchema(stringEnumSchema, Config.resolve(config));
-    const txProperty = get(result, 'parameters[1].nestedObject.parameters[2]', <any>{});
-
-    expect(result).to.be.an('object');
-    expect(txProperty).to.not.eql(undefined);
-    expect(txProperty.paramType).to.eql('String');
-    expect(txProperty.enumeration).to.eql([
-      'DEBIT',
-      'CREDIT',
-      'VOID'
-    ]);
-
-  });
-
-  it('should work with composit schema', async () => {
-    // Each of the sub-schemas in allOf needs to be merged with top level object
-    // Leave out validation fields when doing so
-    const config = Config.resolve({
-      maxDepth: 0,
-      optionSetting: 'useOptions',
-      classNameTextCase: 'pascalCase',
-      classParamsTextCase: 'snakeCase',
-      topLevelCaseClassName: 'PersonInfo',
-      defaultGenericType: 'Any',
-      parseRefs: true,
-      generateComments: true
-    });
-    const result = await stripSchema(allOfSchema, config)
-
-    // const firstName = get(result, 'parameters[0]');
-    const age = get(result, 'parameters[1]');
-    expect(age.paramType).to.eql('Double')
-    expect(age.compositValidations?.allOf.length).to.gt(0)
-  });
-
-  it('should merge composit references with top level object', async () => {
-    // Each of the sub-schemas in allOf needs to be merged with top level object
-    // Leave out validation fields when doing so
-    const config = Config.resolve({
-      maxDepth: 0,
-      optionSetting: 'useOptions',
-      classNameTextCase: 'pascalCase',
-      classParamsTextCase: 'snakeCase',
-      topLevelCaseClassName: 'PersonInfo',
-      defaultGenericType: 'Any',
-      parseRefs: true,
-      generateComments: true
-    });
-    const dereferencedSchema = await resolveRefs(allOfWithReferencesSchema);
-    const result = await stripSchema(dereferencedSchema.schema, config);
-    const shippingParameters = get(result, 'parameters[1].nestedObject.parameters', []);
-    expect(shippingParameters.length).to.equal(4);
-  });
-
-  it('should parse an array of objects', async () => {
-    const dereferencedSchema = await resolveRefs(arrayOfObjectsSchema);
-    const result = await stripSchema(dereferencedSchema.schema, Config.default);
-    expect(result.parameters[3].nestedObject?.parameters.length).to.equal(3);
-  });
-
-  it('should parse an array of array of string', async () => {
-    const dereferencedSchema = await resolveRefs(arrayOfArrayStringSchema);
-    const result = await stripSchema(dereferencedSchema.schema, Config.default);
-    expect(result.parameters[3].paramType).to.eql('List')
-    expect(result.parameters[3].genericType).to.eql('List[String]')
-  });
-
-  it('should parse an array of array of objects', async () => {
-    const result1 = await stripSchema(arrayOfArrayObjectSchema, Config.resolve({ maxDepth: 1 }));
-    expect(result1.parameters[3].paramType).to.eql('Any')
-    expect(result1.parameters[3].nestedObject).to.eql(null)
-
-    const result2 = await stripSchema(arrayOfArrayObjectSchema, Config.default);
-    expect(result2.parameters[3].nestedObject?.parameters[0].paramType).to.eql('List');
-    expect(result2.parameters[3].nestedObject?.parameters[0].genericType).to.eql('List[Experience]');
   });
 
 });

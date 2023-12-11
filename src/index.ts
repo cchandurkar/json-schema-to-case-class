@@ -1,5 +1,5 @@
 import { resolveRefs, stripSchema, validate, supportedTextCases, getSanitizers } from './converter';
-import { format } from './formatter';
+import { caseClassFormatter, avroIDLFormatter } from './formatters/';
 import { IConfig } from './interfaces';
 import { Config } from './config';
 
@@ -26,7 +26,7 @@ class SchemaConverter {
       .then((sanitizedSchema) => resolveRefs(sanitizedSchema))
       .then(res => stripSchema(res.schema, resolved))
       .then((res) => sanitizers.post(res))
-      .then(res => format(res, resolved))
+      .then(res => avroIDLFormatter(res, resolved))
   }
 
 }

@@ -1,8 +1,8 @@
-import { IConfigResolved, ICaseClassDef, ICaseClassDefParams } from './interfaces';
+import { IConfigResolved, ICaseClassDef, ICaseClassDefParams } from '../interfaces';
 import get from 'lodash/get';
 import replace from 'lodash/replace';
 
-import { generateAssertion, validations } from './validations';
+import { generateAssertion, validations } from '../validations';
 import { pascalCase } from 'change-case'
 
 // Reserve keywords are wrapped in backtick (`)
