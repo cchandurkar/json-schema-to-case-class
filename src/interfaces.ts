@@ -3,9 +3,9 @@
 export interface IConfig {
     maxDepth?: number;
     optionSetting?: string | null;
-    classNameTextCase?: string | null;
-    classParamsTextCase?: string | null;
-    topLevelCaseClassName?: string | null;
+    entityTextCase?: string,
+    attributeTextCase?: string,
+    topLevelEntityName?: string | null;
     defaultGenericType?: string | null;
     parseRefs?: boolean;
     generateComments?: boolean;
@@ -16,10 +16,9 @@ export interface IConfig {
 /** Config resolved with default parameters **/
 export interface IConfigResolved {
     maxDepth: number,
-    optionSetting: string,
-    classNameTextCase: string,
-    classParamsTextCase: string,
-    topLevelCaseClassName: string,
+    entityTextCase: string,
+    attributeTextCase: string,
+    topLevelEntityName: string,
     defaultGenericType: string,
     parseRefs: boolean,
     generateComments: boolean
@@ -28,22 +27,21 @@ export interface IConfigResolved {
 }
 
 /** An intermediate data format. This is the striped down version of JSON Schema **/
-export interface ICaseClassDef {
-    entityName: string,
-    entityDescription?: string,
-    parameters: Array<ICaseClassDefParams>
+export interface IEntity {
+    name: string,
+    attributes: Array<IAttribute>,
+    description?: string
 }
 
-export interface ICaseClassDefParams {
-    paramName: string,
+export interface IAttribute {
+    name: string,
+    type: string | IEntity,
+    genericType?: string | IEntity | null,
     isRequired: boolean,
-    paramType: string,
-    genericType?: string | null,
-    enumeration?: Array<string|number> | null,
-    description?: string | null,
+    enumeration?: Array<any> | null,
+    description?: string,
     validations?: { [s: string]: any; } | null,
-    compositValidations?: { allOf: Array<any> } | null,
-    nestedObject?: ICaseClassDef | null
+    compositValidations?: { allOf: Array<any>, oneOf: Array<any>, anyOf: Array<any> } | null
 }
 
 /** Resolved local or remote refs returned by the function **/

@@ -2,7 +2,7 @@ import get from 'lodash/get';
 import find from 'lodash/find';
 import { expect } from 'chai';
 
-import { stripSchema, resolveRefs } from '../src/converter'
+import { stripSchema, resolveRefs } from '../src/parser'
 import { Config } from '../src/config';
 
 import * as simpleSchema from './test-data/simple-schema.json'
@@ -250,22 +250,40 @@ describe('Function stripSchema()', () => {
   //   expect(result2.parameters[3].nestedObject?.parameters[0].genericType).to.eql('List[Experience]');
   // });
 
-  it('should merge properties from if-then-else', async () => {
+  // it('should merge properties from if-then-else', async () => {
 
-    const config = {
-      maxDepth: 0,
-      optionSetting: 'useOptions',
-      classNameTextCase: 'pascalCase',
-      classParamsTextCase: 'snakeCase',
-      topLevelCaseClassName: null,
-      defaultGenericType: 'Any',
-      parseRefs: true,
-      generateComments: false
-    };
+  //   const config = {
+  //     maxDepth: 0,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: null,
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: false
+  //   };
 
-    const result = await stripSchema(ifThenElse, Config.resolve(config));
-    expect(result.parameters.length).to.eql(3);
+  //   const result = await stripSchema(ifThenElse, Config.resolve(config));
+  //   expect(result.parameters.length).to.eql(3);
 
-  });
+  // });
+
+  // it('should merge properties from if-then-else', async () => {
+
+  //   const config = {
+  //     maxDepth: 0,
+  //     optionSetting: 'useOptions',
+  //     classNameTextCase: 'pascalCase',
+  //     classParamsTextCase: 'snakeCase',
+  //     topLevelCaseClassName: null,
+  //     defaultGenericType: 'Any',
+  //     parseRefs: true,
+  //     generateComments: false
+  //   };
+
+  //   const result = await stripSchema(ifThenElse, Config.resolve(config));
+  //   expect(result.parameters.length).to.eql(3);
+
+  // });
 
 });

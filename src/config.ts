@@ -5,15 +5,14 @@ export class Config {
 
   public static readonly default: IConfigResolved = {
     maxDepth: 0,
-    optionSetting: 'useOptions',
-    classNameTextCase: 'pascalCase',
-    classParamsTextCase: 'snakeCase',
-    topLevelCaseClassName: 'MyCaseClass',
+    topLevelEntityName: 'MyEntity',
+    entityTextCase: 'pascalCase',
+    attributeTextCase: 'snakeCase',
     defaultGenericType: 'Any',
     parseRefs: true,
-    generateComments: false,
-    generateValidations: false,
-    generateEnumerations: false
+    generateComments: true,
+    generateValidations: true,
+    generateEnumerations: true
   };
 
   static resolve (config?: IConfig): IConfigResolved {

@@ -1,4 +1,4 @@
-import { resolveRefs, stripSchema, validate, supportedTextCases, getSanitizers } from './converter';
+import { resolveRefs, stripSchema, validate, supportedTextCases, getSanitizers } from './parser';
 import { caseClassFormatter, avroIDLFormatter } from './formatters/';
 import { IConfig } from './interfaces';
 import { Config } from './config';

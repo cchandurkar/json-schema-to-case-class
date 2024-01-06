@@ -11,6 +11,7 @@
     "setup-dev-env": "husky install",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha -r ts-node/register -r babel-register -r source-map-support/register 'tests/**/*.test.ts'",
     "test-single": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha -r ts-node/register -r source-map-support/register -r babel-register",
+    "run-single": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} node -r ts-node/register -r source-map-support/register -r babel-register",
     "type-check": "tsc --noEmit",
     "prepare": "npm run build",
     "lint": "eslint ./src ./tests --ext .ts",
@@ -51,9 +52,10 @@
   },
   "homepage": "https://github.com/cchandurkar/json-schema-to-case-class#readme",
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^9.1.0",
+    "@apidevtools/json-schema-ref-parser": "^11.1.0",
     "change-case": "^4.1.2",
     "commander": "^10.0.0",
+    "json-schema-traverse": "^1.0.0",
     "lodash": "^4.17.21",
     "log4js": "^6.9.1"
   },

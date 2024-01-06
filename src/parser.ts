@@ -1,4 +1,4 @@
-import { IConfigResolved, ICaseClassDef, IResolveRefsResult, ICaseClassDefParams, TextCaseFn } from './interfaces';
+import { IConfigResolved, IEntity, IResolveRefsResult, IAttribute, TextCaseFn } from './interfaces';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import uniq from 'lodash/uniq';
@@ -19,16 +19,16 @@ import { validations } from './validations';
 //   object: 'Any'
 // };
 
-/** Type mapping between JSON Schema and Scala **/
-const typeMap = {
-  integer: 'int',
-  string: 'string',
-  number: 'float',
-  boolean: 'boolean',
-  array: 'array',
-  object: 'record',
-  null: 'null'
-};
+// /** Type mapping between JSON Schema and Scala **/
+// const typeMap = {
+//   integer: 'int',
+//   string: 'string',
+//   number: 'float',
+//   boolean: 'boolean',
+//   array: 'array',
+//   object: 'record',
+//   null: 'null'
+// };
 
 const subSchemaIdentifiers: Array<string> = ['type', 'properties']
 
@@ -49,43 +49,32 @@ export const supportedTextCases: {[key: string]: TextCaseFn} = Object.keys(allTe
 export const validate = async (schema: any) : Promise<boolean> => {
   const fields = ['properties', 'definition'];
   if (!Object.keys(schema).filter(fields.includes.bind(fields))) {
-    throw new Error(`Require at least of of the field at top-level: ${fields}`);
+    throw new Error(`Require at least one of the following fields at top-level: ${fields}`);
   }
   return true;
 };
 
-/**
- * This function basically strips the JSON Schema into simplified format
- * which can be used by formatter(s).
- *
- * @param schema
- * @param config
- */
-export const stripSchema = async (schema: any, config: IConfigResolved) : Promise<ICaseClassDef> => {
-  return stripSchemaObject(schema, 1, config.topLevelCaseClassName, config);
-};
+// export const getSanitizers = (schema: any, config: IConfigResolved): any => {
+//   const hasTopLevelRef = ('properties' in schema === false) && 'definitions' in schema && '$ref' in schema;
+//   return {
+//     pre: () => preResolveSanitize(schema, hasTopLevelRef, config),
+//     post: (resolvedSchema: ICaseClassDef) => postResolveSanitize(resolvedSchema, hasTopLevelRef)
+//   }
+// }
 
-export const getSanitizers = (schema: any, config: IConfigResolved): any => {
-  const hasTopLevelRef = ('properties' in schema === false) && 'definitions' in schema && '$ref' in schema;
-  return {
-    pre: () => preResolveSanitize(schema, hasTopLevelRef, config),
-    post: (resolvedSchema: ICaseClassDef) => postResolveSanitize(resolvedSchema, hasTopLevelRef)
-  }
-}
+// const preResolveSanitize = (schema: any, hasTopLevelRef: boolean, config: IConfigResolved): any => {
+//   if (hasTopLevelRef) {
+//     const { $ref, ...schemaData } = schema;
+//     schemaData.type = 'object';
+//     schemaData.properties = { [config.topLevelCaseClassName]: { $ref } };
+//     return schemaData;
+//   }
+//   return schema
+// }
 
-const preResolveSanitize = (schema: any, hasTopLevelRef: boolean, config: IConfigResolved): any => {
-  if (hasTopLevelRef) {
-    const { $ref, ...schemaData } = schema;
-    schemaData.type = 'object';
-    schemaData.properties = { [config.topLevelCaseClassName]: { $ref } };
-    return schemaData;
-  }
-  return schema
-}
-
-const postResolveSanitize = (resolvedSchema: ICaseClassDef, hasTopLevelRef: boolean) => {
-  return hasTopLevelRef ? resolvedSchema.parameters[0].nestedObject : resolvedSchema;
-}
+// const postResolveSanitize = (resolvedSchema: ICaseClassDef, hasTopLevelRef: boolean) => {
+//   return hasTopLevelRef ? resolvedSchema.parameters[0].nestedObject : resolvedSchema;
+// }
 
 /**
  * Parse remote and local references in JSON Schema
@@ -190,31 +179,64 @@ const getRequired = (schemaObject: any): boolean | Array<string> => {
   return schemaObject.required;
 }
 
-const hasDepthConditionMet = (config: IConfigResolved, currentDepth: number): boolean => {
-  return config.maxDepth !== 0 && currentDepth >= config.maxDepth
-}
+/**
+ * Parses JSON schema into entities and attributes
+ *
+ * @param schema
+ * @param config
+ */
+export const parse = async (schema: any, config: IConfigResolved) : Promise<IEntity[]> => {
+  const entities: IEntity[] = [];
+  const registry = { entities, entitiesTypeMap: { } };
+
+  // If schema only has `definitions` but no `properties` or schema compositions, process that first.
+  // Delete top-level `$ref` as it's references do not get resolved properly.
+  if('$ref' in schema) {
+    delete schema['$ref'];
+  }
+  handleTopLevelReferences(schema, config, registry);
+
+  return traverse(schema, config.topLevelEntityName, config);
+};
+
+/**
+ * Process "definitions" block. This happens only when the top-level object does not an "object".
+ *
+ * @param schema Schema to extract "definitions" from
+ * @param config Schema conversion config
+ * @param depth Depth of the current object from root
+ * @param entities A list of entities
+ */
+const handleTopLevelReferences = (schema: any, config: IConfigResolved, registry: any) => {
+  if ('definitions' in schema && ) {
+    delete schema['$ref'];
+  }
+};
+
+
+
+const processObject = (schema: any, config: IConfigResolved, entities: Entity[])
 
 /**
  * Recursive function that traverses the nested JSON Schema
  * and generates the simplified version of it. Every level of the schema
  * becomes one case class.
  *
- * @param schemaObject - Schema object to parse.
  * @param currentDepth - Current depth of schema object being parsed.
  * @param entityTitle - Used for case class name if 'title' field is not provided.
  * @param config - configuration instance.
  */
-const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle: string, config: IConfigResolved) : ICaseClassDef => {
+const traverse = (schemaObject: any, entityTitle: string, config: IConfigResolved) : ICaseClassDef => {
 
   // Text cases
-  const classNameTextCase = get(supportedTextCases, config.classNameTextCase, (x: string) => x);
-  const classParamsTextCase = get(supportedTextCases, config.classParamsTextCase, (x: string) => x);
+  const entityTextCase = get(supportedTextCases, config.entityTextCase, (x: string) => x);
+  const attributeTextCase = get(supportedTextCases, config.attributeTextCase, (x: string) => x);
 
   // Use schema object 'title' field to derive case class name.
   // For nested properties, use the object 'key' as case class name.
   // For top-level case class it will use `caseClassName` if 'title' field is not provided.
   const schemaObjectTitle: string = get(schemaObject, 'title', entityTitle);
-  const entityName: string = classNameTextCase.call(supportedTextCases, schemaObjectTitle);
+  const entityName: string = entityTextCase.call(supportedTextCases, schemaObjectTitle);
   const entityDescription: string = get(schemaObject, 'description');
   const requiredParams: boolean | string[] = get(schemaObject, 'required', false);
 
@@ -238,7 +260,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
     paramObject = resolveCompositSubSchema(paramObject);
 
     // Get and convert case class parameter's name, type and description
-    const paramName = classParamsTextCase(key);
+    const paramName = attributeTextCase(key);
     const description: string = paramObject.description;
     const validations = extractValidations(paramObject);
     const compositValidations = extractCompositValidations(paramObject);
@@ -264,11 +286,6 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
       const paramObjectType = getJsonSchemaObjectType(nestedSchemaObject);
       let paramType: string = get(typeMap, paramObjectType, config.defaultGenericType);
       let genericType: string | null = paramType === 'array' ? config.defaultGenericType : null;
-
-      // If we have reached the depth limit, bail-out
-      if (hasDepthConditionMet(config, currentDepth)) {
-        return { paramType, genericType };
-      }
 
       // Process nested array first as it does not consume depth
       if (paramObjectType === 'array' && nestedSchemaObject.items) {
