@@ -26,7 +26,9 @@ class SchemaConverter {
       .then((sanitizedSchema) => resolveRefs(sanitizedSchema))
       .then(res => stripSchema(res.schema, resolved))
       .then((res) => sanitizers.post(res))
-      .then(res => avroIDLFormatter(res, resolved))
+      .then(res => {
+        return avroIDLFormatter(res, resolved);
+      });
   }
 
 }

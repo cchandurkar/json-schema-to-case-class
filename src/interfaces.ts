@@ -42,6 +42,7 @@ export interface ICaseClassDefParams {
     enumeration?: Array<string|number> | null,
     description?: string | null,
     validations?: { [s: string]: any; } | null,
+    meta?: { [s: string]: any; } | null,
     compositValidations?: { allOf: Array<any> } | null,
     nestedObject?: ICaseClassDef | null
 }

@@ -66,7 +66,7 @@ export const stripSchema = async (schema: any, config: IConfigResolved) : Promis
 };
 
 export const getSanitizers = (schema: any, config: IConfigResolved): any => {
-  const hasTopLevelRef = ('properties' in schema === false) && 'definitions' in schema && '$ref' in schema;
+  const hasTopLevelRef = ('properties' in schema === false) && '$ref' in schema;
   return {
     pre: () => preResolveSanitize(schema, hasTopLevelRef, config),
     post: (resolvedSchema: ICaseClassDef) => postResolveSanitize(resolvedSchema, hasTopLevelRef)
@@ -75,15 +75,34 @@ export const getSanitizers = (schema: any, config: IConfigResolved): any => {
 
 const preResolveSanitize = (schema: any, hasTopLevelRef: boolean, config: IConfigResolved): any => {
   if (hasTopLevelRef) {
-    const { $ref, ...schemaData } = schema;
+    const { $ref, $defs, ...schemaData } = schema;
     schemaData.type = 'object';
-    schemaData.properties = { [config.topLevelCaseClassName]: { $ref } };
+    schemaData['$defs'] = $defs;
+    schemaData.properties = { [config.topLevelCaseClassName]: { $ref }, payload: $defs['payload'] };
     return schemaData;
   }
   return schema
 }
 
 const postResolveSanitize = (resolvedSchema: ICaseClassDef, hasTopLevelRef: boolean) => {
+  if(hasTopLevelRef) {
+    const first = resolvedSchema.parameters[0];
+    const firstData = first.nestedObject?.parameters.find(d => d.paramName === 'data');
+    // const payload = firstData?.nestedObject?.parameters.find(d => d.paramName === 'payload');
+    // console.log("FOUND PAYLOAD", payload);
+    if(firstData != null && firstData.nestedObject != null) {
+      firstData.nestedObject.parameters = firstData.nestedObject?.parameters.filter(d => d.paramName !== 'payload');
+    }
+
+    const rests = resolvedSchema.parameters.slice(1);
+    rests.forEach(rest => {
+      if(firstData != null) {
+        // payload.paramType = 'object';
+        firstData.nestedObject?.parameters.push(rest);
+      }
+    });
+    return first.nestedObject;
+  }
   return hasTopLevelRef ? resolvedSchema.parameters[0].nestedObject : resolvedSchema;
 }
 
@@ -94,8 +113,12 @@ const postResolveSanitize = (resolvedSchema: ICaseClassDef, hasTopLevelRef: bool
 export const resolveRefs = async (schema: any): Promise<IResolveRefsResult> => {
   return $RefParser
     .dereference(schema, { dereference: { circular: 'ignore' } })
-    .then(result => { return { error: null, schema: result } })
-    .catch(err => { return { error: err, schema: null } });
+    .then(result => {
+      return { error: null, schema: result };
+    })
+    .catch(err => {
+      return { error: err, schema: null };
+    });
 };
 
 /**
@@ -111,6 +134,18 @@ const extractCompositValidations = (paramObject: any): { allOf: Array<any>} => {
     return !subSchemaIdentifiers.some(key => key in subSchema)
   })
   return { allOf: filtered }
+};
+
+/**
+ * Extract validation fields from the properties object.
+ *
+ * @param paramObject
+ */
+const extractMeta = (paramObject: any): {[key: string]: any} => {
+  return Object.keys(paramObject)
+    .reduce((res: any, key: string) => {
+      return { ...res, [key]: paramObject[key] };
+    }, {})
 };
 
 /**
@@ -241,6 +276,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
     const paramName = classParamsTextCase(key);
     const description: string = paramObject.description;
     const validations = extractValidations(paramObject);
+    const meta = extractMeta(paramObject);
     const compositValidations = extractCompositValidations(paramObject);
     let nestedObject: ICaseClassDef | null = null;
 
@@ -311,6 +347,7 @@ const stripSchemaObject = (schemaObject: any, currentDepth: number, entityTitle:
       enumeration,
       description,
       validations,
+      meta,
       compositValidations,
       nestedObject
     };
